@@ -17,16 +17,16 @@
 #include "scripting/squirrel_error.hpp"
 #include <sstream>
 
-namespace scripting {
-
-SquirrelError::SquirrelError(HSQUIRRELVM v, const std::string& message_) throw() :
-  message()
+namespace scripting
+{
+SquirrelError::SquirrelError(HSQUIRRELVM v, const std::string& message_) throw()
+    : message()
 {
   std::ostringstream msg;
   msg << "Squirrel error: " << message_ << " (";
   const char* lasterr;
   sq_getlasterror(v);
-  if(sq_gettype(v, -1) != OT_STRING)
+  if (sq_gettype(v, -1) != OT_STRING)
   {
     lasterr = "no error info";
   }
@@ -39,15 +39,13 @@ SquirrelError::SquirrelError(HSQUIRRELVM v, const std::string& message_) throw()
   this->message = msg.str();
 }
 
-SquirrelError::~SquirrelError() throw()
-{}
+SquirrelError::~SquirrelError() throw() {}
 
 const char*
 SquirrelError::what() const throw()
 {
   return message.c_str();
 }
-
 }
 
 /* EOF */

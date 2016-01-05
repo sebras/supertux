@@ -29,11 +29,10 @@ class World;
 
 class WorldSetMenu : public Menu
 {
-public:
+ public:
   WorldSetMenu();
-  
+
   void menu_action(MenuItem* item) override;
 };
 
-
-#endif // WORLD_SET_MENU_HPP_INCLUDED
+#endif  // WORLD_SET_MENU_HPP_INCLUDED

@@ -17,14 +17,13 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_SCRIPTED_OBJECT_HPP
 #define HEADER_SUPERTUX_SCRIPTING_SCRIPTED_OBJECT_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 class ScriptedObject
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~ScriptedObject()
-  {}
+  virtual ~ScriptedObject() {}
 #endif
 
   virtual void set_action(const std::string& animation) = 0;
@@ -50,7 +49,6 @@ public:
 
   virtual std::string get_name() = 0;
 };
-
 }
 
 #endif

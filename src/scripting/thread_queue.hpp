@@ -20,14 +20,14 @@
 #include <squirrel.h>
 #include <vector>
 
-namespace scripting {
-
+namespace scripting
+{
 /**
  * Keeps a list of SquirrelThreads that wait for a wakeup event
  */
 class ThreadQueue
 {
-public:
+ public:
   ThreadQueue();
   virtual ~ThreadQueue();
 
@@ -36,11 +36,10 @@ public:
   /// wakes up threads in the list
   void wakeup();
 
-private:
+ private:
   typedef std::vector<HSQOBJECT> ThreadList;
   ThreadList threads;
 };
-
 }
 
 #endif

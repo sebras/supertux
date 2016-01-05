@@ -23,14 +23,14 @@
 
 class OFileStream : public std::ostream
 {
-protected:
+ protected:
   std::unique_ptr<std::streambuf> sb;
 
-public:
+ public:
   OFileStream(const std::string& filename);
   ~OFileStream();
 
-private:
+ private:
   OFileStream(const OFileStream&) = delete;
   OFileStream& operator=(const OFileStream&) = delete;
 };

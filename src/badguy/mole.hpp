@@ -1,5 +1,6 @@
 //  SuperTux - Mole Badguy
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,12 +22,12 @@
 
 class Mole : public BadGuy
 {
-public:
-  Mole(const ReaderMapping& );
+ public:
+  Mole(const ReaderMapping&);
   Mole(const Vector& pos);
 
   void kill_fall();
-  HitResponse collision_badguy(BadGuy& , const CollisionHit& );
+  HitResponse collision_badguy(BadGuy&, const CollisionHit&);
   bool collision_squished(GameObject& object);
 
   void activate();
@@ -36,8 +37,9 @@ public:
 
   virtual void ignite();
 
-private:
-  enum MoleState {
+ private:
+  enum MoleState
+  {
     PRE_THROWING,
     THROWING,
     POST_THROWING,
@@ -46,11 +48,11 @@ private:
     BURNING
   };
 
-private:
+ private:
   void set_state(MoleState new_state);
   void throw_rock();
 
-private:
+ private:
   MoleState state;
   Timer timer;
   Timer throw_timer;

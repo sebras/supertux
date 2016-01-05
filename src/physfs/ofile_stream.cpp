@@ -21,15 +21,13 @@
 
 #include "physfs/ofile_streambuf.hpp"
 
-OFileStream::OFileStream(const std::string& filename) :
-  std::ostream(nullptr), sb(new OFileStreambuf(filename))
+OFileStream::OFileStream(const std::string& filename)
+    : std::ostream(nullptr), sb(new OFileStreambuf(filename))
 {
   init(sb.get());
 }
 
-OFileStream::~OFileStream()
-{
-}
+OFileStream::~OFileStream() {}
 
 #endif
 

@@ -1,4 +1,5 @@
-//  SuperTux badguy - Iceflame a flame-like enemy that can be killed with fireballs
+//  SuperTux badguy - Iceflame a flame-like enemy that can be killed with
+//  fireballs
 //  Copyright (C) 2013 LMH <lmh.0013@gmail.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -27,16 +28,18 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-Iceflame::Iceflame(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/flame/iceflame.sprite", LAYER_FLOATINGOBJECTS),
-  angle(0),
-  radius(),
-  speed(),
-  light(0.0f,0.0f,0.0f),
-  lightsprite(SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light-small.sprite"))
+Iceflame::Iceflame(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/flame/iceflame.sprite",
+             LAYER_FLOATINGOBJECTS),
+      angle(0),
+      radius(),
+      speed(),
+      light(0.0f, 0.0f, 0.0f),
+      lightsprite(SpriteManager::current()->create(
+          "images/objects/lightmap_light/lightmap_light-small.sprite"))
 {
-  if ( !reader.get("radius", radius)) radius = 100;
-  if ( !reader.get("speed", speed)) speed = 2;
+  if (!reader.get("radius", radius)) radius = 100;
+  if (!reader.get("speed", speed)) speed = 2;
   bbox.set_pos(Vector(start_position.x + cos(angle) * radius,
                       start_position.y + sin(angle) * radius));
   countMe = false;
@@ -46,13 +49,12 @@ Iceflame::Iceflame(const ReaderMapping& reader) :
 
   lightsprite->set_blend(Blend(GL_SRC_ALPHA, GL_ONE));
   lightsprite->set_color(Color(0.00f, 0.13f, 0.18f));
-
 }
 
 void
 Iceflame::active_update(float elapsed_time)
 {
-  angle = fmodf(angle + elapsed_time * speed, (float) (2*M_PI));
+  angle = fmodf(angle + elapsed_time * speed, (float)(2 * M_PI));
   Vector newpos(start_position.x + cos(angle) * radius,
                 start_position.y + sin(angle) * radius);
   movement = newpos - get_pos();
@@ -64,19 +66,19 @@ void
 Iceflame::draw(DrawingContext& context)
 {
   context.push_target();
-  //Rotate the Sprite (3 rotations per revolution)
-  sprite->set_angle(angle * 360.0f / (2*M_PI) * 3);
-  //Draw the Sprite.
+  // Rotate the Sprite (3 rotations per revolution)
+  sprite->set_angle(angle * 360.0f / (2 * M_PI) * 3);
+  // Draw the Sprite.
   sprite->draw(context, get_pos(), LAYER_OBJECTS);
-  //Draw the light if dark
-  context.get_light( bbox.get_middle(), &light );
-  if (light.blue + light.green < 2.0){
+  // Draw the light if dark
+  context.get_light(bbox.get_middle(), &light);
+  if (light.blue + light.green < 2.0)
+  {
     context.set_target(DrawingContext::LIGHTMAP);
     lightsprite->draw(context, bbox.get_middle(), 0);
   }
   context.pop_target();
 }
-
 
 void
 Iceflame::kill_fall()
@@ -88,11 +90,9 @@ Iceflame::ignite()
 {
   SoundManager::current()->play("sounds/sizzle.ogg", get_pos());
   sprite->set_action("fade", 1);
-  Sector::current()->add_object(std::make_shared<SpriteParticle>("images/objects/particles/smoke.sprite",
-                                                                 "default",
-                                                                 bbox.get_middle(), ANCHOR_MIDDLE,
-                                                                 Vector(0, -150), Vector(0,0),
-                                                                 LAYER_BACKGROUNDTILES+2));
+  Sector::current()->add_object(std::make_shared<SpriteParticle>(
+      "images/objects/particles/smoke.sprite", "default", bbox.get_middle(),
+      ANCHOR_MIDDLE, Vector(0, -150), Vector(0, 0), LAYER_BACKGROUNDTILES + 2));
   set_group(COLGROUP_DISABLED);
 
   // start dead-script

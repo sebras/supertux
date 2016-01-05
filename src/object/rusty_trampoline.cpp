@@ -27,32 +27,37 @@
 
 /* Trampoline will accelerate player to to VY_BOUNCE, if
  * he jumps on it to VY_TRIGGER. */
-namespace {
+namespace
+{
 const std::string BOUNCE_SOUND = "sounds/trampoline.wav";
-const float VY_TRIGGER = -900; //negative, upwards
+const float VY_TRIGGER = -900;  // negative, upwards
 const float VY_BOUNCE = -500;
 }
 
-RustyTrampoline::RustyTrampoline(const ReaderMapping& lisp) :
-  Rock(lisp, "images/objects/rusty-trampoline/rusty-trampoline.sprite"),
-  portable(true), counter(3)
+RustyTrampoline::RustyTrampoline(const ReaderMapping& lisp)
+    : Rock(lisp, "images/objects/rusty-trampoline/rusty-trampoline.sprite"),
+      portable(true),
+      counter(3)
 {
   SoundManager::current()->preload(BOUNCE_SOUND);
 
   lisp.get("counter", counter);
-  lisp.get("portable", portable); //do we really need this?
+  lisp.get("portable", portable);  // do we really need this?
 }
 
 void
 RustyTrampoline::update(float elapsed_time)
 {
-  if(sprite->animation_done()) {
-    if (counter < 1) {
+  if (sprite->animation_done())
+  {
+    if (counter < 1)
+    {
       remove_me();
-    } else {
+    }
+    else
+    {
       sprite->set_action("normal");
     }
-
   }
 
   Rock::update(elapsed_time);
@@ -61,44 +66,58 @@ RustyTrampoline::update(float elapsed_time)
 HitResponse
 RustyTrampoline::collision(GameObject& other, const CollisionHit& hit)
 {
-  //Trampoline has to be on ground to work.
-  if(on_ground) {
-    Player* player = dynamic_cast<Player*> (&other);
-    //Trampoline works for player
-    if(player) {
+  // Trampoline has to be on ground to work.
+  if (on_ground)
+  {
+    Player* player = dynamic_cast<Player*>(&other);
+    // Trampoline works for player
+    if (player)
+    {
       float vy = player->get_physic().get_velocity_y();
-      //player is falling down on trampoline
-      if(hit.top && vy >= 0) {
-        if(player->get_controller()->hold(Controller::JUMP)) {
+      // player is falling down on trampoline
+      if (hit.top && vy >= 0)
+      {
+        if (player->get_controller()->hold(Controller::JUMP))
+        {
           vy = VY_TRIGGER;
-        } else {
+        }
+        else
+        {
           vy = VY_BOUNCE;
         }
         player->get_physic().set_velocity_y(vy);
         SoundManager::current()->play(BOUNCE_SOUND);
         counter--;
-        if (counter > 0) {
+        if (counter > 0)
+        {
           sprite->set_action("swinging", 1);
-        } else {
+        }
+        else
+        {
           sprite->set_action("breaking", 1);
         }
 
         return FORCE_MOVE;
       }
     }
-    WalkingBadguy* walking_badguy = dynamic_cast<WalkingBadguy*> (&other);
-    //Trampoline also works for WalkingBadguy
-    if(walking_badguy) {
+    WalkingBadguy* walking_badguy = dynamic_cast<WalkingBadguy*>(&other);
+    // Trampoline also works for WalkingBadguy
+    if (walking_badguy)
+    {
       float vy = walking_badguy->get_velocity_y();
-      //walking_badguy is falling down on trampoline
-      if(hit.top && vy >= 0) {
+      // walking_badguy is falling down on trampoline
+      if (hit.top && vy >= 0)
+      {
         vy = VY_BOUNCE;
         walking_badguy->set_velocity_y(vy);
         SoundManager::current()->play(BOUNCE_SOUND);
         counter--;
-        if (counter > 0) {
+        if (counter > 0)
+        {
           sprite->set_action("swinging", 1);
-        } else {
+        }
+        else
+        {
           sprite->set_action("breaking", 1);
         }
         return FORCE_MOVE;
@@ -110,20 +129,23 @@ RustyTrampoline::collision(GameObject& other, const CollisionHit& hit)
 }
 
 void
-RustyTrampoline::collision_solid(const CollisionHit& hit) {
+RustyTrampoline::collision_solid(const CollisionHit& hit)
+{
   Rock::collision_solid(hit);
 }
 
 void
-RustyTrampoline::grab(MovingObject& object, const Vector& pos, Direction dir) {
+RustyTrampoline::grab(MovingObject& object, const Vector& pos, Direction dir)
+{
   Rock::grab(object, pos, dir);
 }
 
 void
-RustyTrampoline::ungrab(MovingObject& object, Direction dir) {
+RustyTrampoline::ungrab(MovingObject& object, Direction dir)
+{
   Rock::ungrab(object, dir);
   sprite->set_action("breaking", 1);
-  counter = 0; //remove in update()
+  counter = 0;  // remove in update()
 }
 
 bool

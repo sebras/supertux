@@ -24,7 +24,7 @@
  */
 class Lantern : public Rock
 {
-public:
+ public:
   Lantern(const Vector& pos);
   Lantern(const ReaderMapping& reader);
   void draw(DrawingContext& context);
@@ -43,18 +43,20 @@ public:
   /**
    * returns the lamp's color
    */
-  Color get_color() const {
+  Color
+  get_color() const
+  {
     return lightcolor;
   }
 
   void add_color(Color c);
 
-private:
+ private:
   Color lightcolor;
   SpritePtr lightsprite;
   void updateColor();
 
-private:
+ private:
   Lantern(const Lantern&);
   Lantern& operator=(const Lantern&);
 };

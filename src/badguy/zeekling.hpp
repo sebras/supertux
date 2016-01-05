@@ -1,6 +1,7 @@
 //  Zeekling - flyer that swoops down when she spots the player
 //  Copyright (C) 2005 Matthias Braun <matze@braunis.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -22,7 +23,7 @@
 
 class Zeekling : public BadGuy
 {
-public:
+ public:
   Zeekling(const ReaderMapping& reader);
   Zeekling(const Vector& pos, Direction d);
 
@@ -34,28 +35,29 @@ public:
   void unfreeze();
   bool is_freezable() const;
 
-private:
+ private:
   bool collision_squished(GameObject& object);
   bool should_we_dive();
   void onBumpHorizontal();
   void onBumpVertical();
 
-private:
-  enum ZeeklingState {
+ private:
+  enum ZeeklingState
+  {
     FLYING,
     DIVING,
     CLIMBING
   };
 
-private:
+ private:
   float speed;
   Timer diveRecoverTimer;
   ZeeklingState state;
   const MovingObject* last_player; /**< last player we tracked */
   Vector last_player_pos; /**< position we last spotted the player at */
-  Vector last_self_pos; /**< position we last were at */
+  Vector last_self_pos;   /**< position we last were at */
 
-private:
+ private:
   Zeekling(const Zeekling&);
   Zeekling& operator=(const Zeekling&);
 };

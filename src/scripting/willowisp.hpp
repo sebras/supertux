@@ -17,14 +17,13 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_WILLOWISP_HPP
 #define HEADER_SUPERTUX_SCRIPTING_WILLOWISP_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 class WillOWisp
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~WillOWisp()
-  {}
+  virtual ~WillOWisp() {}
 #endif
 
   /** Move willowisp to given node */
@@ -33,7 +32,8 @@ public:
   /** set willowisp state; can be:
    * -stopped          willowisp doesn't move
    * -move_path        willowisp moves along the path (call goto_node)
-   * -move_path_track  willowisp moves along path but catches tux when he is near
+   * -move_path_track  willowisp moves along path but catches tux when he is
+   * near
    * -normal           "normal" mode starts tracking tux when he is near enough
    * -vanish           vanish
    */
@@ -42,7 +42,6 @@ public:
   virtual void start_moving() = 0;
   virtual void stop_moving() = 0;
 };
-
 }
 
 #endif

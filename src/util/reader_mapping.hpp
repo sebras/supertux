@@ -19,16 +19,17 @@
 
 #include "util/reader_iterator.hpp"
 
-namespace sexp {
+namespace sexp
+{
 class Value;
-} // namespace sexp
+}  // namespace sexp
 
 class ReaderDocument;
 class ReaderCollection;
 
 class ReaderMapping final
 {
-public:
+ public:
   ReaderMapping();
 
   // sx should point to (section (name value)...)
@@ -49,15 +50,23 @@ public:
   bool get(const char* key, ReaderMapping&) const;
   bool get(const char* key, ReaderCollection&) const;
 
-  const sexp::Value& get_sexp() const { return *m_sx; }
+  const sexp::Value&
+  get_sexp() const
+  {
+    return *m_sx;
+  }
 
-  const ReaderDocument* get_doc() const { return m_doc; }
+  const ReaderDocument*
+  get_doc() const
+  {
+    return m_doc;
+  }
 
-private:
+ private:
   /** Returns pointer to (key value) */
   const sexp::Value* get_item(const char* key) const;
 
-private:
+ private:
   const ReaderDocument* m_doc;
   const sexp::Value* m_sx;
   std::vector<sexp::Value> const* m_arr;

@@ -22,65 +22,73 @@
 
 class DummySoundSource : public SoundSource
 {
-public:
-  DummySoundSource() :
-    is_playing()
-  {}
-  virtual ~DummySoundSource()
-  {}
+ public:
+  DummySoundSource() : is_playing() {}
+  virtual ~DummySoundSource() {}
 
-  virtual void play()
+  virtual void
+  play()
   {
     is_playing = true;
   }
 
-  virtual void stop()
+  virtual void
+  stop()
   {
     is_playing = false;
   }
 
-  virtual bool playing() const
+  virtual bool
+  playing() const
   {
     return is_playing;
   }
 
-  virtual void set_looping(bool )
+  virtual void
+  set_looping(bool)
   {
   }
 
-  virtual void set_relative(bool )
+  virtual void
+  set_relative(bool)
   {
   }
 
-  virtual void set_gain(float )
+  virtual void
+  set_gain(float)
   {
   }
 
-  virtual void set_pitch(float )
+  virtual void
+  set_pitch(float)
   {
   }
 
-  virtual void set_position(const Vector& )
+  virtual void
+  set_position(const Vector&)
   {
   }
 
-  virtual void set_velocity(const Vector& )
+  virtual void
+  set_velocity(const Vector&)
   {
   }
 
-  virtual void set_reference_distance(float )
+  virtual void
+  set_reference_distance(float)
   {
   }
 
-private:
+ private:
   bool is_playing;
 
-private:
+ private:
   DummySoundSource(const DummySoundSource&) = delete;
   DummySoundSource& operator=(const DummySoundSource&) = delete;
 };
 
-std::unique_ptr<SoundSource> create_dummy_sound_source()
+std::unique_ptr<SoundSource>
+create_dummy_sound_source()
 {
   return std::unique_ptr<SoundSource>(new DummySoundSource);
 }

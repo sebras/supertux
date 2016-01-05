@@ -1,5 +1,6 @@
 //  SuperTux - PneumaticPlatform
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,26 +22,26 @@
 #include "supertux/object_factory.hpp"
 #include "supertux/sector.hpp"
 
-PneumaticPlatform::PneumaticPlatform(const ReaderMapping& reader) :
-  MovingSprite(reader, LAYER_OBJECTS, COLGROUP_STATIC),
-  master(0),
-  slave(0),
-  start_y(0),
-  offset_y(0),
-  speed_y(0),
-  contacts()
+PneumaticPlatform::PneumaticPlatform(const ReaderMapping& reader)
+    : MovingSprite(reader, LAYER_OBJECTS, COLGROUP_STATIC),
+      master(0),
+      slave(0),
+      start_y(0),
+      offset_y(0),
+      speed_y(0),
+      contacts()
 {
   start_y = get_pos().y;
 }
 
-PneumaticPlatform::PneumaticPlatform(PneumaticPlatform* master_) :
-  MovingSprite(*master_),
-  master(master_),
-  slave(this),
-  start_y(master_->start_y),
-  offset_y(-master_->offset_y),
-  speed_y(0),
-  contacts()
+PneumaticPlatform::PneumaticPlatform(PneumaticPlatform* master_)
+    : MovingSprite(*master_),
+      master(master_),
+      slave(this),
+      start_y(master_->start_y),
+      offset_y(-master_->offset_y),
+      speed_y(0),
+      contacts()
 {
   set_pos(get_pos() + Vector(master->get_bbox().get_width(), 0));
   master->master = master;
@@ -49,11 +50,13 @@ PneumaticPlatform::PneumaticPlatform(PneumaticPlatform* master_) :
 
 PneumaticPlatform::~PneumaticPlatform()
 {
-  if ((this == master) && (master)) {
+  if ((this == master) && (master))
+  {
     slave->master = 0;
     slave->slave = 0;
   }
-  if ((master) && (this == slave)) {
+  if ((master) && (this == slave))
+  {
     master->master = 0;
     master->slave = 0;
   }
@@ -62,16 +65,17 @@ PneumaticPlatform::~PneumaticPlatform()
 }
 
 HitResponse
-PneumaticPlatform::collision(GameObject& other, const CollisionHit& )
+PneumaticPlatform::collision(GameObject& other, const CollisionHit&)
 {
-
-  // somehow the hit parameter does not get filled in, so to determine (hit.top == true) we do this:
+  // somehow the hit parameter does not get filled in, so to determine (hit.top
+  // == true) we do this:
   MovingObject* mo = dynamic_cast<MovingObject*>(&other);
   if (!mo) return FORCE_MOVE;
   if ((mo->get_bbox().p2.y) > (bbox.p1.y + 2)) return FORCE_MOVE;
 
   Player* pl = dynamic_cast<Player*>(mo);
-  if (pl) {
+  if (pl)
+  {
     if (pl->is_big()) contacts.insert(0);
     Portable* po = pl->get_grabbed_object();
     MovingObject* pomo = dynamic_cast<MovingObject*>(po);
@@ -85,18 +89,22 @@ PneumaticPlatform::collision(GameObject& other, const CollisionHit& )
 void
 PneumaticPlatform::update(float elapsed_time)
 {
-  if (!slave) {
+  if (!slave)
+  {
     Sector::current()->add_object(std::make_shared<PneumaticPlatform>(this));
     return;
   }
-  if (!master) {
+  if (!master)
+  {
     return;
   }
-  if (this == slave) {
+  if (this == slave)
+  {
     offset_y = -master->offset_y;
     movement = Vector(0, (start_y + offset_y) - get_pos().y);
   }
-  if (this == master) {
+  if (this == master)
+  {
     int contact_diff = contacts.size() - slave->contacts.size();
     contacts.clear();
     slave->contacts.clear();
@@ -105,8 +113,16 @@ PneumaticPlatform::update(float elapsed_time)
     speed_y -= (offset_y * elapsed_time * 0.05f);
     speed_y *= 1 - elapsed_time;
     offset_y += speed_y * elapsed_time * Sector::current()->get_gravity();
-    if (offset_y < -256) { offset_y = -256; speed_y = 0; }
-    if (offset_y > 256) { offset_y = 256; speed_y = -0; }
+    if (offset_y < -256)
+    {
+      offset_y = -256;
+      speed_y = 0;
+    }
+    if (offset_y > 256)
+    {
+      offset_y = 256;
+      speed_y = -0;
+    }
     movement = Vector(0, (start_y + offset_y) - get_pos().y);
   }
 }

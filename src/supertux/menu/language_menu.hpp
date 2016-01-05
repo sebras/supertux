@@ -23,7 +23,7 @@
 
 class LanguageMenu : public Menu
 {
-public:
+ public:
   LanguageMenu();
 
   void menu_action(MenuItem* item) override;

@@ -23,13 +23,13 @@
 
 class OneUp : public MovingSprite
 {
-public:
+ public:
   OneUp(const Vector& pos, Direction direction = RIGHT);
 
   virtual void update(float elapsed_time);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   Physic physic;
 };
 

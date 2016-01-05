@@ -1,5 +1,6 @@
 //  SuperTux - End Sequence: Tux walks right
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -22,14 +23,15 @@
 
 class EndSequenceFireworks : public EndSequence
 {
-public:
+ public:
   EndSequenceFireworks();
   virtual ~EndSequenceFireworks();
   virtual void draw(DrawingContext& context);
 
-protected:
+ protected:
   virtual void starting(); /**< called when EndSequence starts */
-  virtual void running(float elapsed_time); /**< called while the EndSequence is running */
+  virtual void running(
+      float elapsed_time); /**< called while the EndSequence is running */
   virtual void stopping(); /**< called when EndSequence stops */
 
   Timer endsequence_timer;

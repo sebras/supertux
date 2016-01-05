@@ -27,44 +27,43 @@
 #include "util/log.hpp"
 #include "supertux/globals.hpp"
 
-Config::Config() :
-  profile(1),
-  fullscreen_size(0, 0),
-  fullscreen_refresh_rate(0),
-  window_size(1280, 800),
-  aspect_size(0, 0), // auto detect
-  magnification(0.0f),
-  use_fullscreen(false),
-  video(VideoSystem::AUTO_VIDEO),
-  try_vsync(true),
-  show_fps(false),
-  sound_enabled(true),
-  music_enabled(true),
-  random_seed(0), // set by time(), by default (unless in config)
-  start_level(),
-  enable_script_debugger(false),
-  start_demo(),
-  record_demo(),
-  tux_spawn_pos(),
-  locale(),
-  keyboard_config(),
-  joystick_config(),
-  addons(),
-  developer_mode(false),
-  christmas_mode(false),
-  transitions_enabled(true)
+Config::Config()
+    : profile(1),
+      fullscreen_size(0, 0),
+      fullscreen_refresh_rate(0),
+      window_size(1280, 800),
+      aspect_size(0, 0),  // auto detect
+      magnification(0.0f),
+      use_fullscreen(false),
+      video(VideoSystem::AUTO_VIDEO),
+      try_vsync(true),
+      show_fps(false),
+      sound_enabled(true),
+      music_enabled(true),
+      random_seed(0),  // set by time(), by default (unless in config)
+      start_level(),
+      enable_script_debugger(false),
+      start_demo(),
+      record_demo(),
+      tux_spawn_pos(),
+      locale(),
+      keyboard_config(),
+      joystick_config(),
+      addons(),
+      developer_mode(false),
+      christmas_mode(false),
+      transitions_enabled(true)
 {
 }
 
-Config::~Config()
-{}
+Config::~Config() {}
 
 void
 Config::load()
 {
   auto doc = ReaderDocument::parse("config");
   auto root = doc.get_root();
-  if(root.get_name() != "supertux-config")
+  if (root.get_name() != "supertux-config")
   {
     throw std::runtime_error("File is not a supertux-config file");
   }
@@ -74,8 +73,9 @@ Config::load()
   config_lisp.get("show_fps", show_fps);
   config_lisp.get("developer", developer_mode);
 
-  if(is_christmas()) {
-    if(!config_lisp.get("christmas", christmas_mode))
+  if (is_christmas())
+  {
+    if (!config_lisp.get("christmas", christmas_mode))
     {
       christmas_mode = true;
     }
@@ -85,7 +85,7 @@ Config::load()
   config_lisp.get("random_seed", random_seed);
 
   ReaderMapping config_video_lisp;
-  if(config_lisp.get("video", config_video_lisp))
+  if (config_lisp.get("video", config_video_lisp))
   {
     config_video_lisp.get("fullscreen", use_fullscreen);
     std::string video_string;
@@ -93,21 +93,22 @@ Config::load()
     video = VideoSystem::get_video_system(video_string);
     config_video_lisp.get("vsync", try_vsync);
 
-    config_video_lisp.get("fullscreen_width",  fullscreen_size.width);
+    config_video_lisp.get("fullscreen_width", fullscreen_size.width);
     config_video_lisp.get("fullscreen_height", fullscreen_size.height);
     config_video_lisp.get("fullscreen_refresh_rate", fullscreen_refresh_rate);
 
-    config_video_lisp.get("window_width",  window_size.width);
+    config_video_lisp.get("window_width", window_size.width);
     config_video_lisp.get("window_height", window_size.height);
 
-    config_video_lisp.get("aspect_width",  aspect_size.width);
+    config_video_lisp.get("aspect_width", aspect_size.width);
     config_video_lisp.get("aspect_height", aspect_size.height);
 
     config_video_lisp.get("magnification", magnification);
   }
 
   ReaderMapping config_audio_lisp;
-  if(config_lisp.get("audio", config_audio_lisp)) {
+  if (config_lisp.get("audio", config_audio_lisp))
+  {
     config_audio_lisp.get("sound_enabled", sound_enabled);
     config_audio_lisp.get("music_enabled", music_enabled);
   }
@@ -131,7 +132,7 @@ Config::load()
   ReaderCollection config_addons_lisp;
   if (config_lisp.get("addons", config_addons_lisp))
   {
-    for(auto const& addon_node : config_addons_lisp.get_objects())
+    for (auto const& addon_node : config_addons_lisp.get_objects())
     {
       if (addon_node.get_name() == "addon")
       {
@@ -139,15 +140,15 @@ Config::load()
 
         std::string id;
         bool enabled = false;
-        if (addon.get("id", id) &&
-            addon.get("enabled", enabled))
+        if (addon.get("id", id) && addon.get("enabled", enabled))
         {
           addons.push_back({id, enabled});
         }
       }
       else
       {
-        log_warning << "Unknown token in config file: " << addon_node.get_name() << std::endl;
+        log_warning << "Unknown token in config file: " << addon_node.get_name()
+                    << std::endl;
       }
     }
   }
@@ -163,7 +164,8 @@ Config::save()
   writer.write("profile", profile);
   writer.write("show_fps", show_fps);
   writer.write("developer", developer_mode);
-  if(is_christmas()) {
+  if (is_christmas())
+  {
     writer.write("christmas", christmas_mode);
   }
   writer.write("transitions_enabled", transitions_enabled);
@@ -174,14 +176,14 @@ Config::save()
   writer.write("video", VideoSystem::get_video_string(video));
   writer.write("vsync", try_vsync);
 
-  writer.write("fullscreen_width",  fullscreen_size.width);
+  writer.write("fullscreen_width", fullscreen_size.width);
   writer.write("fullscreen_height", fullscreen_size.height);
   writer.write("fullscreen_refresh_rate", fullscreen_refresh_rate);
 
-  writer.write("window_width",  window_size.width);
+  writer.write("window_width", window_size.width);
   writer.write("window_height", window_size.height);
 
-  writer.write("aspect_width",  aspect_size.width);
+  writer.write("aspect_width", aspect_size.width);
   writer.write("aspect_height", aspect_size.height);
 
   writer.write("magnification", magnification);
@@ -206,7 +208,7 @@ Config::save()
   writer.end_list("control");
 
   writer.start_list("addons");
-  for(auto addon : addons)
+  for (auto addon : addons)
   {
     writer.start_list("addon");
     writer.write("id", addon.id);

@@ -1,5 +1,6 @@
 //  SuperTux - MovingSprite Base Class
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,49 +24,48 @@
 #include <stdexcept>
 
 MovingSprite::MovingSprite(const Vector& pos, const std::string& sprite_name_,
-                           int layer_, CollisionGroup collision_group) :
-  sprite_name(sprite_name_),
-  sprite(),
-  layer(layer_)
+                           int layer_, CollisionGroup collision_group)
+    : sprite_name(sprite_name_), sprite(), layer(layer_)
 {
   bbox.set_pos(pos);
   sprite = SpriteManager::current()->create(sprite_name);
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
   set_group(collision_group);
 }
 
-MovingSprite::MovingSprite(const ReaderMapping& reader, const Vector& pos, int layer_, CollisionGroup collision_group) :
-  sprite_name(),
-  sprite(),
-  layer(layer_)
+MovingSprite::MovingSprite(const ReaderMapping& reader, const Vector& pos,
+                           int layer_, CollisionGroup collision_group)
+    : sprite_name(), sprite(), layer(layer_)
 {
   bbox.set_pos(pos);
   if (!reader.get("sprite", sprite_name))
     throw std::runtime_error("no sprite name set");
 
   sprite = SpriteManager::current()->create(sprite_name);
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
   set_group(collision_group);
 }
 
-MovingSprite::MovingSprite(const ReaderMapping& reader, const std::string& sprite_name_, int layer_, CollisionGroup collision_group) :
-  sprite_name(sprite_name_),
-  sprite(),
-  layer(layer_)
+MovingSprite::MovingSprite(const ReaderMapping& reader,
+                           const std::string& sprite_name_, int layer_,
+                           CollisionGroup collision_group)
+    : sprite_name(sprite_name_), sprite(), layer(layer_)
 {
   reader.get("x", bbox.p1.x);
   reader.get("y", bbox.p1.y);
   reader.get("sprite", this->sprite_name);
 
   sprite = SpriteManager::current()->create(this->sprite_name);
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
   set_group(collision_group);
 }
 
-MovingSprite::MovingSprite(const ReaderMapping& reader, int layer_, CollisionGroup collision_group) :
-  sprite_name(),
-  sprite(),
-  layer(layer_)
+MovingSprite::MovingSprite(const ReaderMapping& reader, int layer_,
+                           CollisionGroup collision_group)
+    : sprite_name(), sprite(), layer(layer_)
 {
   reader.get("x", bbox.p1.x);
   reader.get("y", bbox.p1.y);
@@ -73,15 +73,16 @@ MovingSprite::MovingSprite(const ReaderMapping& reader, int layer_, CollisionGro
     throw std::runtime_error("no sprite name set");
 
   sprite = SpriteManager::current()->create(sprite_name);
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
   set_group(collision_group);
 }
 
-MovingSprite::MovingSprite(const MovingSprite& other) :
-  MovingObject(other),
-  sprite_name(),
-  sprite(other.sprite->clone()),
-  layer(other.layer)
+MovingSprite::MovingSprite(const MovingSprite& other)
+    : MovingObject(other),
+      sprite_name(),
+      sprite(other.sprite->clone()),
+      layer(other.layer)
 {
 }
 /*
@@ -99,9 +100,7 @@ MovingSprite::MovingSprite(const MovingSprite& other) :
   return *this;
   }
 */
-MovingSprite::~MovingSprite()
-{
-}
+MovingSprite::~MovingSprite() {}
 
 void
 MovingSprite::draw(DrawingContext& context)
@@ -110,7 +109,7 @@ MovingSprite::draw(DrawingContext& context)
 }
 
 void
-MovingSprite::update(float )
+MovingSprite::update(float)
 {
 }
 
@@ -124,7 +123,8 @@ void
 MovingSprite::set_action(const std::string& action, int loops)
 {
   sprite->set_action(action, loops);
-  set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  set_size(sprite->get_current_hitbox_width(),
+           sprite->get_current_hitbox_height());
 }
 
 void
@@ -132,12 +132,14 @@ MovingSprite::set_action_centered(const std::string& action, int loops)
 {
   Vector old_size = bbox.get_size().as_vector();
   sprite->set_action(action, loops);
-  set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  set_size(sprite->get_current_hitbox_width(),
+           sprite->get_current_hitbox_height());
   set_pos(get_pos() - (bbox.get_size().as_vector() - old_size) / 2);
 }
 
 void
-MovingSprite::set_action(const std::string& action, int loops, AnchorPoint anchorPoint)
+MovingSprite::set_action(const std::string& action, int loops,
+                         AnchorPoint anchorPoint)
 {
   Rectf old_bbox = bbox;
   sprite->set_action(action, loops);

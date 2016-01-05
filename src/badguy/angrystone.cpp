@@ -1,5 +1,6 @@
 //  AngryStone - A spiked block that charges towards the player
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,12 +27,12 @@ static const float CHARGE_TIME = .5;
 static const float ATTACK_TIME = 1;
 static const float RECOVER_TIME = .5;
 
-AngryStone::AngryStone(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/angrystone/angrystone.sprite"),
-  attackDirection(),
-  oldWallDirection(),
-  timer(),
-  state(IDLE)
+AngryStone::AngryStone(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/angrystone/angrystone.sprite"),
+      attackDirection(),
+      oldWallDirection(),
+      timer(),
+      state(IDLE)
 {
   countMe = false;
   physic.set_velocity_x(0);
@@ -44,7 +45,7 @@ void
 AngryStone::collision_solid(const CollisionHit& hit)
 {
   // TODO
-  (void) hit;
+  (void)hit;
 #if 0
   if ((state == ATTACKING) &&
       (hit.normal.x == -attackDirection.x) && (hit.normal.y == attackDirection.y)) {
@@ -62,13 +63,14 @@ AngryStone::collision_solid(const CollisionHit& hit)
 void
 AngryStone::kill_fall()
 {
-  //prevents AngryStone from getting killed by other enemies or the player
+  // prevents AngryStone from getting killed by other enemies or the player
 }
 
 HitResponse
-AngryStone::collision_badguy(BadGuy& badguy, const CollisionHit& )
+AngryStone::collision_badguy(BadGuy& badguy, const CollisionHit&)
 {
-  if (state == ATTACKING) {
+  if (state == ATTACKING)
+  {
     badguy.kill_fall();
     return FORCE_MOVE;
   }
@@ -77,19 +79,22 @@ AngryStone::collision_badguy(BadGuy& badguy, const CollisionHit& )
 }
 
 void
-AngryStone::active_update(float elapsed_time) {
+AngryStone::active_update(float elapsed_time)
+{
   BadGuy::active_update(elapsed_time);
 
-  if (frozen) {
+  if (frozen)
+  {
     return;
   }
 
-  switch (state) {
-
-
-    case IDLE: {
+  switch (state)
+  {
+    case IDLE:
+    {
       MovingObject* player = get_nearest_player();
-      if(player) {
+      if (player)
+      {
         MovingObject* badguy = this;
         const Vector playerPos = player->get_pos();
         const Vector badguyPos = badguy->get_pos();
@@ -102,38 +107,54 @@ AngryStone::active_update(float elapsed_time) {
         float playerWidth = player->get_bbox().p2.x - player->get_bbox().p1.x;
         float badguyWidth = badguy->get_bbox().p2.x - badguy->get_bbox().p1.x;
 
-        if ((dx > -playerWidth) && (dx < badguyWidth)) {
-          if (dy > 0) {
+        if ((dx > -playerWidth) && (dx < badguyWidth))
+        {
+          if (dy > 0)
+          {
             attackDirection.x = 0;
             attackDirection.y = 1;
-          } else {
+          }
+          else
+          {
             attackDirection.x = 0;
             attackDirection.y = -1;
           }
-          if ((attackDirection.x != oldWallDirection.x) || (attackDirection.y != oldWallDirection.y)) {
+          if ((attackDirection.x != oldWallDirection.x) ||
+              (attackDirection.y != oldWallDirection.y))
+          {
             sprite->set_action("charging");
             timer.start(CHARGE_TIME);
             state = CHARGING;
           }
-        } else if ((dy > -playerHeight) && (dy < badguyHeight)) {
-          if (dx > 0) {
+        }
+        else if ((dy > -playerHeight) && (dy < badguyHeight))
+        {
+          if (dx > 0)
+          {
             attackDirection.x = 1;
             attackDirection.y = 0;
-          } else {
+          }
+          else
+          {
             attackDirection.x = -1;
             attackDirection.y = 0;
           }
-          if ((attackDirection.x != oldWallDirection.x) || (attackDirection.y != oldWallDirection.y)) {
+          if ((attackDirection.x != oldWallDirection.x) ||
+              (attackDirection.y != oldWallDirection.y))
+          {
             sprite->set_action("charging");
             timer.start(CHARGE_TIME);
             state = CHARGING;
           }
         }
       }
-    } break;
+    }
+    break;
 
-    case CHARGING: {
-      if (timer.check()) {
+    case CHARGING:
+    {
+      if (timer.check())
+      {
         sprite->set_action("attacking");
         timer.start(ATTACK_TIME);
         state = ATTACKING;
@@ -143,10 +164,13 @@ AngryStone::active_update(float elapsed_time) {
         oldWallDirection.x = 0;
         oldWallDirection.y = 0;
       }
-    } break;
+    }
+    break;
 
-    case ATTACKING: {
-      if (timer.check()) {
+    case ATTACKING:
+    {
+      if (timer.check())
+      {
         timer.start(RECOVER_TIME);
         state = RECOVERING;
         sprite->set_action("idle");
@@ -154,19 +178,22 @@ AngryStone::active_update(float elapsed_time) {
         physic.set_velocity_x(0);
         physic.set_velocity_y(0);
       }
-    } break;
+    }
+    break;
 
-    case RECOVERING: {
-      if (timer.check()) {
+    case RECOVERING:
+    {
+      if (timer.check())
+      {
         state = IDLE;
         sprite->set_action("idle");
         physic.enable_gravity(true);
         physic.set_velocity_x(0);
         physic.set_velocity_y(0);
       }
-    } break;
+    }
+    break;
   }
-
 }
 
 bool

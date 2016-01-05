@@ -172,15 +172,9 @@ ObjectFactory::instance()
   return instance_;
 }
 
-ObjectFactory::ObjectFactory() :
-  factories()
-{
-  init_factories();
-}
+ObjectFactory::ObjectFactory() : factories() { init_factories(); }
 
-ObjectFactory::~ObjectFactory()
-{
-}
+ObjectFactory::~ObjectFactory() {}
 
 void
 ObjectFactory::init_factories()
@@ -284,14 +278,17 @@ ObjectFactory::init_factories()
   add_factory<SequenceTrigger>("sequencetrigger");
   add_factory<Switch>("switch");
 
-  add_factory("tilemap", [](const ReaderMapping& reader) {
-      auto tileset = TileManager::current()->get_tileset(Level::current()->get_tileset());
-      return std::make_shared<TileMap>(tileset, reader);
-    });
+  add_factory("tilemap", [](const ReaderMapping& reader)
+              {
+                auto tileset = TileManager::current()->get_tileset(
+                    Level::current()->get_tileset());
+                return std::make_shared<TileMap>(tileset, reader);
+              });
 }
 
 GameObjectPtr
-ObjectFactory::create(const std::string& name, const ReaderMapping& reader) const
+ObjectFactory::create(const std::string& name,
+                      const ReaderMapping& reader) const
 {
   Factories::const_iterator i = factories.find(name);
 
@@ -308,15 +305,19 @@ ObjectFactory::create(const std::string& name, const ReaderMapping& reader) cons
 }
 
 GameObjectPtr
-ObjectFactory::create(const std::string& name, const Vector& pos, const Direction& dir, const std::string& data) const
+ObjectFactory::create(const std::string& name, const Vector& pos,
+                      const Direction& dir, const std::string& data) const
 {
   std::stringstream lisptext;
   lisptext << "(" << name << "\n"
            << " (x " << pos.x << ")"
            << " (y " << pos.y << ")" << data;
-  if(dir != AUTO) {
+  if (dir != AUTO)
+  {
     lisptext << " (direction \"" << dir << "\"))";
-  } else {
+  }
+  else
+  {
     lisptext << ")";
   }
 

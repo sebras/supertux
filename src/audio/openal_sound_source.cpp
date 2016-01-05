@@ -18,8 +18,7 @@
 
 #include "audio/sound_manager.hpp"
 
-OpenALSoundSource::OpenALSoundSource() :
-  source()
+OpenALSoundSource::OpenALSoundSource() : source()
 {
   alGenSources(1, &source);
   SoundManager::check_al_error("Couldn't create audio source: ");
@@ -65,7 +64,7 @@ OpenALSoundSource::pause()
 void
 OpenALSoundSource::resume()
 {
-  if( !this->paused() )
+  if (!this->paused())
   {
     return;
   }
@@ -76,9 +75,9 @@ OpenALSoundSource::resume()
 bool
 OpenALSoundSource::paused() const
 {
-    ALint state = AL_PAUSED;
-    alGetSourcei(source, AL_SOURCE_STATE, &state);
-    return state == AL_PAUSED;
+  ALint state = AL_PAUSED;
+  alGetSourcei(source, AL_SOURCE_STATE, &state);
+  return state == AL_PAUSED;
 }
 
 void

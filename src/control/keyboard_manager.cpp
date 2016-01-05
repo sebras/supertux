@@ -28,21 +28,18 @@
 #include "util/writer.hpp"
 
 KeyboardManager::KeyboardManager(InputManager* parent,
-                                 KeyboardConfig& keyboard_config) :
-  m_parent(parent),
-  m_keyboard_config(keyboard_config),
-  wait_for_key(-1)
+                                 KeyboardConfig& keyboard_config)
+    : m_parent(parent), m_keyboard_config(keyboard_config), wait_for_key(-1)
 {
 }
 
-KeyboardManager::~KeyboardManager()
-{
-}
+KeyboardManager::~KeyboardManager() {}
 
 void
 KeyboardManager::process_key_event(const SDL_KeyboardEvent& event)
 {
-  KeyboardConfig::KeyMap::iterator key_mapping = m_keyboard_config.keymap.find(event.keysym.sym);
+  KeyboardConfig::KeyMap::iterator key_mapping =
+      m_keyboard_config.keymap.find(event.keysym.sym);
 
   // if console key was pressed: toggle console
   if (key_mapping != m_keyboard_config.keymap.end() &&
@@ -66,7 +63,8 @@ KeyboardManager::process_key_event(const SDL_KeyboardEvent& event)
   else if (key_mapping == m_keyboard_config.keymap.end())
   {
     // default action: update controls
-    //log_debug << "Key " << event.key.SDL_Keycode.sym << " is unbound" << std::endl;
+    // log_debug << "Key " << event.key.SDL_Keycode.sym << " is unbound" <<
+    // std::endl;
   }
   else
   {
@@ -83,8 +81,9 @@ KeyboardManager::process_key_event(const SDL_KeyboardEvent& event)
 void
 KeyboardManager::process_text_input_event(const SDL_TextInputEvent& event)
 {
-  if (Console::current()->hasFocus()) {
-    for(int i = 0; event.text[i] != '\0'; ++i)
+  if (Console::current()->hasFocus())
+  {
+    for (int i = 0; event.text[i] != '\0'; ++i)
     {
       Console::current()->input(event.text[i]);
     }
@@ -96,7 +95,8 @@ KeyboardManager::process_console_key_event(const SDL_KeyboardEvent& event)
 {
   if (event.type != SDL_KEYDOWN) return;
 
-  switch (event.keysym.sym) {
+  switch (event.keysym.sym)
+  {
     case SDLK_RETURN:
       Console::current()->enter();
       break;
@@ -141,13 +141,12 @@ KeyboardManager::process_menu_key_event(const SDL_KeyboardEvent& event)
   // wait for key mode?
   if (wait_for_key >= 0)
   {
-    if (event.type == SDL_KEYUP)
-      return;
+    if (event.type == SDL_KEYUP) return;
 
-    if (event.keysym.sym != SDLK_ESCAPE &&
-        event.keysym.sym != SDLK_PAUSE)
+    if (event.keysym.sym != SDLK_ESCAPE && event.keysym.sym != SDLK_PAUSE)
     {
-      m_keyboard_config.bind_key(event.keysym.sym, static_cast<Controller::Control>(wait_for_key));
+      m_keyboard_config.bind_key(
+          event.keysym.sym, static_cast<Controller::Control>(wait_for_key));
     }
     m_parent->reset();
     MenuManager::instance().refresh();
@@ -170,7 +169,8 @@ KeyboardManager::process_menu_key_event(const SDL_KeyboardEvent& event)
   /* we use default keys when the menu is open (to avoid problems when
    * redefining keys to invalid settings
    */
-  switch(event.keysym.sym) {
+  switch (event.keysym.sym)
+  {
     case SDLK_UP:
       control = Controller::UP;
       break;
@@ -195,7 +195,7 @@ KeyboardManager::process_menu_key_event(const SDL_KeyboardEvent& event)
       control = Controller::START;
       break;
     default:
-      if(m_keyboard_config.keymap.count(event.keysym.sym) == 0)
+      if (m_keyboard_config.keymap.count(event.keysym.sym) == 0)
       {
         return;
       }

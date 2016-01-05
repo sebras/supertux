@@ -23,16 +23,17 @@
 
 class BonusBlock : public Block
 {
-public:
+ public:
   BonusBlock(const Vector& pos, int data);
   BonusBlock(const ReaderMapping& lisp);
   virtual ~BonusBlock();
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-  void try_open(Player *player);
-  void try_drop(Player *player);
+  void try_open(Player* player);
+  void try_drop(Player* player);
 
-  enum Contents {
+  enum Contents
+  {
     CONTENT_COIN,
     CONTENT_FIREGROW,
     CONTENT_ICEGROW,
@@ -48,25 +49,27 @@ public:
     CONTENT_EXPLODE
   };
 
-protected:
+ protected:
   virtual void hit(Player& player);
 
-public:
+ public:
   Contents contents;
   std::shared_ptr<MovingObject> object;
   int hit_counter;
   void draw(DrawingContext& context);
 
-private:
+ private:
   BonusBlock(const BonusBlock&);
   BonusBlock& operator=(const BonusBlock&);
   std::string sprite_name;
   std::string script;
   SurfacePtr lightsprite;
   void get_content_by_data(int d);
-  void raise_growup_bonus(Player* player, const BonusType& bonus, const Direction& dir);
+  void raise_growup_bonus(Player* player, const BonusType& bonus,
+                          const Direction& dir);
   void drop_growup_bonus(const std::string& bonus_sprite_name, bool& countdown);
-  BonusBlock::Contents get_content_from_string(const std::string& contentstring) const;
+  BonusBlock::Contents get_content_from_string(
+      const std::string& contentstring) const;
 };
 
 #endif

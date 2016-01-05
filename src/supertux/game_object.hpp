@@ -38,7 +38,7 @@ class ObjectRemoveListener;
  */
 class GameObject
 {
-public:
+ public:
   GameObject();
   GameObject(const GameObject& rhs);
   virtual ~GameObject();
@@ -56,13 +56,15 @@ public:
   virtual void draw(DrawingContext& context) = 0;
 
   /** returns true if the object is not scheduled to be removed yet */
-  bool is_valid() const
+  bool
+  is_valid() const
   {
     return !wants_to_die;
   }
 
   /** schedules this object to be removed at the end of the frame */
-  void remove_me()
+  void
+  remove_me()
   {
     wants_to_die = true;
   }
@@ -78,12 +80,13 @@ public:
    */
   void del_remove_listener(ObjectRemoveListener* listener);
 
-  const std::string& get_name() const
+  const std::string&
+  get_name() const
   {
     return name;
   }
 
-private:
+ private:
   /** this flag indicates if the object should be removed at the end of the
    * frame
    */
@@ -96,14 +99,14 @@ private:
   };
   RemoveListenerListEntry* remove_listeners;
 
-protected:
+ protected:
   /**
    * a name for the gameobject, this is mostly a hint for scripts and for
    * debugging, don't rely on names being set or being unique
    */
   std::string name;
 
-private:
+ private:
   GameObject& operator=(const GameObject&);
 };
 

@@ -1,5 +1,6 @@
 //  SuperTux - Decal
-//  Copyright (C) 2008 Christoph Sommer <christoph.sommer@2008.expires.deltadevelopment.de>
+//  Copyright (C) 2008 Christoph Sommer
+//  <christoph.sommer@2008.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,10 +26,12 @@
  */
 class Decal : public MovingSprite
 {
-public:
+ public:
   Decal(const ReaderMapping& reader);
   virtual ~Decal();
-  virtual HitResponse collision(GameObject& , const CollisionHit& ) {
+  virtual HitResponse
+  collision(GameObject&, const CollisionHit&)
+  {
     return FORCE_MOVE;
   }
 };

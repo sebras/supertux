@@ -21,7 +21,7 @@
 
 class Plant : public BadGuy
 {
-public:
+ public:
   Plant(const ReaderMapping& reader);
 
   void initialize();
@@ -30,14 +30,15 @@ public:
   void active_update(float elapsed_time);
   void ignite();
 
-protected:
-  enum PlantState {
+ protected:
+  enum PlantState
+  {
     PLANT_SLEEPING,
     PLANT_WAKING,
     PLANT_WALKING
   };
 
-private:
+ private:
   Timer timer;
   PlantState state;
 };

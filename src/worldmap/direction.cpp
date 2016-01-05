@@ -18,11 +18,12 @@
 
 #include "util/log.hpp"
 
-namespace worldmap {
-
-Direction reverse_dir(Direction direction)
+namespace worldmap
 {
-  switch(direction)
+Direction
+reverse_dir(Direction direction)
+{
+  switch (direction)
   {
     case D_WEST:
       return D_EAST;
@@ -41,7 +42,7 @@ Direction reverse_dir(Direction direction)
 std::string
 direction_to_string(Direction direction)
 {
-  switch(direction)
+  switch (direction)
   {
     case D_WEST:
       return "west";
@@ -69,12 +70,13 @@ string_to_direction(const std::string& directory)
     return D_SOUTH;
   else if (directory == "none")
     return D_NONE;
-  else {
+  else
+  {
     log_warning << "unknown direction: \"" << directory << "\"" << std::endl;
     return D_NONE;
   }
 }
 
-} // namespace worldmap
+}  // namespace worldmap
 
 /* EOF */

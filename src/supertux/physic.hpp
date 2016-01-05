@@ -26,7 +26,7 @@
  */
 class Physic
 {
-public:
+ public:
   Physic();
   ~Physic();
 
@@ -70,7 +70,7 @@ public:
 
   Vector get_movement(float elapsed_time);
 
-private:
+ private:
   /** horizontal and vertical acceleration */
   float ax, ay;
 

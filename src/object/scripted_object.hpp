@@ -26,7 +26,7 @@ class ScriptedObject : public MovingSprite,
                        public scripting::ScriptedObject,
                        public ScriptInterface
 {
-public:
+ public:
   ScriptedObject(const ReaderMapping& lisp);
 
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
@@ -59,7 +59,7 @@ public:
 
   std::string get_name();
 
-private:
+ private:
   Physic physic;
   std::string name;
   bool solid;

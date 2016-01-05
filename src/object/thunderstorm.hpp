@@ -1,5 +1,6 @@
 //  SuperTux - Thunderstorm Game Object
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,12 +26,12 @@
 #include "video/drawing_context.hpp"
 
 /**
- * Thunderstorm scriptable GameObject; plays thunder, lightning and electrifies water at regular interval
+ * Thunderstorm scriptable GameObject; plays thunder, lightning and electrifies
+ * water at regular interval
  */
-class Thunderstorm : public GameObject,
-                     public ScriptInterface
+class Thunderstorm : public GameObject, public ScriptInterface
 {
-public:
+ public:
   Thunderstorm(const ReaderMapping& reader);
 
   void update(float elapsed_time);
@@ -78,13 +79,13 @@ public:
    * @}
    */
 
-private:
-  bool running; /**< whether we currently automatically trigger lightnings */
+ private:
+  bool running;   /**< whether we currently automatically trigger lightnings */
   float interval; /**< time between two lightnings */
-  int layer; /**< layer, where flash will be painted */
+  int layer;      /**< layer, where flash will be painted */
 
-  Timer time_to_thunder; /**< counts down until next thunder */
-  Timer time_to_lightning; /**< counts down until next lightning */
+  Timer time_to_thunder;     /**< counts down until next thunder */
+  Timer time_to_lightning;   /**< counts down until next lightning */
   Timer flash_display_timer; /**< counts down while flash is displayed */
 };
 

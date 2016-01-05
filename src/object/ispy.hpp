@@ -1,5 +1,6 @@
 //  SuperTux - Ispy
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,15 +26,16 @@
  */
 class Ispy : public MovingSprite
 {
-public:
+ public:
   Ispy(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
   virtual void update(float elapsed_time);
 
-private:
-  enum IspyState {
+ private:
+  enum IspyState
+  {
     ISPYSTATE_IDLE,
     ISPYSTATE_ALERT,
     ISPYSTATE_HIDING,
@@ -43,7 +45,6 @@ private:
 
   std::string script; /**< script to execute when Tux is spotted */
   Direction dir;
-
 };
 
 #endif

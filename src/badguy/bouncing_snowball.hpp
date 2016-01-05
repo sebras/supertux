@@ -21,7 +21,7 @@
 
 class BouncingSnowball : public BadGuy
 {
-public:
+ public:
   BouncingSnowball(const ReaderMapping& reader);
   BouncingSnowball(const Vector& pos, Direction d);
 
@@ -29,7 +29,7 @@ public:
   void collision_solid(const CollisionHit& hit);
   HitResponse collision_badguy(BadGuy& badguy, const CollisionHit& hit);
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 };
 

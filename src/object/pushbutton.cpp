@@ -1,5 +1,6 @@
 //  SuperTux - PushButton running a script
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,21 +27,25 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace {
+namespace
+{
 const std::string BUTTON_SOUND = "sounds/switch.ogg";
-//14 -> 8
+// 14 -> 8
 }
 
-PushButton::PushButton(const ReaderMapping& lisp) :
-  MovingSprite(lisp, "images/objects/pushbutton/pushbutton.sprite", LAYER_BACKGROUNDTILES+1, COLGROUP_MOVING),
-  script(),
-  state(OFF)
+PushButton::PushButton(const ReaderMapping& lisp)
+    : MovingSprite(lisp, "images/objects/pushbutton/pushbutton.sprite",
+                   LAYER_BACKGROUNDTILES + 1, COLGROUP_MOVING),
+      script(),
+      state(OFF)
 {
   SoundManager::current()->preload(BUTTON_SOUND);
   set_action("off", -1);
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
 
-  if (!lisp.get("script", script)) {
+  if (!lisp.get("script", script))
+  {
     log_warning << "No script set for pushbutton." << std::endl;
   }
 }
@@ -57,7 +62,7 @@ PushButton::collision(GameObject& other, const CollisionHit& hit)
   if (!player) return FORCE_MOVE;
   float vy = player->get_physic().get_velocity_y();
 
-  //player->add_velocity(Vector(0, -150));
+  // player->add_velocity(Vector(0, -150));
   player->get_physic().set_velocity_y(-150);
 
   if (state != OFF) return FORCE_MOVE;

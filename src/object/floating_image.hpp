@@ -25,36 +25,52 @@ class Sprite;
 
 class FloatingImage : public GameObject
 {
-public:
+ public:
   FloatingImage(const std::string& sprite);
   virtual ~FloatingImage();
 
-  void set_layer(int layer_) {
+  void
+  set_layer(int layer_)
+  {
     this->layer = layer_;
   }
 
-  int get_layer() const {
+  int
+  get_layer() const
+  {
     return layer;
   }
 
-  void set_pos(const Vector& pos_) {
+  void
+  set_pos(const Vector& pos_)
+  {
     this->pos = pos_;
   }
-  const Vector& get_pos() const {
+  const Vector&
+  get_pos() const
+  {
     return pos;
   }
 
-  void set_anchor_point(AnchorPoint anchor_) {
+  void
+  set_anchor_point(AnchorPoint anchor_)
+  {
     this->anchor = anchor_;
   }
-  AnchorPoint get_anchor_point() const {
+  AnchorPoint
+  get_anchor_point() const
+  {
     return anchor;
   }
 
-  void set_visible(bool visible_) {
+  void
+  set_visible(bool visible_)
+  {
     this->visible = visible_;
   }
-  bool get_visible() const {
+  bool
+  get_visible() const
+  {
     return visible;
   }
 
@@ -67,7 +83,7 @@ public:
   void update(float elapsed_time);
   void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   int layer;
   bool visible;

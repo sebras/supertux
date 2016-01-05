@@ -23,7 +23,7 @@ class Writer;
 
 class ScriptTrigger : public TriggerBase
 {
-public:
+ public:
   ScriptTrigger(const ReaderMapping& reader);
   ScriptTrigger(const Vector& pos, const std::string& script);
   ~ScriptTrigger();
@@ -31,7 +31,7 @@ public:
   void write(Writer& writer);
   void event(Player& player, EventType type);
 
-private:
+ private:
   EventType triggerevent;
   std::string script;
 };

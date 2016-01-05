@@ -1,4 +1,5 @@
-//  SuperTux badguy - Iceflame a flame-like enemy that can be killed with fireballs
+//  SuperTux badguy - Iceflame a flame-like enemy that can be killed with
+//  fireballs
 //  Copyright (C) 2013 LMH <lmh.0013@gmail.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -21,7 +22,7 @@
 
 class Iceflame : public BadGuy
 {
-public:
+ public:
   Iceflame(const ReaderMapping& reader);
   Iceflame(const Iceflame& iceflame);
 
@@ -32,13 +33,12 @@ public:
   void ignite();
   bool is_flammable() const;
 
-private:
+ private:
   float angle;
   float radius;
   float speed;
   Color light;
   SpritePtr lightsprite;
-
 };
 
 #endif

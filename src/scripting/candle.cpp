@@ -17,25 +17,23 @@
 #include "object/candle.hpp"
 #include "scripting/candle.hpp"
 
-namespace scripting {
+namespace scripting
+{
+Candle::Candle(::Candle* candle_) : candle(candle_) {}
 
-Candle::Candle(::Candle* candle_)
-  : candle(candle_)
-{ }
+Candle::~Candle() {}
 
-Candle::~Candle()
-{ }
-
-bool Candle::get_burning()
+bool
+Candle::get_burning()
 {
   return candle->get_burning();
 }
 
-void Candle::set_burning(bool burning)
+void
+Candle::set_burning(bool burning)
 {
   candle->set_burning(burning);
 }
-
 }
 
 /* EOF */

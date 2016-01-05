@@ -26,13 +26,14 @@
 #include "video/texture_manager.hpp"
 
 /// bitset for drawing effects
-enum {
+enum
+{
   /** Don't apply anything */
   NO_EFFECT = 0,
   /** Draw the Surface upside down */
-  VERTICAL_FLIP = (1<<1),
+  VERTICAL_FLIP = (1 << 1),
   /** Draw the Surface from left to down */
-  HORIZONTAL_FLIP = (1<<2),
+  HORIZONTAL_FLIP = (1 << 2),
   NUM_EFFECTS
 };
 
@@ -45,13 +46,13 @@ typedef unsigned int DrawingEffect;
  */
 class Texture
 {
-private:
+ private:
   friend class TextureManager;
   /* The name under which this texture is cached by the texture manager,
    * or the empty string if not. */
   std::string cache_filename;
 
-public:
+ public:
   Texture() : cache_filename() {}
   virtual ~Texture()
   {
@@ -66,7 +67,7 @@ public:
   virtual unsigned int get_image_width() const = 0;
   virtual unsigned int get_image_height() const = 0;
 
-private:
+ private:
   Texture(const Texture&);
   Texture& operator=(const Texture&);
 };

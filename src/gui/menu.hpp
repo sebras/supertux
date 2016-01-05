@@ -32,7 +32,7 @@ class MenuItem;
 
 class Menu
 {
-public:
+ public:
   Menu();
   virtual ~Menu();
 
@@ -45,19 +45,24 @@ public:
   MenuItem* add_submenu(const std::string& text, int submenu, int id = -1);
   MenuItem* add_controlfield(int id, const std::string& text,
                              const std::string& mapping = "");
-  MenuItem* add_string_select(int id, const std::string& text, size_t* selected, std::vector<std::string> strings);
+  MenuItem* add_string_select(int id, const std::string& text, size_t* selected,
+                              std::vector<std::string> strings);
 
   virtual void menu_action(MenuItem* item) = 0;
 
   void process_input();
 
   /** Perform actions to bring the menu up to date with configuration changes */
-  virtual void refresh() {}
+  virtual void
+  refresh()
+  {
+  }
 
   /** Remove all entries from the menu */
   void clear();
 
-  MenuItem& get_item(int index)
+  MenuItem&
+  get_item(int index)
   {
     return *(items[index]);
   }
@@ -69,7 +74,11 @@ public:
   void set_active_item(int id);
 
   void draw(DrawingContext& context);
-  Vector get_center_pos() const { return pos; }
+  Vector
+  get_center_pos() const
+  {
+    return pos;
+  }
   void set_center_pos(float x, float y);
 
   void event(const SDL_Event& event);
@@ -79,27 +88,27 @@ public:
 
   virtual void on_window_resize();
 
-protected:
+ protected:
   MenuItem* add_item(std::unique_ptr<MenuItem> menu_item);
 
-private:
+ private:
   void process_action(MenuAction menuaction);
   void check_controlfield_change_event(const SDL_Event& event);
   void draw_item(DrawingContext& context, int index);
 
-private:
+ private:
   // position of the menu (ie. center of the menu, not top/left)
   Vector pos;
 
   /* input implementation variables */
-  int   delete_character;
-  char  mn_input_char;
+  int delete_character;
+  char mn_input_char;
   float menu_repeat_time;
 
-public:
+ public:
   std::vector<std::unique_ptr<MenuItem> > items;
 
-private:
+ private:
   int arrange_left;
   int active_item;
 };

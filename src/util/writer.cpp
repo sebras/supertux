@@ -19,11 +19,8 @@
 #include "physfs/ofile_stream.hpp"
 #include "util/log.hpp"
 
-Writer::Writer(const std::string& filename) :
-  out(),
-  out_owned(),
-  indent_depth(),
-  lists()
+Writer::Writer(const std::string& filename)
+    : out(), out_owned(), indent_depth(), lists()
 {
   out = new OFileStream(filename);
   out_owned = true;
@@ -31,11 +28,8 @@ Writer::Writer(const std::string& filename) :
   out->precision(10);
 }
 
-Writer::Writer(std::ostream* newout) :
-  out(),
-  out_owned(),
-  indent_depth(),
-  lists()
+Writer::Writer(std::ostream* newout)
+    : out(), out_owned(), indent_depth(), lists()
 {
   out = newout;
   out_owned = false;
@@ -45,11 +39,11 @@ Writer::Writer(std::ostream* newout) :
 
 Writer::~Writer()
 {
-  if(lists.size() > 0) {
+  if (lists.size() > 0)
+  {
     log_warning << "Not all sections closed in lispwriter" << std::endl;
   }
-  if(out_owned)
-    delete out;
+  if (out_owned) delete out;
 }
 
 void
@@ -63,7 +57,7 @@ Writer::start_list(const std::string& listname, bool string)
 {
   indent();
   *out << '(';
-  if(string)
+  if (string)
     write_escaped_string(listname);
   else
     *out << listname;
@@ -76,12 +70,16 @@ Writer::start_list(const std::string& listname, bool string)
 void
 Writer::end_list(const std::string& listname)
 {
-  if(lists.size() == 0) {
-    log_warning << "Trying to close list '" << listname << "', which is not open" << std::endl;
+  if (lists.size() == 0)
+  {
+    log_warning << "Trying to close list '" << listname
+                << "', which is not open" << std::endl;
     return;
   }
-  if(lists.back() != listname) {
-    log_warning << "trying to close list '" << listname << "' while list '" << lists.back() << "' is open" << std::endl;
+  if (lists.back() != listname)
+  {
+    log_warning << "trying to close list '" << listname << "' while list '"
+                << lists.back() << "' is open" << std::endl;
     return;
   }
   lists.pop_back();
@@ -120,11 +118,14 @@ Writer::write(const std::string& name, const std::string& value,
 {
   indent();
   *out << '(' << name;
-  if(translatable) {
+  if (translatable)
+  {
     *out << " (_ ";
     write_escaped_string(value);
     *out << "))\n";
-  } else {
+  }
+  else
+  {
     *out << " ";
     write_escaped_string(value);
     *out << ")\n";
@@ -139,45 +140,46 @@ Writer::write(const std::string& name, bool value)
 }
 
 void
-Writer::write(const std::string& name,
-              const std::vector<int>& value)
+Writer::write(const std::string& name, const std::vector<int>& value)
 {
   indent();
   *out << '(' << name;
-  for(std::vector<int>::const_iterator i = value.begin(); i != value.end(); ++i)
+  for (std::vector<int>::const_iterator i = value.begin(); i != value.end();
+       ++i)
     *out << " " << *i;
   *out << ")\n";
 }
 
 void
-Writer::write(const std::string& name,
-              const std::vector<unsigned int>& value)
+Writer::write(const std::string& name, const std::vector<unsigned int>& value)
 {
   indent();
   *out << '(' << name;
-  for(std::vector<unsigned int>::const_iterator i = value.begin(); i != value.end(); ++i)
+  for (std::vector<unsigned int>::const_iterator i = value.begin();
+       i != value.end(); ++i)
     *out << " " << *i;
   *out << ")\n";
 }
 
 void
-Writer::write(const std::string& name,
-              const std::vector<float>& value)
+Writer::write(const std::string& name, const std::vector<float>& value)
 {
   indent();
   *out << '(' << name;
-  for(std::vector<float>::const_iterator i = value.begin(); i != value.end(); ++i)
+  for (std::vector<float>::const_iterator i = value.begin(); i != value.end();
+       ++i)
     *out << " " << *i;
   *out << ")\n";
 }
 
 void
-Writer::write(const std::string& name,
-              const std::vector<std::string>& value)
+Writer::write(const std::string& name, const std::vector<std::string>& value)
 {
   indent();
   *out << '(' << name;
-  for(std::vector<std::string>::const_iterator i = value.begin(); i != value.end(); ++i) {
+  for (std::vector<std::string>::const_iterator i = value.begin();
+       i != value.end(); ++i)
+  {
     *out << " ";
     write_escaped_string(*i);
   }
@@ -188,10 +190,11 @@ void
 Writer::write_escaped_string(const std::string& str)
 {
   *out << '"';
-  for(const char* c = str.c_str(); *c != 0; ++c) {
-    if(*c == '\"')
+  for (const char* c = str.c_str(); *c != 0; ++c)
+  {
+    if (*c == '\"')
       *out << "\\\"";
-    else if(*c == '\\')
+    else if (*c == '\\')
       *out << "\\\\";
     else
       *out << *c;
@@ -202,8 +205,7 @@ Writer::write_escaped_string(const std::string& str)
 void
 Writer::indent()
 {
-  for(int i = 0; i<indent_depth; ++i)
-    *out << ' ';
+  for (int i = 0; i < indent_depth; ++i) *out << ' ';
 }
 
 /* EOF */

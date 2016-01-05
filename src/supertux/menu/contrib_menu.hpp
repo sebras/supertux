@@ -24,16 +24,16 @@ class World;
 
 class ContribMenu : public Menu
 {
-private:
+ private:
   std::vector<std::unique_ptr<World> > m_contrib_worlds;
 
-public:
+ public:
   ContribMenu();
   ~ContribMenu();
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   ContribMenu(const ContribMenu&);
   ContribMenu& operator=(const ContribMenu&);
 };

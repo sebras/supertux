@@ -17,32 +17,31 @@
 #include "object/platform.hpp"
 #include "scripting/platform.hpp"
 
-#define NOIMPL      log_fatal << __PRETTY_FUNCTION__ << " not implemented."
+#define NOIMPL log_fatal << __PRETTY_FUNCTION__ << " not implemented."
 
-namespace scripting {
+namespace scripting
+{
+Platform::Platform(::Platform* platform_) : platform(platform_) {}
 
-Platform::Platform(::Platform* platform_)
-  : platform(platform_)
-{ }
+Platform::~Platform() {}
 
-Platform::~Platform()
-{ }
-
-void Platform::goto_node(int node_no)
+void
+Platform::goto_node(int node_no)
 {
   platform->goto_node(node_no);
 }
 
-void Platform::start_moving()
+void
+Platform::start_moving()
 {
   platform->start_moving();
 }
 
-void Platform::stop_moving()
+void
+Platform::stop_moving()
 {
   platform->stop_moving();
 }
-
 }
 
 /* EOF */

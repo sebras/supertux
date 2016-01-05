@@ -26,12 +26,8 @@ class PlayerStatus;
 
 struct LevelState
 {
-public:
-  LevelState() :
-    filename(),
-    solved(false),
-    perfect(false)
-  {}
+ public:
+  LevelState() : filename(), solved(false), perfect(false) {}
 
   std::string filename;
   bool solved;
@@ -40,11 +36,8 @@ public:
 
 struct LevelsetState
 {
-public:
-  LevelsetState() :
-    directory(),
-    level_states()
-  {}
+ public:
+  LevelsetState() : directory(), level_states() {}
   std::string directory;
   std::vector<LevelState> level_states;
 
@@ -54,35 +47,35 @@ public:
 
 struct WorldmapState
 {
-public:
-  WorldmapState() :
-    filename(),
-    level_states()
-  {}
+ public:
+  WorldmapState() : filename(), level_states() {}
   std::string filename;
   std::vector<LevelState> level_states;
 };
 
 class Savegame
 {
-private:
+ private:
   std::string m_filename;
   std::unique_ptr<PlayerStatus> m_player_status;
 
-public:
+ public:
   Savegame(const std::string& filename);
   ~Savegame();
 
   /** Returns content of (tux ...) entry */
-  PlayerStatus* get_player_status() const { return m_player_status.get(); }
+  PlayerStatus*
+  get_player_status() const
+  {
+    return m_player_status.get();
+  }
 
   std::string get_title() const;
 
   std::vector<std::string> get_levelsets();
   LevelsetState get_levelset_state(const std::string& name);
   void set_levelset_state(const std::string& basedir,
-                          const std::string& level_filename,
-                          bool solved);
+                          const std::string& level_filename, bool solved);
 
   std::vector<std::string> get_worldmaps();
   WorldmapState get_worldmap_state(const std::string& name);
@@ -90,10 +83,10 @@ public:
   void save();
   void load();
 
-private:
+ private:
   void clear_state_table();
 
-private:
+ private:
   Savegame(const Savegame&) = delete;
   Savegame& operator=(const Savegame&) = delete;
 };

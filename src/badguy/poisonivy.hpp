@@ -21,15 +21,14 @@
 
 class PoisonIvy : public WalkingBadguy
 {
-public:
+ public:
   PoisonIvy(const ReaderMapping& reader);
   PoisonIvy(const Vector& pos, Direction d);
 
   bool is_freezable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-
 };
 
 #endif

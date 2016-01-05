@@ -1,6 +1,7 @@
 //  SuperTux - Boss "Yeti"
 //  Copyright (C) 2005 Matthias Braun <matze@braunis.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@
 
 class Yeti : public BadGuy
 {
-public:
+ public:
   Yeti(const ReaderMapping& lisp);
   ~Yeti();
 
@@ -38,7 +39,7 @@ public:
 
   bool is_flammable() const;
 
-private:
+ private:
   void run();
   void jump_up();
   void be_angry();
@@ -49,8 +50,9 @@ private:
 
   void take_hit(Player& player);
 
-private:
-  enum YetiState {
+ private:
+  enum YetiState
+  {
     JUMP_DOWN,
     RUN,
     JUMP_UP,
@@ -58,7 +60,7 @@ private:
     SQUISHED
   };
 
-private:
+ private:
   YetiState state;
   Timer state_timer;
   Timer safe_timer;

@@ -25,17 +25,18 @@
 
 class SpriteData
 {
-public:
+ public:
   /** cur has to be a pointer to data in the form of ((hitbox 5 10 0 0) ...) */
   SpriteData(const ReaderMapping& cur, const std::string& basedir);
   ~SpriteData();
 
-  const std::string& get_name() const
+  const std::string&
+  get_name() const
   {
     return name;
   }
 
-private:
+ private:
   friend class Sprite;
 
   struct Action
@@ -64,9 +65,10 @@ private:
     std::vector<SurfacePtr> surfaces;
   };
 
-  typedef std::map <std::string, std::unique_ptr<Action> > Actions;
+  typedef std::map<std::string, std::unique_ptr<Action> > Actions;
 
-  void parse_action(const ReaderMapping& lispreader, const std::string& basedir);
+  void parse_action(const ReaderMapping& lispreader,
+                    const std::string& basedir);
   /** Get an action */
   const Action* get_action(const std::string& act) const;
 

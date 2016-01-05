@@ -19,10 +19,9 @@
 
 #include "badguy/walking_badguy.hpp"
 
-class MrBomb : public WalkingBadguy,
-               public Portable
+class MrBomb : public WalkingBadguy, public Portable
 {
-public:
+ public:
   MrBomb(const ReaderMapping& reader);
   MrBomb(const Vector& pos, Direction d);
 
@@ -39,10 +38,10 @@ public:
 
   bool is_freezable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   bool grabbed;
 };
 

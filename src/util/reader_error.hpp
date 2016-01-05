@@ -25,23 +25,22 @@
 
 #include "util/reader_document.hpp"
 
-#define raise_exception(doc, sx, msg) raise_exception_real(__FILE__, __LINE__, doc, sx, msg)
+#define raise_exception(doc, sx, msg) \
+  raise_exception_real(__FILE__, __LINE__, doc, sx, msg)
 
-[[noreturn]]
-inline void
-raise_exception_real(const char* filename, int line,
-                     ReaderDocument const& doc, sexp::Value const& sx,
-                     const char* usermsg)
+[[noreturn]] inline void
+raise_exception_real(const char* filename, int line, ReaderDocument const& doc,
+                     sexp::Value const& sx, const char* usermsg)
 {
   std::ostringstream msg;
-  msg << "[" << filename << ":" << line << "] "
-      << doc.get_filename() << ":" << sx.get_line() << ": "
-      << usermsg << " in expression:"
+  msg << "[" << filename << ":" << line << "] " << doc.get_filename() << ":"
+      << sx.get_line() << ": " << usermsg << " in expression:"
       << "\n    " << sx;
   throw std::runtime_error(msg.str());
 }
 
-inline void assert_is_boolean(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_boolean(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_boolean())
   {
@@ -49,7 +48,8 @@ inline void assert_is_boolean(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_is_integer(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_integer(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_integer())
   {
@@ -57,7 +57,8 @@ inline void assert_is_integer(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_is_real(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_real(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_real())
   {
@@ -65,7 +66,8 @@ inline void assert_is_real(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_is_symbol(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_symbol(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_symbol())
   {
@@ -73,7 +75,8 @@ inline void assert_is_symbol(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_is_string(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_string(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_string())
   {
@@ -81,7 +84,8 @@ inline void assert_is_string(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_is_array(ReaderDocument const& doc, sexp::Value const& sx)
+inline void
+assert_is_array(ReaderDocument const& doc, sexp::Value const& sx)
 {
   if (!sx.is_array())
   {
@@ -89,7 +93,8 @@ inline void assert_is_array(ReaderDocument const& doc, sexp::Value const& sx)
   }
 }
 
-inline void assert_array_size_ge(ReaderDocument const& doc, sexp::Value const& sx, int size)
+inline void
+assert_array_size_ge(ReaderDocument const& doc, sexp::Value const& sx, int size)
 {
   assert_is_array(doc, sx);
 
@@ -101,14 +106,16 @@ inline void assert_array_size_ge(ReaderDocument const& doc, sexp::Value const& s
   }
 }
 
-inline void assert_array_size_eq(ReaderDocument const& doc, sexp::Value const& sx, int size)
+inline void
+assert_array_size_eq(ReaderDocument const& doc, sexp::Value const& sx, int size)
 {
   assert_is_array(doc, sx);
 
   if (static_cast<int>(sx.as_array().size()) != size)
   {
     std::ostringstream msg;
-    msg << "array must have " << size << " elements, but has " << sx.as_array().size();
+    msg << "array must have " << size << " elements, but has "
+        << sx.as_array().size();
     raise_exception(doc, sx, msg.str().c_str());
   }
 }

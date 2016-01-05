@@ -23,7 +23,7 @@
 
 class Flower : public MovingObject
 {
-public:
+ public:
   Flower(BonusType type);
   ~Flower();
 
@@ -31,12 +31,12 @@ public:
   virtual void draw(DrawingContext& context);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   BonusType type;
   SpritePtr sprite;
   DrawingEffect drawing_effect;
 
-private:
+ private:
   Flower(const Flower&);
   Flower& operator=(const Flower&);
   Color light;

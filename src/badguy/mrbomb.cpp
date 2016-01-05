@@ -25,33 +25,37 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-MrBomb::MrBomb(const ReaderMapping& reader) :
-  WalkingBadguy(reader, "images/creatures/mr_bomb/mr_bomb.sprite", "left", "right"),
-  grabbed()
+MrBomb::MrBomb(const ReaderMapping& reader)
+    : WalkingBadguy(reader, "images/creatures/mr_bomb/mr_bomb.sprite", "left",
+                    "right"),
+      grabbed()
 {
   walk_speed = 80;
   max_drop_height = 16;
   grabbed = false;
 
-  //Prevent stutter when Tux jumps on Mr Bomb
+  // Prevent stutter when Tux jumps on Mr Bomb
   SoundManager::current()->preload("sounds/explosion.wav");
 
-  //Check if we need another sprite
-  if( !reader.get( "sprite", sprite_name ) ){
+  // Check if we need another sprite
+  if (!reader.get("sprite", sprite_name))
+  {
     return;
   }
-  if (sprite_name.empty()) {
+  if (sprite_name.empty())
+  {
     sprite_name = "images/creatures/mr_bomb/mr_bomb.sprite";
     return;
   }
-  //Replace sprite
-  sprite = SpriteManager::current()->create( sprite_name );
+  // Replace sprite
+  sprite = SpriteManager::current()->create(sprite_name);
 }
 
 /* MrBomb created by a dispenser always gets default sprite atm.*/
-MrBomb::MrBomb(const Vector& pos, Direction d) :
-  WalkingBadguy(pos, d, "images/creatures/mr_bomb/mr_bomb.sprite", "left", "right"),
-  grabbed()
+MrBomb::MrBomb(const Vector& pos, Direction d)
+    : WalkingBadguy(pos, d, "images/creatures/mr_bomb/mr_bomb.sprite", "left",
+                    "right"),
+      grabbed()
 {
   walk_speed = 80;
   max_drop_height = 16;
@@ -62,16 +66,14 @@ MrBomb::MrBomb(const Vector& pos, Direction d) :
 HitResponse
 MrBomb::collision(GameObject& object, const CollisionHit& hit)
 {
-  if(grabbed)
-    return FORCE_MOVE;
+  if (grabbed) return FORCE_MOVE;
   return WalkingBadguy::collision(object, hit);
 }
 
 HitResponse
 MrBomb::collision_player(Player& player, const CollisionHit& hit)
 {
-  if(grabbed)
-    return FORCE_MOVE;
+  if (grabbed) return FORCE_MOVE;
   return WalkingBadguy::collision_player(player, hit);
 }
 
@@ -79,14 +81,17 @@ bool
 MrBomb::collision_squished(GameObject& object)
 {
   Player* player = dynamic_cast<Player*>(&object);
-  if(player && player->is_invincible()) {
+  if (player && player->is_invincible())
+  {
     player->bounce(*this);
     kill_fall();
     return true;
   }
-  if(is_valid()) {
+  if (is_valid())
+  {
     remove_me();
-    Sector::current()->add_object(std::make_shared<Bomb>(get_pos(), dir, sprite_name));
+    Sector::current()->add_object(
+        std::make_shared<Bomb>(get_pos(), dir, sprite_name));
   }
   kill_squished(object);
   return true;
@@ -95,15 +100,15 @@ MrBomb::collision_squished(GameObject& object)
 void
 MrBomb::active_update(float elapsed_time)
 {
-  if(grabbed)
-    return;
+  if (grabbed) return;
   WalkingBadguy::active_update(elapsed_time);
 }
 
 void
 MrBomb::kill_fall()
 {
-  if(is_valid()) {
+  if (is_valid())
+  {
     remove_me();
     auto explosion = std::make_shared<Explosion>(bbox.get_middle());
     Sector::current()->add_object(explosion);
@@ -130,7 +135,7 @@ MrBomb::grab(MovingObject&, const Vector& pos, Direction dir_)
 }
 
 void
-MrBomb::ungrab(MovingObject& , Direction dir_)
+MrBomb::ungrab(MovingObject&, Direction dir_)
 {
   this->dir = dir_;
   set_colgroup_active(COLGROUP_MOVING);

@@ -1,5 +1,6 @@
 //  SuperTux - "Will-O-Wisp" Badguy
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -31,41 +32,45 @@
 #include "util/reader_mapping.hpp"
 
 static const float FLYSPEED = 64; /**< speed in px per second */
-static const float TRACK_RANGE = 384; /**< at what distance to start tracking the player */
-static const float VANISH_RANGE = 512; /**< at what distance to stop tracking and vanish */
+static const float TRACK_RANGE =
+    384; /**< at what distance to start tracking the player */
+static const float VANISH_RANGE =
+    512; /**< at what distance to stop tracking and vanish */
 static const std::string SOUNDFILE = "sounds/willowisp.wav";
 
-WillOWisp::WillOWisp(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/willowisp/willowisp.sprite", LAYER_FLOATINGOBJECTS),
-  mystate(STATE_IDLE),
-  target_sector(),
-  target_spawnpoint(),
-  hit_script(),
-  sound_source(),
-  path(),
-  walker(),
-  flyspeed(),
-  track_range(),
-  vanish_range(),
-  lightsprite(SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light-small.sprite"))
+WillOWisp::WillOWisp(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/willowisp/willowisp.sprite",
+             LAYER_FLOATINGOBJECTS),
+      mystate(STATE_IDLE),
+      target_sector(),
+      target_spawnpoint(),
+      hit_script(),
+      sound_source(),
+      path(),
+      walker(),
+      flyspeed(),
+      track_range(),
+      vanish_range(),
+      lightsprite(SpriteManager::current()->create(
+          "images/objects/lightmap_light/lightmap_light-small.sprite"))
 {
-  if ( !reader.get("sector", target_sector)) target_sector = "main";
-  if ( !reader.get("spawnpoint", target_spawnpoint)) target_spawnpoint = "main";
-  if ( !reader.get("flyspeed", flyspeed)) flyspeed = FLYSPEED;
-  if ( !reader.get("track-range", track_range)) track_range = TRACK_RANGE;
-  if ( !reader.get("vanish-range", vanish_range)) vanish_range = VANISH_RANGE;
-  if ( !reader.get("hit-script", hit_script)) hit_script = "";
+  if (!reader.get("sector", target_sector)) target_sector = "main";
+  if (!reader.get("spawnpoint", target_spawnpoint)) target_spawnpoint = "main";
+  if (!reader.get("flyspeed", flyspeed)) flyspeed = FLYSPEED;
+  if (!reader.get("track-range", track_range)) track_range = TRACK_RANGE;
+  if (!reader.get("vanish-range", vanish_range)) vanish_range = VANISH_RANGE;
+  if (!reader.get("hit-script", hit_script)) hit_script = "";
 
   bool running;
-  if ( !reader.get("running", running)) running = false;
+  if (!reader.get("running", running)) running = false;
 
   ReaderMapping path_mapping;
-  if(reader.get("path", path_mapping)) {
+  if (reader.get("path", path_mapping))
+  {
     path.reset(new Path());
     path->read(path_mapping);
     walker.reset(new PathWalker(path.get(), running));
-    if(running)
-      mystate = STATE_PATHMOVING_TRACK;
+    if (running) mystate = STATE_PATHMOVING_TRACK;
   }
 
   countMe = false;
@@ -101,23 +106,30 @@ WillOWisp::active_update(float elapsed_time)
   Vector p2 = player->get_bbox().get_middle();
   Vector dist = (p2 - p1);
 
-  switch(mystate) {
+  switch (mystate)
+  {
     case STATE_STOPPED:
       break;
 
     case STATE_IDLE:
-      if (dist.norm() <= track_range) {
+      if (dist.norm() <= track_range)
+      {
         mystate = STATE_TRACKING;
       }
       break;
 
     case STATE_TRACKING:
-      if (dist.norm() > vanish_range) {
+      if (dist.norm() > vanish_range)
+      {
         vanish();
-      } else if (dist.norm() >= 1) {
+      }
+      else if (dist.norm() >= 1)
+      {
         Vector dir_ = dist.unit();
         movement = dir_ * elapsed_time * flyspeed;
-      } else {
+      }
+      else
+      {
         /* We somehow landed right on top of the player without colliding.
          * Sit tight and avoid a division by zero. */
       }
@@ -125,14 +137,17 @@ WillOWisp::active_update(float elapsed_time)
       break;
 
     case STATE_WARPING:
-      if(sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         remove_me();
       }
 
-    case STATE_VANISHING: {
+    case STATE_VANISHING:
+    {
       Vector dir_ = dist.unit();
       movement = dir_ * elapsed_time * flyspeed;
-      if(sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         remove_me();
       }
       break;
@@ -140,10 +155,10 @@ WillOWisp::active_update(float elapsed_time)
 
     case STATE_PATHMOVING:
     case STATE_PATHMOVING_TRACK:
-      if(walker.get() == NULL)
-        return;
+      if (walker.get() == NULL) return;
       movement = walker->advance(elapsed_time) - get_pos();
-      if(mystate == STATE_PATHMOVING_TRACK && dist.norm() <= track_range) {
+      if (mystate == STATE_PATHMOVING_TRACK && dist.norm() <= track_range)
+      {
         mystate = STATE_TRACKING;
       }
       break;
@@ -169,7 +184,8 @@ WillOWisp::deactivate()
 {
   sound_source.reset(NULL);
 
-  switch (mystate) {
+  switch (mystate)
+  {
     case STATE_STOPPED:
     case STATE_IDLE:
     case STATE_PATHMOVING:
@@ -194,33 +210,34 @@ WillOWisp::vanish()
 }
 
 bool
-WillOWisp::collides(GameObject& other, const CollisionHit& ) const {
+WillOWisp::collides(GameObject& other, const CollisionHit&) const
+{
   Lantern* lantern = dynamic_cast<Lantern*>(&other);
 
-  if (lantern && lantern->is_open())
-    return true;
+  if (lantern && lantern->is_open()) return true;
 
-  if (dynamic_cast<Player*>(&other))
-    return true;
+  if (dynamic_cast<Player*>(&other)) return true;
 
   return false;
 }
 
 HitResponse
-WillOWisp::collision_player(Player& player, const CollisionHit& ) {
-  if(player.is_invincible())
-    return ABORT_MOVE;
+WillOWisp::collision_player(Player& player, const CollisionHit&)
+{
+  if (player.is_invincible()) return ABORT_MOVE;
 
-  if (mystate != STATE_TRACKING)
-    return ABORT_MOVE;
+  if (mystate != STATE_TRACKING) return ABORT_MOVE;
 
   mystate = STATE_WARPING;
   sprite->set_action("warping", 1);
 
-  if(hit_script != "") {
+  if (hit_script != "")
+  {
     std::istringstream stream(hit_script);
     Sector::current()->run_script(stream, "hit-script");
-  } else {
+  }
+  else
+  {
     GameSession::current()->respawn(target_sector, target_spawnpoint);
   }
   SoundManager::current()->play("sounds/warp.wav");
@@ -232,7 +249,8 @@ void
 WillOWisp::goto_node(int node_no)
 {
   walker->goto_node(node_no);
-  if(mystate != STATE_PATHMOVING && mystate != STATE_PATHMOVING_TRACK) {
+  if (mystate != STATE_PATHMOVING && mystate != STATE_PATHMOVING_TRACK)
+  {
     mystate = STATE_PATHMOVING;
   }
 }
@@ -252,41 +270,53 @@ WillOWisp::stop_moving()
 void
 WillOWisp::set_state(const std::string& new_state)
 {
-  if(new_state == "stopped") {
+  if (new_state == "stopped")
+  {
     mystate = STATE_STOPPED;
-  } else if(new_state == "idle") {
+  }
+  else if (new_state == "idle")
+  {
     mystate = STATE_IDLE;
-  } else if(new_state == "move_path") {
+  }
+  else if (new_state == "move_path")
+  {
     mystate = STATE_PATHMOVING;
     walker->start_moving();
-  } else if(new_state == "move_path_track") {
+  }
+  else if (new_state == "move_path_track")
+  {
     mystate = STATE_PATHMOVING_TRACK;
     walker->start_moving();
-  } else if(new_state == "normal") {
+  }
+  else if (new_state == "normal")
+  {
     mystate = STATE_IDLE;
-  } else if(new_state == "vanish") {
+  }
+  else if (new_state == "vanish")
+  {
     vanish();
-  } else {
-    log_warning << "Can't set unknown willowisp state '" << new_state << std::endl;
+  }
+  else
+  {
+    log_warning << "Can't set unknown willowisp state '" << new_state
+                << std::endl;
   }
 }
 
 void
 WillOWisp::expose(HSQUIRRELVM vm, SQInteger table_idx)
 {
-  if (name.empty())
-    return;
+  if (name.empty()) return;
 
   std::cout << "[DEBUG] Expose me '" << name << "'\n";
-  scripting::WillOWisp* _this = static_cast<scripting::WillOWisp*> (this);
+  scripting::WillOWisp* _this = static_cast<scripting::WillOWisp*>(this);
   expose_object(vm, table_idx, _this, name);
 }
 
 void
 WillOWisp::unexpose(HSQUIRRELVM vm, SQInteger table_idx)
 {
-  if (name.empty())
-    return;
+  if (name.empty()) return;
 
   std::cout << "[DEBUG] UnExpose me '" << name << "'\n";
   scripting::unexpose_object(vm, table_idx, name);

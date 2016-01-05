@@ -1,5 +1,6 @@
 //  SuperTux - MovingSprite Base Class
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -28,24 +29,20 @@
  */
 class MovingSprite : public MovingObject
 {
-public:
-  MovingSprite(const Vector& pos,
-               const std::string& sprite_name,
+ public:
+  MovingSprite(const Vector& pos, const std::string& sprite_name,
                int layer = LAYER_OBJECTS,
                CollisionGroup collision_group = COLGROUP_MOVING);
-  MovingSprite(const ReaderMapping& reader,
-               const Vector& pos,
+  MovingSprite(const ReaderMapping& reader, const Vector& pos,
                int layer = LAYER_OBJECTS,
                CollisionGroup collision_group = COLGROUP_MOVING);
-  MovingSprite(const ReaderMapping& reader,
-               const std::string& sprite_name,
+  MovingSprite(const ReaderMapping& reader, const std::string& sprite_name,
                int layer = LAYER_OBJECTS,
                CollisionGroup collision_group = COLGROUP_MOVING);
-  MovingSprite(const ReaderMapping& reader,
-               int layer = LAYER_OBJECTS,
+  MovingSprite(const ReaderMapping& reader, int layer = LAYER_OBJECTS,
                CollisionGroup collision_group = COLGROUP_MOVING);
   MovingSprite(const MovingSprite& moving_sprite);
-  //MovingSprite& operator=(const MovingSprite& moving_sprite);
+  // MovingSprite& operator=(const MovingSprite& moving_sprite);
   ~MovingSprite();
 
   virtual void draw(DrawingContext& context);
@@ -53,10 +50,11 @@ public:
 
   std::string get_sprite_name() const;
 
-protected:
+ protected:
   std::string sprite_name;
   SpritePtr sprite;
-  int layer; /**< Sprite's z-position. Refer to video/drawing_context.hpp for sensible values. */
+  int layer; /**< Sprite's z-position. Refer to video/drawing_context.hpp for
+                sensible values. */
 
   /** set new action for sprite and resize bounding box.  use with
       care as you can easily get stuck when resizing the bounding box. */
@@ -70,10 +68,11 @@ protected:
   /** set new action for sprite and align bounding boxes at
       anchorPoint.  use with care as you can easily get stuck when
       resizing the bounding box. */
-  void set_action(const std::string& action, int loops, AnchorPoint anchorPoint);
+  void set_action(const std::string& action, int loops,
+                  AnchorPoint anchorPoint);
 
-private:
-  //MovingSprite(const MovingSprite&);
+ private:
+  // MovingSprite(const MovingSprite&);
   MovingSprite& operator=(const MovingSprite&);
 };
 

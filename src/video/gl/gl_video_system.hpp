@@ -26,12 +26,12 @@ class TextureManager;
 
 class GLVideoSystem : public VideoSystem
 {
-private:
+ private:
   std::unique_ptr<TextureManager> m_texture_manager;
   std::unique_ptr<Renderer> m_renderer;
   std::unique_ptr<Lightmap> m_lightmap;
 
-public:
+ public:
   GLVideoSystem();
 
   Renderer& get_renderer() const override;
@@ -43,7 +43,7 @@ public:
   void apply_config() override;
   void resize(int w, int h) override;
 
-private:
+ private:
   GLVideoSystem(const GLVideoSystem&) = delete;
   GLVideoSystem& operator=(const GLVideoSystem&) = delete;
 };

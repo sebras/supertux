@@ -24,13 +24,24 @@ class Lantern;
 
 class GhostTree : public BadGuy
 {
-public:
+ public:
   GhostTree(const ReaderMapping& lisp);
   ~GhostTree();
 
-  virtual bool is_flammable() const { return false; }
-  virtual bool is_freezable() const { return false; }
-  virtual void kill_fall() { }
+  virtual bool
+  is_flammable() const
+  {
+    return false;
+  }
+  virtual bool
+  is_freezable() const
+  {
+    return false;
+  }
+  virtual void
+  kill_fall()
+  {
+  }
 
   void activate();
   void active_update(float elapsed_time);
@@ -42,22 +53,26 @@ public:
 
   void die();
 
-private:
-  enum MyState {
-    STATE_IDLE, STATE_SUCKING, STATE_SWALLOWING, STATE_DYING
+ private:
+  enum MyState
+  {
+    STATE_IDLE,
+    STATE_SUCKING,
+    STATE_SWALLOWING,
+    STATE_DYING
   };
   MyState mystate;
   Timer willowisp_timer;
   float willo_spawn_y;
   float willo_radius;
   float willo_speed;
-  int   willo_color;
+  int willo_color;
 
   SpritePtr glow_sprite;
   Timer colorchange_timer;
   Timer suck_timer;
   Timer root_timer;
-  int   treecolor;
+  int treecolor;
   Color suck_lantern_color;
 
   Lantern* suck_lantern; /**< Lantern that is currently being sucked in */
@@ -67,7 +82,7 @@ private:
   bool is_color_deadly(Color color) const;
   void spawn_lantern();
 
-private:
+ private:
   GhostTree(const GhostTree&);
   GhostTree& operator=(const GhostTree&);
 };

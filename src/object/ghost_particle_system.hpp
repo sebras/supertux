@@ -26,7 +26,7 @@ class ReaderMapping;
 
 class GhostParticleSystem : public ParticleSystem
 {
-public:
+ public:
   GhostParticleSystem();
   virtual ~GhostParticleSystem();
 
@@ -34,23 +34,24 @@ public:
 
   virtual void update(float elapsed_time);
 
-  std::string type() const
-  { return "GhostParticleSystem"; }
+  std::string
+  type() const
+  {
+    return "GhostParticleSystem";
+  }
 
-private:
+ private:
   class GhostParticle : public Particle
   {
-  public:
+   public:
     float speed;
 
-    GhostParticle() :
-      speed()
-    {}
+    GhostParticle() : speed() {}
   };
 
   SurfacePtr ghosts[2];
 
-private:
+ private:
   GhostParticleSystem(const GhostParticleSystem&);
   GhostParticleSystem& operator=(const GhostParticleSystem&);
 };

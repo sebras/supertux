@@ -23,18 +23,18 @@
 static const float FISH_JUMP_POWER = -600;
 static const float FISH_WAIT_TIME = 1;
 
-Fish::Fish(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/fish/fish.sprite", LAYER_TILES-1),
-  waiting(),
-  stop_y(0)
+Fish::Fish(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/fish/fish.sprite", LAYER_TILES - 1),
+      waiting(),
+      stop_y(0)
 {
   physic.enable_gravity(true);
 }
 
-Fish::Fish(const Vector& pos) :
-  BadGuy(pos, "images/creatures/fish/fish.sprite", LAYER_TILES-1),
-  waiting(),
-  stop_y(0)
+Fish::Fish(const Vector& pos)
+    : BadGuy(pos, "images/creatures/fish/fish.sprite", LAYER_TILES - 1),
+      waiting(),
+      stop_y(0)
 {
   physic.enable_gravity(true);
 }
@@ -46,7 +46,7 @@ Fish::collision_solid(const CollisionHit& chit)
 }
 
 HitResponse
-Fish::collision_badguy(BadGuy& , const CollisionHit& chit)
+Fish::collision_badguy(BadGuy&, const CollisionHit& chit)
 {
   return hit(chit);
 }
@@ -54,13 +54,15 @@ Fish::collision_badguy(BadGuy& , const CollisionHit& chit)
 void
 Fish::draw(DrawingContext& context)
 {
-  if(waiting.started())
-    return;
+  if (waiting.started()) return;
 
-  if (get_state() == STATE_FALLING) {
+  if (get_state() == STATE_FALLING)
+  {
     sprite->set_action("down");
     sprite->draw(context, get_pos(), layer);
-  } else {
+  }
+  else
+  {
     sprite->draw(context, get_pos(), layer);
   }
 }
@@ -68,7 +70,8 @@ Fish::draw(DrawingContext& context)
 HitResponse
 Fish::hit(const CollisionHit& hit_)
 {
-  if(hit_.top) {
+  if (hit_.top)
+  {
     physic.set_velocity_y(0);
   }
 
@@ -78,18 +81,17 @@ Fish::hit(const CollisionHit& hit_)
 void
 Fish::collision_tile(uint32_t tile_attributes)
 {
-  if ((tile_attributes & Tile::WATER) && (physic.get_velocity_y() >= 0)) {
-
+  if ((tile_attributes & Tile::WATER) && (physic.get_velocity_y() >= 0))
+  {
     // initialize stop position if uninitialized
     if (stop_y == 0) stop_y = get_pos().y + bbox.get_height();
 
     // stop when we have reached the stop position
-    if (get_pos().y >= stop_y) {
-      if(!frozen)
-        start_waiting();
+    if (get_pos().y >= stop_y)
+    {
+      if (!frozen) start_waiting();
       movement = Vector(0, 0);
     }
-
   }
 }
 
@@ -99,16 +101,18 @@ Fish::active_update(float elapsed_time)
   BadGuy::active_update(elapsed_time);
 
   // waited long enough?
-  if(waiting.check()) {
+  if (waiting.check())
+  {
     jump();
   }
 
   // set sprite
-  if(!frozen)
+  if (!frozen)
     sprite->set_action(physic.get_velocity_y() < 0 ? "normal" : "down");
 
-  // we can't afford flying out of the tilemap, 'cause the engine would remove us.
-  if ((get_pos().y - 31.8) < 0) // too high, let us fall
+  // we can't afford flying out of the tilemap, 'cause the engine would remove
+  // us.
+  if ((get_pos().y - 31.8) < 0)  // too high, let us fall
   {
     physic.set_velocity_y(0);
     physic.enable_gravity(true);
@@ -143,7 +147,7 @@ Fish::freeze()
 
 void
 Fish::unfreeze()
-{ // does this happen at all? (or do fishes die when they fall frozen?)
+{  // does this happen at all? (or do fishes die when they fall frozen?)
   BadGuy::unfreeze();
   start_waiting();
 }

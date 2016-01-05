@@ -22,19 +22,19 @@
 
 class OFileStreambuf : public std::streambuf
 {
-public:
+ public:
   OFileStreambuf(const std::string& filename);
   ~OFileStreambuf();
 
-protected:
+ protected:
   virtual int overflow(int c);
   virtual int sync();
 
-private:
+ private:
   PHYSFS_file* file;
   char buf[1024];
 
-private:
+ private:
   OFileStreambuf(const OFileStreambuf&);
   OFileStreambuf& operator=(const OFileStreambuf&);
 };

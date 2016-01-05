@@ -22,11 +22,11 @@ class Thunderstorm;
 typedef Thunderstorm _Thunderstorm;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Thunderstorm
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   Thunderstorm(_Thunderstorm* thunderstorm);
   ~Thunderstorm();
@@ -65,12 +65,11 @@ public:
 #ifndef SCRIPTING_API
   _Thunderstorm* thunderstorm;
 
-private:
+ private:
   Thunderstorm(const Thunderstorm&);
   Thunderstorm& operator=(const Thunderstorm&);
 #endif
 };
-
 }
 
 #endif

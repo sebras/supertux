@@ -56,7 +56,7 @@ WorldmapCheatMenu::menu_action(MenuItem* item)
   {
     PlayerStatus* status = worldmap->get_savegame().get_player_status();
 
-    switch(item->id)
+    switch (item->id)
     {
       case MNID_GROW:
         status->bonus = GROWUP_BONUS;
@@ -83,26 +83,26 @@ WorldmapCheatMenu::menu_action(MenuItem* item)
         break;
 
       case MNID_FINISH_LEVEL:
+      {
+        worldmap::LevelTile* level_tile = worldmap->at_level();
+        if (level_tile)
         {
-          worldmap::LevelTile* level_tile = worldmap->at_level();
-          if (level_tile)
-          {
-            level_tile->set_solved(true);
-            level_tile->set_perfect(false);
-          }
+          level_tile->set_solved(true);
+          level_tile->set_perfect(false);
         }
-        break;
+      }
+      break;
 
       case MNID_RESET_LEVEL:
+      {
+        worldmap::LevelTile* level_tile = worldmap->at_level();
+        if (level_tile)
         {
-          worldmap::LevelTile* level_tile = worldmap->at_level();
-          if (level_tile)
-          {
-            level_tile->set_solved(false);
-            level_tile->set_perfect(false);
-          }
+          level_tile->set_solved(false);
+          level_tile->set_perfect(false);
         }
-        break;
+      }
+      break;
 
       case MNID_FINISH_WORLDMAP:
         worldmap->set_levels_solved(true, false);

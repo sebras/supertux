@@ -24,14 +24,15 @@
 #include "util/reader_mapping.hpp"
 #include "video/drawing_context.hpp"
 
-CloudParticleSystem::CloudParticleSystem() :
-  ParticleSystem(128),
-  cloudimage(Surface::create("images/objects/particles/cloud.png"))
+CloudParticleSystem::CloudParticleSystem()
+    : ParticleSystem(128),
+      cloudimage(Surface::create("images/objects/particles/cloud.png"))
 {
   virtual_width = 2000.0;
 
   // create some random clouds
-  for(size_t i=0; i<15; ++i) {
+  for (size_t i = 0; i < 15; ++i)
+  {
     auto particle = std::unique_ptr<CloudParticle>(new CloudParticle);
     particle->pos.x = graphicsRandom.rand(static_cast<int>(virtual_width));
     particle->pos.y = graphicsRandom.rand(static_cast<int>(virtual_height));
@@ -45,16 +46,16 @@ CloudParticleSystem::CloudParticleSystem() :
 void
 CloudParticleSystem::parse(const ReaderMapping& reader)
 {
-  z_pos = reader_get_layer (reader, /* default = */ LAYER_BACKGROUND1);
+  z_pos = reader_get_layer(reader, /* default = */ LAYER_BACKGROUND1);
 }
 
-CloudParticleSystem::~CloudParticleSystem()
-{
-}
+CloudParticleSystem::~CloudParticleSystem() {}
 
-void CloudParticleSystem::update(float elapsed_time)
+void
+CloudParticleSystem::update(float elapsed_time)
 {
-  for(auto i = particles.begin(); i != particles.end(); ++i) {
+  for (auto i = particles.begin(); i != particles.end(); ++i)
+  {
     CloudParticle* particle = (CloudParticle*)i->get();
     particle->pos.x += particle->speed * elapsed_time;
   }

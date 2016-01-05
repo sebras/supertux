@@ -22,46 +22,47 @@
 #include "supertux/globals.hpp"
 #include "video/drawing_context.hpp"
 
-ParticleSystem::ParticleSystem(float max_particle_size_) :
-  max_particle_size(max_particle_size_),
-  z_pos(),
-  particles(),
-  virtual_width(),
-  virtual_height()
+ParticleSystem::ParticleSystem(float max_particle_size_)
+    : max_particle_size(max_particle_size_),
+      z_pos(),
+      particles(),
+      virtual_width(),
+      virtual_height()
 {
   virtual_width = SCREEN_WIDTH + max_particle_size * 2;
-  virtual_height = SCREEN_HEIGHT + max_particle_size *2;
+  virtual_height = SCREEN_HEIGHT + max_particle_size * 2;
   z_pos = LAYER_BACKGROUND1;
 }
 
-ParticleSystem::~ParticleSystem()
-{
-}
+ParticleSystem::~ParticleSystem() {}
 
-void ParticleSystem::draw(DrawingContext& context)
+void
+ParticleSystem::draw(DrawingContext& context)
 {
   float scrollx = context.get_translation().x;
   float scrolly = context.get_translation().y;
 
   context.push_transform();
-  context.set_translation(Vector(max_particle_size,max_particle_size));
+  context.set_translation(Vector(max_particle_size, max_particle_size));
 
-  for(auto i = particles.begin(); i != particles.end(); ++i) {
+  for (auto i = particles.begin(); i != particles.end(); ++i)
+  {
     Particle* particle = i->get();
 
     // remap x,y coordinates onto screencoordinates
     Vector pos;
 
     pos.x = fmodf(particle->pos.x - scrollx, virtual_width);
-    if(pos.x < 0) pos.x += virtual_width;
+    if (pos.x < 0) pos.x += virtual_width;
 
     pos.y = fmodf(particle->pos.y - scrolly, virtual_height);
-    if(pos.y < 0) pos.y += virtual_height;
+    if (pos.y < 0) pos.y += virtual_height;
 
-    //if(pos.x > virtual_width) pos.x -= virtual_width;
-    //if(pos.y > virtual_height) pos.y -= virtual_height;
+    // if(pos.x > virtual_width) pos.x -= virtual_width;
+    // if(pos.y > virtual_height) pos.y -= virtual_height;
 
-    context.draw_surface(particle->texture, pos, particle->angle, Color(1.0f, 1.0f, 1.0f), Blend(), z_pos);
+    context.draw_surface(particle->texture, pos, particle->angle,
+                         Color(1.0f, 1.0f, 1.0f), Blend(), z_pos);
   }
 
   context.pop_transform();

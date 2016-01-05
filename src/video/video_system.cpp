@@ -29,7 +29,7 @@
 std::unique_ptr<VideoSystem>
 VideoSystem::create(VideoSystem::Enum video_system)
 {
-  switch(video_system)
+  switch (video_system)
   {
     case AUTO_VIDEO:
 #ifdef HAVE_OPENGL
@@ -37,9 +37,10 @@ VideoSystem::create(VideoSystem::Enum video_system)
       {
         return std::unique_ptr<VideoSystem>(new GLVideoSystem);
       }
-      catch(std::exception& err)
+      catch (std::exception& err)
       {
-        log_warning << "Error creating GLVideoSystem, using SDL fallback: "  << err.what() << std::endl;
+        log_warning << "Error creating GLVideoSystem, using SDL fallback: "
+                    << err.what() << std::endl;
         return std::unique_ptr<VideoSystem>(new SDLVideoSystem);
       }
 #else
@@ -51,7 +52,8 @@ VideoSystem::create(VideoSystem::Enum video_system)
 #ifdef HAVE_OPENGL
       return std::unique_ptr<VideoSystem>(new GLVideoSystem);
 #else
-      log_warning << "OpenGL requested, but missing using SDL fallback" << std::endl;
+      log_warning << "OpenGL requested, but missing using SDL fallback"
+                  << std::endl;
       return std::unique_ptr<VideoSystem>(new SDLVideoSystem);
 #endif
 
@@ -66,28 +68,31 @@ VideoSystem::create(VideoSystem::Enum video_system)
 }
 
 VideoSystem::Enum
-VideoSystem::get_video_system(const std::string &video)
+VideoSystem::get_video_system(const std::string& video)
 {
-  if(video == "auto")
+  if (video == "auto")
   {
     return AUTO_VIDEO;
   }
 #ifdef HAVE_OPENGL
-  else if(video == "opengl")
+  else if (video == "opengl")
   {
     return OPENGL;
   }
 #endif
-  else if(video == "sdl")
+  else if (video == "sdl")
   {
     return PURE_SDL;
   }
   else
   {
 #ifdef HAVE_OPENGL
-    throw std::runtime_error("invalid VideoSystem::Enum, valid values are 'auto', 'sdl' and 'opengl'");
+    throw std::runtime_error(
+        "invalid VideoSystem::Enum, valid values are 'auto', 'sdl' and "
+        "'opengl'");
 #else
-    throw std::runtime_error("invalid VideoSystem::Enum, valid values are 'auto' and 'sdl'");
+    throw std::runtime_error(
+        "invalid VideoSystem::Enum, valid values are 'auto' and 'sdl'");
 #endif
   }
 }
@@ -95,7 +100,7 @@ VideoSystem::get_video_system(const std::string &video)
 std::string
 VideoSystem::get_video_string(VideoSystem::Enum video)
 {
-  switch(video)
+  switch (video)
   {
     case AUTO_VIDEO:
       return "auto";

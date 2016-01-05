@@ -23,7 +23,7 @@
 
 class JoystickMenu : public Menu
 {
-public:
+ public:
   JoystickMenu(InputManager& input_manager);
   virtual ~JoystickMenu();
 
@@ -33,15 +33,15 @@ public:
   std::string get_button_name(int button) const;
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   void recreate_menu();
 
-private:
+ private:
   InputManager& m_input_manager;
   bool m_joysticks_available;
   bool m_auto_joystick_cfg;
 
-private:
+ private:
   JoystickMenu(const JoystickMenu&);
   JoystickMenu& operator=(const JoystickMenu&);
 };

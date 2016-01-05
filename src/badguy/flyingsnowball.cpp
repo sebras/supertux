@@ -22,23 +22,26 @@
 #include "supertux/object_factory.hpp"
 #include "supertux/sector.hpp"
 
-namespace {
-const float PUFF_INTERVAL_MIN = 4.0f; /**< spawn new puff of smoke at most that often */
-const float PUFF_INTERVAL_MAX = 8.0f; /**< spawn new puff of smoke at least that often */
+namespace
+{
+const float PUFF_INTERVAL_MIN =
+    4.0f; /**< spawn new puff of smoke at most that often */
+const float PUFF_INTERVAL_MAX =
+    8.0f; /**< spawn new puff of smoke at least that often */
 }
 
-FlyingSnowBall::FlyingSnowBall(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/flying_snowball/flying_snowball.sprite"),
-  normal_propeller_speed(),
-  puff_timer()
+FlyingSnowBall::FlyingSnowBall(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/flying_snowball/flying_snowball.sprite"),
+      normal_propeller_speed(),
+      puff_timer()
 {
   physic.enable_gravity(true);
 }
 
-FlyingSnowBall::FlyingSnowBall(const Vector& pos) :
-  BadGuy(pos, "images/creatures/flying_snowball/flying_snowball.sprite"),
-  normal_propeller_speed(),
-  puff_timer()
+FlyingSnowBall::FlyingSnowBall(const Vector& pos)
+    : BadGuy(pos, "images/creatures/flying_snowball/flying_snowball.sprite"),
+      normal_propeller_speed(),
+      puff_timer()
 {
   physic.enable_gravity(true);
 }
@@ -69,7 +72,8 @@ FlyingSnowBall::collision_squished(GameObject& object)
 void
 FlyingSnowBall::collision_solid(const CollisionHit& hit)
 {
-  if(hit.top || hit.bottom) {
+  if (hit.top || hit.bottom)
+  {
     physic.set_velocity_y(0);
   }
 }
@@ -77,46 +81,45 @@ FlyingSnowBall::collision_solid(const CollisionHit& hit)
 void
 FlyingSnowBall::active_update(float elapsed_time)
 {
-
   const float grav = Sector::current()->get_gravity() * 100.0f;
-  if (get_pos().y > start_position.y + 2*32) {
-
+  if (get_pos().y > start_position.y + 2 * 32)
+  {
     // Flying too low - increased propeller speed
-    physic.set_acceleration_y(-grav*1.2);
+    physic.set_acceleration_y(-grav * 1.2);
 
     physic.set_velocity_y(physic.get_velocity_y() * 0.99);
-
-  } else if (get_pos().y < start_position.y - 2*32) {
-
+  }
+  else if (get_pos().y < start_position.y - 2 * 32)
+  {
     // Flying too high - decreased propeller speed
-    physic.set_acceleration_y(-grav*0.8);
+    physic.set_acceleration_y(-grav * 0.8);
 
     physic.set_velocity_y(physic.get_velocity_y() * 0.99f);
-
-  } else {
-
+  }
+  else
+  {
     // Flying at acceptable altitude - normal propeller speed
-    physic.set_acceleration_y(-grav*normal_propeller_speed);
-
+    physic.set_acceleration_y(-grav * normal_propeller_speed);
   }
 
-  movement=physic.get_movement(elapsed_time);
+  movement = physic.get_movement(elapsed_time);
 
   Player* player = get_nearest_player();
-  if (player) {
+  if (player)
+  {
     dir = (player->get_pos().x > get_pos().x) ? RIGHT : LEFT;
     sprite->set_action(dir == LEFT ? "left" : "right");
   }
 
   // spawn smoke puffs
-  if (puff_timer.check()) {
+  if (puff_timer.check())
+  {
     Vector ppos = bbox.get_middle();
     Vector pspeed = Vector(gameRandom.randf(-10, 10), 150);
-    Vector paccel = Vector(0,0);
-    Sector::current()->add_object(std::make_shared<SpriteParticle>("images/objects/particles/smoke.sprite",
-                                                                   "default",
-                                                                   ppos, ANCHOR_MIDDLE, pspeed, paccel,
-                                                                   LAYER_OBJECTS-1));
+    Vector paccel = Vector(0, 0);
+    Sector::current()->add_object(std::make_shared<SpriteParticle>(
+        "images/objects/particles/smoke.sprite", "default", ppos, ANCHOR_MIDDLE,
+        pspeed, paccel, LAYER_OBJECTS - 1));
     puff_timer.start(gameRandom.randf(PUFF_INTERVAL_MIN, PUFF_INTERVAL_MAX));
 
     normal_propeller_speed = gameRandom.randf(0.95, 1.05);

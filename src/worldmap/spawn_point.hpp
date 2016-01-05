@@ -24,18 +24,17 @@
 #include "supertux/game_object.hpp"
 #include "worldmap/direction.hpp"
 
-namespace worldmap {
-
+namespace worldmap
+{
 class SpawnPoint
 {
-public:
+ public:
   SpawnPoint(const ReaderMapping& lisp);
 
   std::string name;
   Vector pos;
   Direction auto_dir; /**< automatically start walking in this direction */
 };
-
 }
 
 #endif

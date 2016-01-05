@@ -27,20 +27,20 @@
 
 class BrokenBrick : public GameObject
 {
-public:
+ public:
   BrokenBrick(SpritePtr sprite, const Vector& pos, const Vector& movement);
   ~BrokenBrick();
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   Timer timer;
   SpritePtr sprite;
   Vector position;
   Vector movement;
 
-private:
+ private:
   BrokenBrick(const BrokenBrick&);
   BrokenBrick& operator=(const BrokenBrick&);
 };

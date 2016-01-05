@@ -19,20 +19,21 @@
 
 #include "gui/menu.hpp"
 
-enum WorldMapMenuIDs {
+enum WorldMapMenuIDs
+{
   MNID_RETURNWORLDMAP,
   MNID_QUITWORLDMAP
 };
 
 class WorldmapMenu : public Menu
 {
-private:
-public:
+ private:
+ public:
   WorldmapMenu();
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   WorldmapMenu(const WorldmapMenu&);
   WorldmapMenu& operator=(const WorldmapMenu&);
 };

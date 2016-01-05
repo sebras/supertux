@@ -26,13 +26,13 @@
 
 class JoystickConfig
 {
-public:
+ public:
   typedef Uint8 JoyId;
   typedef std::map<std::pair<JoyId, int>, Controller::Control> ButtonMap;
   typedef std::map<std::pair<JoyId, int>, Controller::Control> AxisMap;
   typedef std::map<std::pair<JoyId, int>, Controller::Control> HatMap;
 
-public:
+ public:
   int dead_zone;
   bool jump_with_up_joy;
   bool use_game_controller;
@@ -41,7 +41,7 @@ public:
   AxisMap joy_axis_map;
   HatMap joy_hat_map;
 
-public:
+ public:
   JoystickConfig();
 
   void print_joystick_mappings() const;
@@ -59,7 +59,7 @@ public:
   void read(const ReaderMapping& joystick_lisp);
   void write(Writer& writer);
 
-private:
+ private:
   JoystickConfig(const JoystickConfig&) = delete;
   JoystickConfig& operator=(const JoystickConfig&) = delete;
 };

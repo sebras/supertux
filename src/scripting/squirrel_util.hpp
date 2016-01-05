@@ -23,8 +23,8 @@
 #include "scripting/squirrel_error.hpp"
 #include "scripting/wrapper.hpp"
 
-namespace scripting {
-
+namespace scripting
+{
 std::string squirrel2string(HSQUIRRELVM vm, SQInteger i);
 void print_squirrel_stack(HSQUIRRELVM vm);
 
@@ -39,33 +39,34 @@ void compile_script(HSQUIRRELVM vm, std::istream& in,
 void compile_and_run(HSQUIRRELVM vm, std::istream& in,
                      const std::string& sourcename);
 
-template<typename T>
-void expose_object(HSQUIRRELVM v, SQInteger table_idx, T* object,
-                   const std::string& name, bool free = false)
+template <typename T>
+void
+expose_object(HSQUIRRELVM v, SQInteger table_idx, T* object,
+              const std::string& name, bool free = false)
 {
   sq_pushstring(v, name.c_str(), -1);
   scripting::create_squirrel_instance(v, object, free);
 
-  if(table_idx < 0)
-    table_idx -= 2;
+  if (table_idx < 0) table_idx -= 2;
 
   // register instance in root table
-  if(SQ_FAILED(sq_createslot(v, table_idx))) {
+  if (SQ_FAILED(sq_createslot(v, table_idx)))
+  {
     std::ostringstream msg;
     msg << "Couldn't register object '" << name << "' in squirrel table";
     throw scripting::SquirrelError(v, msg.str());
   }
 }
 
-static inline void unexpose_object(HSQUIRRELVM v, SQInteger table_idx,
-                                   const std::string& name)
+static inline void
+unexpose_object(HSQUIRRELVM v, SQInteger table_idx, const std::string& name)
 {
   sq_pushstring(v, name.c_str(), name.length());
 
-  if(table_idx < 0)
-    table_idx -= 1;
+  if (table_idx < 0) table_idx -= 1;
 
-  if(SQ_FAILED(sq_deleteslot(v, table_idx, SQFalse))) {
+  if (SQ_FAILED(sq_deleteslot(v, table_idx, SQFalse)))
+  {
     std::ostringstream msg;
     msg << "Couldn't unregister object '" << name << "' in squirrel root table";
     throw scripting::SquirrelError(v, msg.str());

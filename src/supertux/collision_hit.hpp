@@ -43,15 +43,16 @@ enum HitResponse
  */
 class CollisionHit
 {
-public:
-  CollisionHit() :
-    left(false),
-    right(false),
-    top(false),
-    bottom(false),
-    crush(false),
-    slope_normal()
-  {}
+ public:
+  CollisionHit()
+      : left(false),
+        right(false),
+        top(false),
+        bottom(false),
+        crush(false),
+        slope_normal()
+  {
+  }
 
   bool left, right;
   bool top, bottom;

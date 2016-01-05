@@ -27,32 +27,30 @@
 
 static const std::string TREEWILLOSOUND = "sounds/willowisp.wav";
 
-TreeWillOWisp::TreeWillOWisp(GhostTree* tree_, const Vector& pos,
-                             float radius_, float speed_) :
-  BadGuy(tree_->get_pos() + pos, "images/creatures/willowisp/willowisp.sprite",
-         LAYER_OBJECTS - 20),
-  was_sucked(false),
-  mystate(STATE_DEFAULT),
-  color(),
-  angle(),
-  radius(),
-  speed(),
-  sound_source(),
-  tree(tree_),
-  suck_target()
+TreeWillOWisp::TreeWillOWisp(GhostTree* tree_, const Vector& pos, float radius_,
+                             float speed_)
+    : BadGuy(tree_->get_pos() + pos,
+             "images/creatures/willowisp/willowisp.sprite", LAYER_OBJECTS - 20),
+      was_sucked(false),
+      mystate(STATE_DEFAULT),
+      color(),
+      angle(),
+      radius(),
+      speed(),
+      sound_source(),
+      tree(tree_),
+      suck_target()
 {
   SoundManager::current()->preload(TREEWILLOSOUND);
 
   this->radius = radius_;
-  this->angle  = 0;
-  this->speed  = speed_;
+  this->angle = 0;
+  this->speed = speed_;
 
   set_colgroup_active(COLGROUP_MOVING);
 }
 
-TreeWillOWisp::~TreeWillOWisp()
-{
-}
+TreeWillOWisp::~TreeWillOWisp() {}
 
 void
 TreeWillOWisp::activate()
@@ -84,18 +82,16 @@ TreeWillOWisp::start_sucking(Vector suck_target_)
 HitResponse
 TreeWillOWisp::collision_player(Player& player, const CollisionHit& hit)
 {
-  //TODO: basically a no-op. Remove if this doesn't change.
+  // TODO: basically a no-op. Remove if this doesn't change.
   return BadGuy::collision_player(player, hit);
 }
 
 bool
-TreeWillOWisp::collides(GameObject& other, const CollisionHit& ) const
+TreeWillOWisp::collides(GameObject& other, const CollisionHit&) const
 {
   Lantern* lantern = dynamic_cast<Lantern*>(&other);
-  if (lantern && lantern->is_open())
-    return true;
-  if (dynamic_cast<Player*>(&other))
-    return true;
+  if (lantern && lantern->is_open()) return true;
+  if (dynamic_cast<Player*>(&other)) return true;
 
   return false;
 }
@@ -117,17 +113,21 @@ void
 TreeWillOWisp::active_update(float elapsed_time)
 {
   // remove TreeWillOWisp if it has completely vanished
-  if (mystate == STATE_VANISHING) {
-    if(sprite->animation_done()) {
+  if (mystate == STATE_VANISHING)
+  {
+    if (sprite->animation_done())
+    {
       remove_me();
       tree->willowisp_died(this);
     }
     return;
   }
 
-  if (mystate == STATE_SUCKED) {
+  if (mystate == STATE_SUCKED)
+  {
     Vector dir_ = suck_target - get_pos();
-    if(dir_.norm() < 5) {
+    if (dir_.norm() < 5)
+    {
       vanish();
       return;
     }
@@ -136,7 +136,7 @@ TreeWillOWisp::active_update(float elapsed_time)
     return;
   }
 
-  angle = fmodf(angle + elapsed_time * speed, (float) (2*M_PI));
+  angle = fmodf(angle + elapsed_time * speed, (float)(2 * M_PI));
   Vector newpos(start_position + Vector(sin(angle) * radius, 0));
   movement = newpos - get_pos();
   float sizemod = cos(angle) * 0.8f;
@@ -144,9 +144,12 @@ TreeWillOWisp::active_update(float elapsed_time)
 
   sound_source->set_position(get_pos());
 
-  if(sizemod < 0) {
+  if (sizemod < 0)
+  {
     layer = LAYER_OBJECTS + 5;
-  } else {
+  }
+  else
+  {
     layer = LAYER_OBJECTS - 20;
   }
 }

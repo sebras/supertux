@@ -25,95 +25,79 @@ class Size;
 
 class Sizef
 {
-public:
-  Sizef() :
-    width(0.0f),
-    height(0.0f)
-  {}
+ public:
+  Sizef() : width(0.0f), height(0.0f) {}
 
-  explicit Sizef(const Vector& v) :
-    width(v.x),
-    height(v.y)
-  {}
+  explicit Sizef(const Vector& v) : width(v.x), height(v.y) {}
 
-  Sizef(float width_, float height_) :
-    width(width_),
-    height(height_)
-  {}
+  Sizef(float width_, float height_) : width(width_), height(height_) {}
 
-  Sizef(const Sizef& rhs) :
-    width(rhs.width),
-    height(rhs.height)
-  {}
+  Sizef(const Sizef& rhs) : width(rhs.width), height(rhs.height) {}
 
   Sizef(const Size& rhs);
 
   Sizef& operator*=(float factor)
   {
-    width  *= factor;
+    width *= factor;
     height *= factor;
     return *this;
   }
 
   Sizef& operator/=(float divisor)
   {
-    width  /= divisor;
+    width /= divisor;
     height /= divisor;
     return *this;
   }
 
   Sizef& operator+=(const Sizef& rhs)
   {
-    width  += rhs.width;
+    width += rhs.width;
     height += rhs.height;
     return *this;
   }
 
   Sizef& operator-=(const Sizef& rhs)
   {
-    width  -= rhs.width;
+    width -= rhs.width;
     height -= rhs.height;
     return *this;
   }
 
-  Vector as_vector() const
+  Vector
+  as_vector() const
   {
     return Vector(width, height);
   }
 
-public:
+ public:
   float width;
   float height;
 };
 
 inline Sizef operator*(const Sizef& lhs, float factor)
 {
-  return Sizef(lhs.width  * factor,
-               lhs.height * factor);
+  return Sizef(lhs.width * factor, lhs.height * factor);
 }
 
 inline Sizef operator*(float factor, const Sizef& rhs)
 {
-  return Sizef(rhs.width  * factor,
-               rhs.height * factor);
+  return Sizef(rhs.width * factor, rhs.height * factor);
 }
 
 inline Sizef operator/(const Sizef& lhs, float divisor)
 {
-  return Sizef(lhs.width  / divisor,
-               lhs.height / divisor);
+  return Sizef(lhs.width / divisor, lhs.height / divisor);
 }
 
 inline Sizef operator+(const Sizef& lhs, const Sizef& rhs)
 {
-  return Sizef(lhs.width  + rhs.width,
-               lhs.height + rhs.height);
+  return Sizef(lhs.width + rhs.width, lhs.height + rhs.height);
 }
 
 inline Sizef operator-(const Sizef& lhs, const Sizef& rhs)
 {
-  return Sizef(lhs.width  - rhs.width,
-               lhs.height - rhs.height);
+  return Sizef(lhs.width - rhs.width, lhs.height - rhs.height);
 }
 
 inline bool operator==(const Sizef& lhs, const Sizef& rhs)

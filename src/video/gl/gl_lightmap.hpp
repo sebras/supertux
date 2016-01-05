@@ -25,11 +25,11 @@ class Texture;
 
 class GLLightmap : public Lightmap
 {
-public:
+ public:
   GLLightmap();
   ~GLLightmap();
 
-  void start_draw(const Color &ambient_color) override;
+  void start_draw(const Color& ambient_color) override;
   void end_draw() override;
   void do_draw() override;
   void draw_surface(const DrawingRequest& request) override;
@@ -39,7 +39,7 @@ public:
   void draw_inverse_ellipse(const DrawingRequest& request) override;
   void get_light(const DrawingRequest& request) const override;
 
-private:
+ private:
   static const int s_LIGHTMAP_DIV = 5;
 
   std::shared_ptr<GLTexture> m_lightmap;
@@ -47,9 +47,10 @@ private:
   int m_lightmap_height;
   float m_lightmap_uv_right;
   float m_lightmap_uv_bottom;
-  GLfloat m_old_viewport[4]; //holds vieport before redefining in start_draw - returned from glGet
+  GLfloat m_old_viewport[4];  // holds vieport before redefining in start_draw -
+                              // returned from glGet
 
-private:
+ private:
   GLLightmap(const GLLightmap&);
   GLLightmap& operator=(const GLLightmap&);
 };

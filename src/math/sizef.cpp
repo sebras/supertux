@@ -20,9 +20,9 @@
 
 #include "math/size.hpp"
 
-Sizef::Sizef(const Size& rhs) :
-  width(static_cast<float>(rhs.width)),
-  height(static_cast<float>(rhs.height))
+Sizef::Sizef(const Size& rhs)
+    : width(static_cast<float>(rhs.width)),
+      height(static_cast<float>(rhs.height))
 {
 }
 

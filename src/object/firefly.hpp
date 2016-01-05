@@ -20,19 +20,22 @@
 #include "object/moving_sprite.hpp"
 
 /**
- * A Firefly: When tux touches it, it begins buzzing and you will respawn at this
+ * A Firefly: When tux touches it, it begins buzzing and you will respawn at
+ * this
  * position.
  */
 class Firefly : public MovingSprite
 {
-public:
+ public:
   Firefly(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   bool activated;
-  Vector initial_position; /**< position as in level file. This is where Tux will have to respawn, as the level is reset every time */
+  Vector
+      initial_position; /**< position as in level file. This is where Tux will
+                           have to respawn, as the level is reset every time */
   void reactivate();
 };
 

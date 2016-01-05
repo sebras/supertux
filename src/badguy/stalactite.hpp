@@ -21,14 +21,14 @@
 
 class Stalactite : public BadGuy
 {
-public:
+ public:
   Stalactite(const ReaderMapping& reader);
 
   void active_update(float elapsed_time);
   void collision_solid(const CollisionHit& hit);
   HitResponse collision_player(Player& player, const CollisionHit& hit);
   HitResponse collision_badguy(BadGuy& other, const CollisionHit& hit);
-  HitResponse collision_bullet(Bullet& bullet, const CollisionHit& );
+  HitResponse collision_bullet(Bullet& bullet, const CollisionHit&);
 
   void kill_fall();
   void draw(DrawingContext& context);
@@ -36,15 +36,16 @@ public:
 
   void squish();
 
-protected:
-  enum StalactiteState {
+ protected:
+  enum StalactiteState
+  {
     STALACTITE_HANGING,
     STALACTITE_SHAKING,
     STALACTITE_FALLING,
     STALACTITE_SQUISHED
   };
 
-protected:
+ protected:
   Timer timer;
   StalactiteState state;
   Vector shake_delta;

@@ -1,6 +1,7 @@
 //  SuperTux - Weak Block
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -22,20 +23,19 @@
 #include "supertux/physic.hpp"
 #include "object/bullet.hpp"
 
-
 /**
  * A block that can be destroyed by Bullet hits
  */
 class WeakBlock : public MovingSprite
 {
-public:
+ public:
   WeakBlock(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
   void update(float elapsed_time);
   void draw(DrawingContext& context);
-	
-protected:
+
+ protected:
   /**
    * called by self when hit by a bullet
    */
@@ -46,20 +46,20 @@ protected:
    */
   void spreadHit();
 
-private:
-  enum State {
-    STATE_NORMAL, /**< default state */
-    STATE_BURNING, /**< on fire, still solid */
+ private:
+  enum State
+  {
+    STATE_NORMAL,        /**< default state */
+    STATE_BURNING,       /**< on fire, still solid */
     STATE_DISINTEGRATING /**< crumbling to dust, no longer solid */
   };
   State state;
-	
+
   bool linked;
   virtual HitResponse collision_bullet(Bullet& bullet, const CollisionHit& hit);
 
   Color light;
   SpritePtr lightsprite;
-
 };
 
 #endif

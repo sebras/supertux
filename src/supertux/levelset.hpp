@@ -22,17 +22,17 @@
 
 class Levelset
 {
-private:
+ private:
   std::string m_basedir;
   std::vector<std::string> m_levels;
 
-public:
+ public:
   Levelset(const std::string& basedir);
 
   int get_num_levels() const;
   std::string get_level_filename(int i) const;
 
-private:
+ private:
   Levelset(const Levelset&) = delete;
   Levelset& operator=(const Levelset&) = delete;
 };

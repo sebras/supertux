@@ -27,47 +27,48 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-Ghostflame::Ghostflame(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/flame/ghostflame.sprite", LAYER_FLOATINGOBJECTS),
-  angle(0),
-  radius(),
-  speed(),
-  light(0.0f,0.0f,0.0f),
-  lightsprite(SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light-small.sprite"))
+Ghostflame::Ghostflame(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/flame/ghostflame.sprite",
+             LAYER_FLOATINGOBJECTS),
+      angle(0),
+      radius(),
+      speed(),
+      light(0.0f, 0.0f, 0.0f),
+      lightsprite(SpriteManager::current()->create(
+          "images/objects/lightmap_light/lightmap_light-small.sprite"))
 {
-  if ( !reader.get("radius", radius)) radius = 100;
-  if ( !reader.get("speed", speed)) speed = 2;
+  if (!reader.get("radius", radius)) radius = 100;
+  if (!reader.get("speed", speed)) speed = 2;
   bbox.set_pos(Vector(start_position.x + cos(angle) * radius,
                       start_position.y + sin(angle) * radius));
   countMe = false;
-  //TODO: get unique death sound
+  // TODO: get unique death sound
   SoundManager::current()->preload("sounds/fizz.wav");
 
   set_colgroup_active(COLGROUP_TOUCHABLE);
 
   lightsprite->set_blend(Blend(GL_SRC_ALPHA, GL_ONE));
   lightsprite->set_color(Color(0.21f, 0.00f, 0.21f));
-
 }
 
 void
 Ghostflame::active_update(float elapsed_time)
 {
-  angle = fmodf(angle + elapsed_time * speed, (float) (2*M_PI));
+  angle = fmodf(angle + elapsed_time * speed, (float)(2 * M_PI));
   Vector newpos(start_position.x + cos(angle) * radius,
                 start_position.y + sin(angle) * radius);
   movement = newpos - get_pos();
-
 }
 
 void
 Ghostflame::draw(DrawingContext& context)
 {
-  //Draw the Sprite.
+  // Draw the Sprite.
   sprite->draw(context, get_pos(), LAYER_OBJECTS);
-  //Draw the light if dark
-  context.get_light( bbox.get_middle(), &light );
-  if (light.blue + light.red < 2.0){
+  // Draw the light if dark
+  context.get_light(bbox.get_middle(), &light);
+  if (light.blue + light.red < 2.0)
+  {
     context.push_target();
     context.set_target(DrawingContext::LIGHTMAP);
     sprite->draw(context, get_pos(), layer);
@@ -75,7 +76,6 @@ Ghostflame::draw(DrawingContext& context)
     context.pop_target();
   }
 }
-
 
 void
 Ghostflame::kill_fall()

@@ -1,5 +1,6 @@
 //  AngryStone - A spiked block that charges towards the player
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
 
 class AngryStone : public BadGuy
 {
-public:
+ public:
   AngryStone(const ReaderMapping& reader);
 
   void collision_solid(const CollisionHit& hit);
@@ -31,17 +32,21 @@ public:
   bool is_freezable() const;
   bool is_flammable() const;
 
-protected:
-  enum AngryStoneState {
+ protected:
+  enum AngryStoneState
+  {
     IDLE,
     CHARGING,
     ATTACKING,
     RECOVERING
   };
 
-private:
-  Vector attackDirection;  /**< 1-normalized vector of current attack direction */
-  Vector oldWallDirection; /**< if wall was hit during last attack: 1-normalized vector of last attack direction, (0,0) otherwise */
+ private:
+  Vector
+      attackDirection; /**< 1-normalized vector of current attack direction */
+  Vector
+      oldWallDirection; /**< if wall was hit during last attack: 1-normalized
+                           vector of last attack direction, (0,0) otherwise */
   Timer timer;
   AngryStoneState state;
 };

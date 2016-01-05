@@ -1,5 +1,6 @@
 //  SuperTux - Thunderstorm Game Object
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,46 +26,52 @@
 #include "util/reader.hpp"
 #include "util/reader_mapping.hpp"
 
-namespace {
+namespace
+{
 const float LIGHTNING_DELAY = 2.0f;
 const float FLASH_DISPLAY_TIME = 0.1f;
 const float ELECTRIFY_TIME = 0.5f;
 }
 
-Thunderstorm::Thunderstorm(const ReaderMapping& reader) :
-  running(true),
-  interval(10.0f),
-  layer(LAYER_BACKGROUNDTILES-1),
-  time_to_thunder(),
-  time_to_lightning(),
-  flash_display_timer()
+Thunderstorm::Thunderstorm(const ReaderMapping& reader)
+    : running(true),
+      interval(10.0f),
+      layer(LAYER_BACKGROUNDTILES - 1),
+      time_to_thunder(),
+      time_to_lightning(),
+      flash_display_timer()
 {
   reader.get("name", name);
   reader.get("running", running);
   reader.get("interval", interval);
-  if(interval <= 0) {
-    log_warning << "Running a thunderstorm with non-positive time interval is a bad idea" << std::endl;
+  if (interval <= 0)
+  {
+    log_warning << "Running a thunderstorm with non-positive time interval is "
+                   "a bad idea" << std::endl;
   }
-  layer = reader_get_layer (reader, /* default = */ LAYER_BACKGROUNDTILES-1);
+  layer = reader_get_layer(reader, /* default = */ LAYER_BACKGROUNDTILES - 1);
 
   SoundManager::current()->preload("sounds/thunder.wav");
   SoundManager::current()->preload("sounds/lightning.wav");
 
-  if (running) {
-    running = false; // else start() is ignored
+  if (running)
+  {
+    running = false;  // else start() is ignored
     start();
   }
 }
 
 void
-Thunderstorm::update(float )
+Thunderstorm::update(float)
 {
   if (!running) return;
-  if (time_to_thunder.check()) {
+  if (time_to_thunder.check())
+  {
     thunder();
     time_to_lightning.start(LIGHTNING_DELAY);
   }
-  if (time_to_lightning.check()) {
+  if (time_to_lightning.check())
+  {
     lightning();
     time_to_thunder.start(interval);
   }
@@ -78,9 +85,9 @@ Thunderstorm::draw(DrawingContext& context)
   float alpha = 0.33f;
   context.push_transform();
   context.set_translation(Vector(0, 0));
-  context.draw_filled_rect(Vector(0, 0), Vector(SCREEN_WIDTH, SCREEN_HEIGHT), Color(1, 1, 1, alpha), layer);
+  context.draw_filled_rect(Vector(0, 0), Vector(SCREEN_WIDTH, SCREEN_HEIGHT),
+                           Color(1, 1, 1, alpha), layer);
   context.pop_transform();
-
 }
 
 void
@@ -139,8 +146,10 @@ Thunderstorm::flash()
 void
 Thunderstorm::electrify()
 {
-  Sector::current()->add_object(std::make_shared<Electrifier>(200, 1421, ELECTRIFY_TIME));
-  Sector::current()->add_object(std::make_shared<Electrifier>(201, 1422, ELECTRIFY_TIME));
+  Sector::current()->add_object(
+      std::make_shared<Electrifier>(200, 1421, ELECTRIFY_TIME));
+  Sector::current()->add_object(
+      std::make_shared<Electrifier>(201, 1422, ELECTRIFY_TIME));
 }
 
 /* EOF */

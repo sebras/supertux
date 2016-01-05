@@ -21,12 +21,8 @@
 #include "sprite/sprite_manager.hpp"
 #include "util/reader_mapping.hpp"
 
-Torch::Torch(const ReaderMapping& reader) :
-  m_torch(),
-  m_flame(),
-  m_flame_glow(),
-  m_flame_light(),
-  m_burning(true)
+Torch::Torch(const ReaderMapping& reader)
+    : m_torch(), m_flame(), m_flame_glow(), m_flame_light(), m_burning(true)
 {
   reader.get("x", bbox.p1.x);
   reader.get("y", bbox.p1.y);
@@ -38,10 +34,13 @@ Torch::Torch(const ReaderMapping& reader) :
   bbox.p2.y = bbox.p1.y + 50;
 
   m_torch = SpriteManager::current()->create(sprite_name);
-  m_flame = SpriteManager::current()->create("images/objects/torch/flame.sprite");
-  m_flame_glow = SpriteManager::current()->create("images/objects/torch/flame_glow.sprite");
+  m_flame =
+      SpriteManager::current()->create("images/objects/torch/flame.sprite");
+  m_flame_glow = SpriteManager::current()->create(
+      "images/objects/torch/flame_glow.sprite");
   m_flame_glow->set_blend(Blend(GL_SRC_ALPHA, GL_ONE));
-  m_flame_light = SpriteManager::current()->create("images/objects/torch/flame_light.sprite");
+  m_flame_light = SpriteManager::current()->create(
+      "images/objects/torch/flame_light.sprite");
   m_flame_light->set_blend(Blend(GL_SRC_ALPHA, GL_ONE));
   set_group(COLGROUP_TOUCHABLE);
 }
@@ -73,11 +72,11 @@ Torch::update(float)
 }
 
 HitResponse
-Torch::collision(GameObject& other, const CollisionHit& )
+Torch::collision(GameObject& other, const CollisionHit&)
 {
   // FIXME: this doesn't work, as bbox is wrong
   Player* player = dynamic_cast<Player*>(&other);
-  if(player != 0)
+  if (player != 0)
   {
     m_burning = true;
   }

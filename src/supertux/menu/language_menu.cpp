@@ -28,10 +28,11 @@ extern "C" {
 #include "supertux/gameconfig.hpp"
 #include "supertux/globals.hpp"
 
-enum {
+enum
+{
   MNID_LANGUAGE_AUTO_DETECT = 0,
-  MNID_LANGUAGE_ENGLISH     = 1,
-  MNID_LANGUAGE_NEXT        = 10
+  MNID_LANGUAGE_ENGLISH = 1,
+  MNID_LANGUAGE_NEXT = 10
 };
 
 LanguageMenu::LanguageMenu()
@@ -42,8 +43,10 @@ LanguageMenu::LanguageMenu()
   add_entry(MNID_LANGUAGE_ENGLISH, "English");
 
   int mnid = MNID_LANGUAGE_NEXT;
-  std::set<tinygettext::Language> languages = g_dictionary_manager->get_languages();
-  for (std::set<tinygettext::Language>::iterator i = languages.begin(); i != languages.end(); ++i)
+  std::set<tinygettext::Language> languages =
+      g_dictionary_manager->get_languages();
+  for (std::set<tinygettext::Language>::iterator i = languages.begin();
+       i != languages.end(); ++i)
   {
     add_entry(mnid++, i->get_name());
   }
@@ -55,31 +58,38 @@ LanguageMenu::LanguageMenu()
 void
 LanguageMenu::menu_action(MenuItem* item)
 {
-  if (item->id == MNID_LANGUAGE_AUTO_DETECT) // auto detect
+  if (item->id == MNID_LANGUAGE_AUTO_DETECT)  // auto detect
   {
-    FL_Locale *locale;
+    FL_Locale* locale;
     FL_FindLocale(&locale);
-    tinygettext::Language language = tinygettext::Language::from_spec( locale->lang?locale->lang:"", locale->country?locale->country:"", locale->variant?locale->variant:"");
+    tinygettext::Language language = tinygettext::Language::from_spec(
+        locale->lang ? locale->lang : "",
+        locale->country ? locale->country : "",
+        locale->variant ? locale->variant : "");
     FL_FreeLocale(&locale);
 
-    g_dictionary_manager->set_language(language); // set currently detected language
-    g_config->locale = ""; // do auto detect every time on startup
+    g_dictionary_manager->set_language(
+        language);          // set currently detected language
+    g_config->locale = "";  // do auto detect every time on startup
     g_config->save();
     MenuManager::instance().clear_menu_stack();
   }
-  else if (item->id == MNID_LANGUAGE_ENGLISH) // english
+  else if (item->id == MNID_LANGUAGE_ENGLISH)  // english
   {
     g_config->locale = "en";
-    g_dictionary_manager->set_language(tinygettext::Language::from_name(g_config->locale));
+    g_dictionary_manager->set_language(
+        tinygettext::Language::from_name(g_config->locale));
     g_config->save();
     MenuManager::instance().clear_menu_stack();
   }
   else
   {
     int mnid = MNID_LANGUAGE_NEXT;
-    std::set<tinygettext::Language> languages = g_dictionary_manager->get_languages();
+    std::set<tinygettext::Language> languages =
+        g_dictionary_manager->get_languages();
 
-    for (std::set<tinygettext::Language>::iterator i = languages.begin(); i != languages.end(); ++i)
+    for (std::set<tinygettext::Language>::iterator i = languages.begin();
+         i != languages.end(); ++i)
     {
       if (item->id == mnid++)
       {
@@ -90,7 +100,7 @@ LanguageMenu::menu_action(MenuItem* item)
       }
     }
   }
-  if(g_dictionary_manager->get_language().get_language() != "en")
+  if (g_dictionary_manager->get_language().get_language() != "en")
     MenuManager::instance().push_menu(MenuStorage::LANGPACK_AUTO_UPDATE_MENU);
 }
 

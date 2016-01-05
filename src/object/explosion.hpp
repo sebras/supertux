@@ -1,5 +1,6 @@
 //  SuperTux -- Explosion object
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@
  */
 class Explosion : public MovingSprite
 {
-public:
+ public:
   /**
    * Create new Explosion centered(!) at @c pos
    */
@@ -35,34 +36,39 @@ public:
   void draw(DrawingContext& context);
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-  bool hurts() const
+  bool
+  hurts() const
   {
     return this->hurt;
   }
 
-  void hurts (bool val)
+  void
+  hurts(bool val)
   {
     this->hurt = val;
   }
 
-  bool pushes() const
+  bool
+  pushes() const
   {
     return this->push;
   }
 
-  void pushes (bool val)
+  void
+  pushes(bool val)
   {
     this->push = val;
   }
 
-protected:
+ protected:
   /**
    * plays sound, starts animation
    */
   void explode();
 
-private:
-  enum State {
+ private:
+  enum State
+  {
     STATE_WAITING,
     STATE_EXPLODING
   };
@@ -71,7 +77,6 @@ private:
   State state;
   Color light;
   SpritePtr lightsprite;
-
 };
 
 #endif

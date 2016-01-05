@@ -25,18 +25,18 @@
  */
 class SpecialRiser : public GameObject
 {
-public:
+ public:
   SpecialRiser(Vector pos, std::shared_ptr<MovingObject> child);
   ~SpecialRiser();
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   float offset;
   std::shared_ptr<MovingObject> child;
 
-private:
+ private:
   SpecialRiser(const SpecialRiser&);
   SpecialRiser& operator=(const SpecialRiser&);
 };

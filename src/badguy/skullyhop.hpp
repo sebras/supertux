@@ -1,5 +1,6 @@
 //  SkullyHop - A Hopping Skull
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@
  */
 class SkullyHop : public BadGuy
 {
-public:
+ public:
   SkullyHop(const ReaderMapping& reader);
   SkullyHop(const Vector& pos, Direction d);
 
@@ -37,17 +38,18 @@ public:
   void unfreeze();
   bool is_freezable() const;
 
-private:
-  enum SkullyHopState {
+ private:
+  enum SkullyHopState
+  {
     STANDING,
     CHARGING,
     JUMPING
   };
 
-private:
+ private:
   void set_state(SkullyHopState newState);
 
-private:
+ private:
   Timer recover_timer;
   SkullyHopState state;
 };

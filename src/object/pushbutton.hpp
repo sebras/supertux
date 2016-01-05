@@ -1,5 +1,6 @@
 //  SuperTux - PushButton running a script
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,14 +25,15 @@
  */
 class PushButton : public MovingSprite
 {
-public:
+ public:
   PushButton(const ReaderMapping& reader);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
   void update(float elapsed_time);
 
-private:
-  enum PushButtonState {
+ private:
+  enum PushButtonState
+  {
     OFF,
     ON
   };

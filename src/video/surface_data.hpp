@@ -19,7 +19,7 @@
 
 class SurfaceData
 {
-public:
+ public:
   virtual ~SurfaceData() {}
 };
 

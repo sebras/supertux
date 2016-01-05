@@ -22,11 +22,11 @@ class LevelTime;
 typedef LevelTime _LevelTime;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class LevelTime
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   LevelTime(_LevelTime* level_time);
   ~LevelTime();
@@ -55,12 +55,11 @@ public:
 #ifndef SCRIPTING_API
   _LevelTime* level_time;
 
-private:
+ private:
   LevelTime(const LevelTime&);
   LevelTime& operator=(const LevelTime&);
 #endif
 };
-
 }
 
 #endif

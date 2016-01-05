@@ -24,7 +24,7 @@ class ReaderMapping;
 
 class SnowParticleSystem : public ParticleSystem
 {
-public:
+ public:
   SnowParticleSystem();
   virtual ~SnowParticleSystem();
 
@@ -32,13 +32,16 @@ public:
 
   virtual void update(float elapsed_time);
 
-  std::string type() const
-  { return "SnowParticleSystem"; }
+  std::string
+  type() const
+  {
+    return "SnowParticleSystem";
+  }
 
-private:
+ private:
   class SnowParticle : public Particle
   {
-  public:
+   public:
     float speed;
     float wobble;
     float anchorx;
@@ -50,20 +53,22 @@ private:
     // for inertia
     unsigned int flake_size;
 
-    SnowParticle() :
-      speed(),
-      wobble(),
-      anchorx(),
-      drift_speed(),
-      spin_speed(),
-      flake_size()
-    {}
+    SnowParticle()
+        : speed(),
+          wobble(),
+          anchorx(),
+          drift_speed(),
+          spin_speed(),
+          flake_size()
+    {
+    }
   };
 
   // Wind is simulated in discrete "gusts"
 
   // Gust state
-  enum State {
+  enum State
+  {
     ATTACKING,
     DECAYING,
     SUSTAINING,
@@ -73,18 +78,17 @@ private:
   };
   State state;
 
-
   // Gust state delay timer
   Timer timer;
 
   // Peak magnitude of gust is gust_onset * randf(5)
   float gust_onset,
-  // Current blowing velocity of gust
-        gust_current_velocity;
+      // Current blowing velocity of gust
+      gust_current_velocity;
 
   SurfacePtr snowimages[3];
 
-private:
+ private:
   SnowParticleSystem(const SnowParticleSystem&);
   SnowParticleSystem& operator=(const SnowParticleSystem&);
 };

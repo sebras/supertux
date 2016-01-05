@@ -32,10 +32,10 @@ class Path;
 /** Vertically or horizontally flip a level */
 class FlipLevelTransformer : public LevelTransformer
 {
-public:
+ public:
   virtual void transform_sector(Sector* sector);
 
-private:
+ private:
   DrawingEffect transform_drawing_effect(DrawingEffect effect);
   void transform_path(float height, float obj_height, Path& path);
   void transform_tilemap(float height, TileMap& tilemap);

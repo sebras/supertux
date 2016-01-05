@@ -22,7 +22,7 @@
 
 class InvisibleBlock : public Block
 {
-public:
+ public:
   InvisibleBlock(const Vector& pos);
   InvisibleBlock(const ReaderMapping& lisp);
 
@@ -30,10 +30,10 @@ public:
   virtual bool collides(GameObject& other, const CollisionHit& hit) const;
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-protected:
+ protected:
   virtual void hit(Player& player);
 
-private:
+ private:
   bool visible;
 };
 

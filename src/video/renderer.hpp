@@ -39,7 +39,7 @@ struct DrawingRequest;
 
 class Renderer
 {
-public:
+ public:
   Renderer();
   virtual ~Renderer();
 
@@ -48,8 +48,8 @@ public:
   virtual void draw_surface(const DrawingRequest& request) = 0;
   virtual void draw_surface_part(const DrawingRequest& request) = 0;
   virtual void draw_gradient(const DrawingRequest& request) = 0;
-  virtual void draw_filled_rect(const DrawingRequest& request)= 0;
-  virtual void draw_inverse_ellipse(const DrawingRequest& request)= 0;
+  virtual void draw_filled_rect(const DrawingRequest& request) = 0;
+  virtual void draw_inverse_ellipse(const DrawingRequest& request) = 0;
   virtual void do_take_screenshot() = 0;
   virtual void flip() = 0;
   virtual void resize(int w, int h) = 0;

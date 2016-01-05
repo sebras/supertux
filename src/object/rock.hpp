@@ -23,10 +23,9 @@
 
 class Sprite;
 
-class Rock : public MovingSprite,
-             public Portable
+class Rock : public MovingSprite, public Portable
 {
-public:
+ public:
   Rock(const Vector& pos, std::string spritename);
   Rock(const ReaderMapping& reader);
   Rock(const ReaderMapping& reader, std::string spritename);
@@ -38,7 +37,7 @@ public:
   void grab(MovingObject& object, const Vector& pos, Direction dir);
   void ungrab(MovingObject& object, Direction dir);
 
-protected:
+ protected:
   Physic physic;
   bool on_ground;
   bool grabbed;

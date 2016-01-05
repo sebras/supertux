@@ -26,32 +26,30 @@
 
 class Particles : public GameObject
 {
-public:
+ public:
   Particles(const Vector& epicenter, int min_angle, int max_angle,
             const Vector& initial_velocity, const Vector& acceleration,
             int number, Color color, int size, float life_time,
             int drawing_layer);
   Particles(const Vector& epicenter, int min_angle, int max_angle,
             const float min_initial_velocity, const float max_initial_velocity,
-            const Vector& acceleration, int number, Color color,
-            int size, float life_time, int drawing_layer);
+            const Vector& acceleration, int number, Color color, int size,
+            float life_time, int drawing_layer);
   ~Particles();
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
-  struct Particle {
+ private:
+  struct Particle
+  {
     Vector pos, vel;
 
-    Particle() :
-      pos(),
-      vel()
-    {}
+    Particle() : pos(), vel() {}
     //     float angle;
   };
 
-private:
+ private:
   Vector accel;
   Timer timer;
   bool live_forever;

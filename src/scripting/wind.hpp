@@ -22,11 +22,11 @@ class Wind;
 typedef Wind _Wind;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Wind
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   Wind(_Wind* wind);
   ~Wind();
@@ -41,13 +41,13 @@ public:
 #ifndef SCRIPTING_API
   _Wind* wind;
 
-private:
+ private:
   Wind(const Wind&);
   Wind& operator=(const Wind&);
 #endif
 };
 
-} // namespace scripting
+}  // namespace scripting
 
 #endif
 

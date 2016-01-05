@@ -21,15 +21,16 @@
 
 #include "util/reader_object.hpp"
 
-namespace sexp {
+namespace sexp
+{
 class Value;
-} // namespace sexp
+}  // namespace sexp
 
 class ReaderDocument;
 
 class ReaderCollection final
 {
-public:
+ public:
   ReaderCollection();
 
   // sx should point to (section (objname (name value)...)...)
@@ -37,7 +38,7 @@ public:
 
   std::vector<ReaderObject> get_objects() const;
 
-private:
+ private:
   const ReaderDocument* m_doc;
   const sexp::Value* m_sx;
 };

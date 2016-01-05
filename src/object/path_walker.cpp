@@ -20,23 +20,21 @@
 #include <math.h>
 #include <assert.h>
 
-PathWalker::PathWalker(const Path* path_, bool running_) :
-  path(path_),
-  running(running_),
-  current_node_nr(0),
-  next_node_nr(0),
-  stop_at_node_nr(running?-1:0),
-  node_time(0),
-  node_mult(),
-  walking_speed(1.0)
+PathWalker::PathWalker(const Path* path_, bool running_)
+    : path(path_),
+      running(running_),
+      current_node_nr(0),
+      next_node_nr(0),
+      stop_at_node_nr(running ? -1 : 0),
+      node_time(0),
+      node_mult(),
+      walking_speed(1.0)
 {
   node_mult = 1 / path->nodes[0].time;
   next_node_nr = path->nodes.size() > 1 ? 1 : 0;
 }
 
-PathWalker::~PathWalker()
-{
-}
+PathWalker::~PathWalker() {}
 
 Vector
 PathWalker::advance(float elapsed_time)
@@ -47,21 +45,28 @@ PathWalker::advance(float elapsed_time)
 
   elapsed_time *= fabsf(walking_speed);
 
-  const Path::Node* current_node = & (path->nodes[current_node_nr]);
-  while(node_time + elapsed_time * node_mult >= 1) {
+  const Path::Node* current_node = &(path->nodes[current_node_nr]);
+  while (node_time + elapsed_time * node_mult >= 1)
+  {
     elapsed_time -= (1 - node_time) / node_mult;
 
-    if(walking_speed > 0) {
+    if (walking_speed > 0)
+    {
       advance_node();
-    } else if(walking_speed < 0) {
+    }
+    else if (walking_speed < 0)
+    {
       goback_node();
     }
 
-    current_node = & (path->nodes[current_node_nr]);
+    current_node = &(path->nodes[current_node_nr]);
     node_time = 0;
-    if(walking_speed > 0) {
+    if (walking_speed > 0)
+    {
       node_mult = 1 / current_node->time;
-    } else {
+    }
+    else
+    {
       node_mult = 1 / path->nodes[next_node_nr].time;
     }
   }
@@ -74,10 +79,10 @@ PathWalker::advance(float elapsed_time)
 Vector
 PathWalker::get_pos() const
 {
-  const Path::Node* current_node = & (path->nodes[current_node_nr]);
-  const Path::Node* next_node = & (path->nodes[next_node_nr]);
+  const Path::Node* current_node = &(path->nodes[current_node_nr]);
+  const Path::Node* next_node = &(path->nodes[next_node_nr]);
   Vector new_pos = current_node->position +
-    (next_node->position - current_node->position) * node_time;
+                   (next_node->position - current_node->position) * node_time;
 
   return new_pos;
 }
@@ -89,7 +94,8 @@ PathWalker::goto_node(int node_no)
   running = true;
   stop_at_node_nr = node_no;
 
-  if (path->mode == Path::UNORDERED) {
+  if (path->mode == Path::UNORDERED)
+  {
     next_node_nr = node_no;
   }
 }
@@ -113,17 +119,20 @@ PathWalker::advance_node()
   current_node_nr = next_node_nr;
   if (static_cast<int>(current_node_nr) == stop_at_node_nr) running = false;
 
-  if (path->mode == Path::UNORDERED) {
-    next_node_nr = gameRandom.rand( path->nodes.size() );
+  if (path->mode == Path::UNORDERED)
+  {
+    next_node_nr = gameRandom.rand(path->nodes.size());
     return;
   }
 
-  if(next_node_nr + 1 < path->nodes.size()) {
+  if (next_node_nr + 1 < path->nodes.size())
+  {
     next_node_nr++;
     return;
   }
 
-  switch(path->mode) {
+  switch (path->mode)
+  {
     case Path::ONE_SHOT:
       next_node_nr = path->nodes.size() - 1;
       walking_speed = 0;
@@ -153,12 +162,14 @@ PathWalker::goback_node()
 {
   current_node_nr = next_node_nr;
 
-  if(next_node_nr > 0) {
+  if (next_node_nr > 0)
+  {
     next_node_nr--;
     return;
   }
 
-  switch(path->mode) {
+  switch (path->mode)
+  {
     case Path::PING_PONG:
       walking_speed = -walking_speed;
       next_node_nr = path->nodes.size() > 1 ? 1 : 0;

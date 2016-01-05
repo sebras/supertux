@@ -20,10 +20,9 @@
 #include "badguy/walking_badguy.hpp"
 #include "object/portable.hpp"
 
-class MrIceBlock : public WalkingBadguy,
-                   public Portable
+class MrIceBlock : public WalkingBadguy, public Portable
 {
-public:
+ public:
   MrIceBlock(const ReaderMapping& reader);
   MrIceBlock(const Vector& pos, Direction d);
 
@@ -43,19 +42,20 @@ public:
 
   void ignite();
 
-protected:
-  enum IceState {
+ protected:
+  enum IceState
+  {
     ICESTATE_NORMAL,
     ICESTATE_FLAT,
     ICESTATE_GRABBED,
     ICESTATE_KICKED
   };
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
   void set_state(IceState state, bool up = false);
 
-private:
+ private:
   IceState ice_state;
   Timer nokick_timer;
   Timer flat_timer;
@@ -64,10 +64,12 @@ private:
 
 class SmartBlock : public MrIceBlock
 {
-public:
+ public:
   SmartBlock(const ReaderMapping& reader);
 
-  virtual std::string get_mpsf() const {
+  virtual std::string
+  get_mpsf() const
+  {
     return "images/objects/water_drop/pink_drop.sprite";
   }
 };

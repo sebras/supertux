@@ -19,7 +19,14 @@
 
 #include <iostream>
 
-enum Direction { AUTO, LEFT, RIGHT, UP, DOWN };
+enum Direction
+{
+  AUTO,
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN
+};
 
 std::ostream& operator<<(std::ostream& o, const Direction& dir);
 

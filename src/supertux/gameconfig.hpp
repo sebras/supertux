@@ -29,7 +29,7 @@
 
 class Config
 {
-public:
+ public:
   Config();
   ~Config();
 
@@ -67,8 +67,9 @@ public:
   bool enable_script_debugger;
   std::string start_demo;
   std::string record_demo;
-  
-  /** this variable is set if tux should spawn somewhere which isn't the "main" spawn point*/
+
+  /** this variable is set if tux should spawn somewhere which isn't the "main"
+   * spawn point*/
   boost::optional<Vector> tux_spawn_pos;
 
   /** force SuperTux language to this locale, e.g. "de". A file
@@ -90,7 +91,9 @@ public:
   bool christmas_mode;
   bool transitions_enabled;
 
-  bool is_christmas() const {
+  bool
+  is_christmas() const
+  {
     using namespace boost::gregorian;
     using namespace boost::posix_time;
     date today = second_clock::local_time().date();

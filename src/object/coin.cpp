@@ -26,25 +26,28 @@
 #include "util/reader_mapping.hpp"
 
 Coin::Coin(const Vector& pos)
-  : MovingSprite(pos, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1, COLGROUP_TOUCHABLE),
-    path(),
-    walker(),
-    offset(),
-    from_tilemap(false),
-    physic()
+    : MovingSprite(pos, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1,
+                   COLGROUP_TOUCHABLE),
+      path(),
+      walker(),
+      offset(),
+      from_tilemap(false),
+      physic()
 {
   SoundManager::current()->preload("sounds/coin.wav");
 }
 
 Coin::Coin(const Vector& pos, TileMap* tilemap)
-  : MovingSprite(pos, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1, COLGROUP_TOUCHABLE),
-    path(std::shared_ptr<Path>(tilemap->get_path())),
-    walker(std::shared_ptr<PathWalker>(tilemap->get_walker())),
-    offset(),
-    from_tilemap(true),
-    physic()
+    : MovingSprite(pos, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1,
+                   COLGROUP_TOUCHABLE),
+      path(std::shared_ptr<Path>(tilemap->get_path())),
+      walker(std::shared_ptr<PathWalker>(tilemap->get_walker())),
+      offset(),
+      from_tilemap(true),
+      physic()
 {
-  if(walker.get()) {
+  if (walker.get())
+  {
     Vector v = path->get_base();
     offset = pos - v;
   }
@@ -53,15 +56,17 @@ Coin::Coin(const Vector& pos, TileMap* tilemap)
 }
 
 Coin::Coin(const ReaderMapping& reader)
-  : MovingSprite(reader, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1, COLGROUP_TOUCHABLE),
-    path(),
-    walker(),
-    offset(),
-    from_tilemap(false),
-    physic()
+    : MovingSprite(reader, "images/objects/coin/coin.sprite", LAYER_OBJECTS - 1,
+                   COLGROUP_TOUCHABLE),
+      path(),
+      walker(),
+      offset(),
+      from_tilemap(false),
+      physic()
 {
   ReaderMapping path_mapping;
-  if (reader.get("path", path_mapping)) {
+  if (reader.get("path", path_mapping))
+  {
     path.reset(new Path());
     path->read(path_mapping);
     walker.reset(new PathWalker(path.get()));
@@ -76,8 +81,10 @@ void
 Coin::update(float elapsed_time)
 {
   // if we have a path to follow, follow it
-  if (walker.get()) {
-    Vector v = from_tilemap ? offset + walker->get_pos() : walker->advance(elapsed_time);
+  if (walker.get())
+  {
+    Vector v = from_tilemap ? offset + walker->get_pos()
+                            : walker->advance(elapsed_time);
     movement = v - get_pos();
   }
 }
@@ -85,7 +92,8 @@ Coin::update(float elapsed_time)
 void
 Coin::collect()
 {
-  // TODO: commented out musical code. Maybe fork this for a special "MusicalCoin" object?
+  // TODO: commented out musical code. Maybe fork this for a special
+  // "MusicalCoin" object?
   /*
     static Timer sound_timer;
     static int pitch_one = 128;
@@ -149,24 +157,25 @@ Coin::collect()
     }
     sound_timer.start(1);
 
-    SoundSource* soundSource = SoundManager::current()->create_sound_source("sounds/coin.wav");
+    SoundSource* soundSource =
+    SoundManager::current()->create_sound_source("sounds/coin.wav");
     soundSource->set_position(get_pos());
     soundSource->set_pitch(pitch);
     soundSource->play();
     SoundManager::current()->manage_source(soundSource);
   */
   Sector::current()->player->get_status()->add_coins(1);
-  Sector::current()->add_object(std::make_shared<BouncyCoin>(get_pos(), false, get_sprite_name()));
+  Sector::current()->add_object(
+      std::make_shared<BouncyCoin>(get_pos(), false, get_sprite_name()));
   Sector::current()->get_level()->stats.coins++;
   remove_me();
 }
 
 HitResponse
-Coin::collision(GameObject& other, const CollisionHit& )
+Coin::collision(GameObject& other, const CollisionHit&)
 {
   Player* player = dynamic_cast<Player*>(&other);
-  if(player == 0)
-    return ABORT_MOVE;
+  if (player == 0) return ABORT_MOVE;
 
   collect();
   return ABORT_MOVE;
@@ -174,8 +183,7 @@ Coin::collision(GameObject& other, const CollisionHit& )
 
 /* The following defines a coin subject to gravity */
 HeavyCoin::HeavyCoin(const Vector& pos, const Vector& init_velocity)
-  : Coin(pos),
-  physic()
+    : Coin(pos), physic()
 {
   physic.enable_gravity(true);
   SoundManager::current()->preload("sounds/coin2.ogg");
@@ -183,9 +191,7 @@ HeavyCoin::HeavyCoin(const Vector& pos, const Vector& init_velocity)
   physic.set_velocity(init_velocity);
 }
 
-HeavyCoin::HeavyCoin(const ReaderMapping& reader)
-  : Coin(reader),
-  physic()
+HeavyCoin::HeavyCoin(const ReaderMapping& reader) : Coin(reader), physic()
 {
   physic.enable_gravity(true);
   SoundManager::current()->preload("sounds/coin2.ogg");
@@ -202,25 +208,33 @@ HeavyCoin::update(float elapsed_time)
 void
 HeavyCoin::collision_solid(const CollisionHit& hit)
 {
-  int clink_threshold = 100; // sets the minimum speed needed to result in collision noise
-  //TODO: colliding HeavyCoins should have their own unique sound
-  if(hit.bottom) {
-    if(physic.get_velocity_y() > clink_threshold)
+  int clink_threshold =
+      100;  // sets the minimum speed needed to result in collision noise
+  // TODO: colliding HeavyCoins should have their own unique sound
+  if (hit.bottom)
+  {
+    if (physic.get_velocity_y() > clink_threshold)
       SoundManager::current()->play("sounds/coin2.ogg");
-    if(physic.get_velocity_y() > 200) {// lets some coins bounce
+    if (physic.get_velocity_y() > 200)
+    {  // lets some coins bounce
       physic.set_velocity_y(-99);
-    }else{
+    }
+    else
+    {
       physic.set_velocity_y(0);
       physic.set_velocity_x(0);
     }
   }
-  if(hit.right || hit.left) {
-    if(physic.get_velocity_x() > clink_threshold || physic.get_velocity_x() < clink_threshold)
+  if (hit.right || hit.left)
+  {
+    if (physic.get_velocity_x() > clink_threshold ||
+        physic.get_velocity_x() < clink_threshold)
       SoundManager::current()->play("sounds/coin2.ogg");
     physic.set_velocity_x(-physic.get_velocity_x());
   }
-  if(hit.top) {
-    if(physic.get_velocity_y() < clink_threshold)
+  if (hit.top)
+  {
+    if (physic.get_velocity_y() < clink_threshold)
       SoundManager::current()->play("sounds/coin2.ogg");
     physic.set_velocity_y(-physic.get_velocity_y());
   }

@@ -19,13 +19,11 @@
 #include "scripting/camera.hpp"
 #include "util/log.hpp"
 
-namespace scripting {
-Camera::Camera(::Camera* camera_)
-  : camera(camera_)
-{ }
+namespace scripting
+{
+Camera::Camera(::Camera* camera_) : camera(camera_) {}
 
-Camera::~Camera()
-{ }
+Camera::~Camera() {}
 
 void
 Camera::reload_config()
@@ -40,18 +38,23 @@ Camera::shake(float speed, float x, float y)
 }
 
 void
-Camera::set_pos(float , float )
+Camera::set_pos(float, float)
 {
 }
 
 void
 Camera::set_mode(const std::string& mode)
 {
-  if(mode == "normal") {
+  if (mode == "normal")
+  {
     camera->mode = ::Camera::NORMAL;
-  } else if(mode == "manual") {
+  }
+  else if (mode == "manual")
+  {
     camera->mode = ::Camera::MANUAL;
-  } else {
+  }
+  else
+  {
     log_fatal << "Camera mode '" << mode << "' unknown.";
   }
 }

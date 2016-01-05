@@ -1,5 +1,6 @@
 //  DartTrap - Shoots a Dart at regular intervals
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,24 +24,30 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-namespace {
+namespace
+{
 const float MUZZLE_Y = 25; /**< [px] muzzle y-offset from top */
 }
 
-DartTrap::DartTrap(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/darttrap/darttrap.sprite", LAYER_TILES-1),
-  initial_delay(),
-  fire_delay(),
-  ammo(),
-  state(IDLE),
-  fire_timer()
+DartTrap::DartTrap(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/darttrap/darttrap.sprite",
+             LAYER_TILES - 1),
+      initial_delay(),
+      fire_delay(),
+      ammo(),
+      state(IDLE),
+      fire_timer()
 {
-  if ( !reader.get("initial-delay", initial_delay) ) initial_delay = 0;
-  if ( !reader.get("fire-delay", fire_delay)) fire_delay = 2;
-  if ( !reader.get("ammo", ammo)) ammo = -1;
+  if (!reader.get("initial-delay", initial_delay)) initial_delay = 0;
+  if (!reader.get("fire-delay", fire_delay)) fire_delay = 2;
+  if (!reader.get("ammo", ammo)) ammo = -1;
   countMe = false;
   SoundManager::current()->preload("sounds/dartfire.wav");
-  if (start_dir == AUTO) { log_warning << "Setting a DartTrap's direction to AUTO is no good idea" << std::endl; }
+  if (start_dir == AUTO)
+  {
+    log_warning << "Setting a DartTrap's direction to AUTO is no good idea"
+                << std::endl;
+  }
   state = IDLE;
   set_colgroup_active(COLGROUP_DISABLED);
   if (initial_delay == 0) initial_delay = 0.1f;
@@ -59,17 +66,19 @@ DartTrap::activate()
 }
 
 HitResponse
-DartTrap::collision_player(Player& , const CollisionHit& )
+DartTrap::collision_player(Player&, const CollisionHit&)
 {
   return ABORT_MOVE;
 }
 
 void
-DartTrap::active_update(float )
+DartTrap::active_update(float)
 {
-  switch (state) {
+  switch (state)
+  {
     case IDLE:
-      if ((ammo != 0) && (fire_timer.check())) {
+      if ((ammo != 0) && (fire_timer.check()))
+      {
         if (ammo > 0) ammo--;
         load();
         fire_timer.start(fire_delay);
@@ -77,7 +86,8 @@ DartTrap::active_update(float )
       break;
 
     case LOADING:
-      if (sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         fire();
       }
       break;
@@ -103,7 +113,8 @@ DartTrap::fire()
   py += MUZZLE_Y;
 
   SoundManager::current()->play("sounds/dartfire.wav", get_pos());
-  Sector::current()->add_object(std::make_shared<Dart>(Vector(px, py), dir, this));
+  Sector::current()->add_object(
+      std::make_shared<Dart>(Vector(px, py), dir, this));
   state = IDLE;
   sprite->set_action(dir == LEFT ? "idle-left" : "idle-right");
 }

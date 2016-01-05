@@ -26,7 +26,8 @@
 class Sector;
 class CollisionGrid;
 
-enum CollisionGroup {
+enum CollisionGroup
+{
   /** Objects in DISABLED group are not tested for collisions */
   COLGROUP_DISABLED = 0,
 
@@ -75,23 +76,25 @@ enum CollisionGroup {
     feedback. */
 class MovingObject : public GameObject
 {
-public:
+ public:
   MovingObject();
   virtual ~MovingObject();
 
   /** this function is called when the object collided with something solid */
-  virtual void collision_solid(const CollisionHit& hit)
+  virtual void
+  collision_solid(const CollisionHit& hit)
   {
-    (void) hit;
+    (void)hit;
   }
 
   /** when 2 objects collided, we will first call the
       pre_collision_check functions of both objects that can decide on
       how to react to the collision. */
-  virtual bool collides(GameObject& other, const CollisionHit& hit) const
+  virtual bool
+  collides(GameObject& other, const CollisionHit& hit) const
   {
-    (void) other;
-    (void) hit;
+    (void)other;
+    (void)hit;
     return true;
   }
 
@@ -99,23 +102,27 @@ public:
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit) = 0;
 
   /** called when tiles with special attributes have been touched */
-  virtual void collision_tile(uint32_t tile_attributes)
+  virtual void
+  collision_tile(uint32_t tile_attributes)
   {
-    (void) tile_attributes;
+    (void)tile_attributes;
   }
 
-  const Vector& get_pos() const
+  const Vector&
+  get_pos() const
   {
     return bbox.p1;
   }
 
   /** returns the bounding box of the Object */
-  const Rectf& get_bbox() const
+  const Rectf&
+  get_bbox() const
   {
     return bbox;
   }
 
-  const Vector& get_movement() const
+  const Vector&
+  get_movement() const
   {
     return movement;
   }
@@ -123,16 +130,18 @@ public:
   /** places the moving object at a specific position. Be careful when
       using this function. There are no collision detection checks
       performed here so bad things could happen. */
-  virtual void set_pos(const Vector& pos)
+  virtual void
+  set_pos(const Vector& pos)
   {
-    dest.move(pos-get_pos());
+    dest.move(pos - get_pos());
     bbox.set_pos(pos);
   }
 
   /** sets the moving object's bbox to a specific width. Be careful
       when using this function. There are no collision detection
       checks performed here so bad things could happen. */
-  virtual void set_width(float w)
+  virtual void
+  set_width(float w)
   {
     dest.set_width(w);
     bbox.set_width(w);
@@ -141,23 +150,26 @@ public:
   /** sets the moving object's bbox to a specific size. Be careful
       when using this function. There are no collision detection
       checks performed here so bad things could happen. */
-  virtual void set_size(float w, float h)
+  virtual void
+  set_size(float w, float h)
   {
     dest.set_size(w, h);
     bbox.set_size(w, h);
   }
 
-  CollisionGroup get_group() const
+  CollisionGroup
+  get_group() const
   {
     return group;
   }
 
-protected:
+ protected:
   friend class Sector;
   friend class CollisionGrid;
   friend class Platform;
 
-  void set_group(CollisionGroup group_)
+  void
+  set_group(CollisionGroup group_)
   {
     this->group = group_;
   }
@@ -172,7 +184,7 @@ protected:
   /** The collision group */
   CollisionGroup group;
 
-private:
+ private:
   /** this is only here for internal collision detection use (don't touch this
       from outside collision detection code)
 

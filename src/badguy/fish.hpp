@@ -21,14 +21,14 @@
 
 class Fish : public BadGuy
 {
-public:
-  Fish(const ReaderMapping& );
+ public:
+  Fish(const ReaderMapping&);
   Fish(const Vector& pos);
 
   void draw(DrawingContext& context);
 
   void collision_solid(const CollisionHit& hit);
-  HitResponse collision_badguy(BadGuy& , const CollisionHit& );
+  HitResponse collision_badguy(BadGuy&, const CollisionHit&);
   void collision_tile(uint32_t tile_attributes);
 
   void active_update(float);
@@ -37,8 +37,8 @@ public:
   void unfreeze();
   bool is_freezable() const;
 
-private:
-  HitResponse hit(const CollisionHit& );
+ private:
+  HitResponse hit(const CollisionHit&);
   void start_waiting();
   void jump();
 

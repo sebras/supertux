@@ -21,8 +21,9 @@
 
 class CheatMenu : public Menu
 {
-private:
-  enum MenuIDs {
+ private:
+  enum MenuIDs
+  {
     MNID_GROW,
     MNID_FIRE,
     MNID_ICE,
@@ -34,12 +35,12 @@ private:
     MNID_FINISH
   };
 
-public:
+ public:
   CheatMenu();
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   CheatMenu(const CheatMenu&) = delete;
   CheatMenu& operator=(const CheatMenu&) = delete;
 };

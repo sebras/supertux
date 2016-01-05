@@ -21,15 +21,15 @@
 #include "supertux/object_factory.hpp"
 #include "util/reader_mapping.hpp"
 
-Spotlight::Spotlight(const ReaderMapping& lisp) :
-  position(),
-  angle(0.0f),
-  center(),
-  base(),
-  lights(),
-  light(),
-  lightcone(),
-  color(1.0f, 1.0f, 1.0f)
+Spotlight::Spotlight(const ReaderMapping& lisp)
+    : position(),
+      angle(0.0f),
+      center(),
+      base(),
+      lights(),
+      light(),
+      lightcone(),
+      color(1.0f, 1.0f, 1.0f)
 {
   lisp.get("x", position.x);
   lisp.get("y", position.y);
@@ -37,21 +37,24 @@ Spotlight::Spotlight(const ReaderMapping& lisp) :
   lisp.get("angle", angle);
 
   std::vector<float> vColor;
-  if( lisp.get( "color", vColor ) ){
-    color = Color( vColor );
+  if (lisp.get("color", vColor))
+  {
+    color = Color(vColor);
   }
 
-  center    = SpriteManager::current()->create("images/objects/spotlight/spotlight_center.sprite");
-  base      = SpriteManager::current()->create("images/objects/spotlight/spotlight_base.sprite");
-  lights    = SpriteManager::current()->create("images/objects/spotlight/spotlight_lights.sprite");
-  lightcone = SpriteManager::current()->create("images/objects/spotlight/lightcone.sprite");
-  light     = SpriteManager::current()->create("images/objects/spotlight/light.sprite");
-
+  center = SpriteManager::current()->create(
+      "images/objects/spotlight/spotlight_center.sprite");
+  base = SpriteManager::current()->create(
+      "images/objects/spotlight/spotlight_base.sprite");
+  lights = SpriteManager::current()->create(
+      "images/objects/spotlight/spotlight_lights.sprite");
+  lightcone = SpriteManager::current()->create(
+      "images/objects/spotlight/lightcone.sprite");
+  light =
+      SpriteManager::current()->create("images/objects/spotlight/light.sprite");
 }
 
-Spotlight::~Spotlight()
-{
-}
+Spotlight::~Spotlight() {}
 
 void
 Spotlight::update(float delta)
@@ -70,8 +73,8 @@ Spotlight::draw(DrawingContext& context)
   light->set_angle(angle);
   light->draw(context, position, 0);
 
-  //lightcone->set_angle(angle);
-  //lightcone->draw(context, position, 0);
+  // lightcone->set_angle(angle);
+  // lightcone->draw(context, position, 0);
 
   context.set_target(DrawingContext::NORMAL);
 

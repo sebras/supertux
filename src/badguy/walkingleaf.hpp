@@ -24,15 +24,14 @@
  */
 class WalkingLeaf : public WalkingBadguy
 {
-public:
+ public:
   WalkingLeaf(const ReaderMapping& reader);
   WalkingLeaf(const Vector& pos, Direction d);
 
   bool is_freezable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-
 };
 
 #endif

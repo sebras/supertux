@@ -35,71 +35,61 @@ class Surface;
 
 enum RequestType
 {
-  SURFACE, SURFACE_PART, TEXT, GRADIENT, FILLRECT, INVERSEELLIPSE, DRAW_LIGHTMAP, GETLIGHT
+  SURFACE,
+  SURFACE_PART,
+  TEXT,
+  GRADIENT,
+  FILLRECT,
+  INVERSEELLIPSE,
+  DRAW_LIGHTMAP,
+  GETLIGHT
 };
 
 struct DrawingRequestData
 {
-  virtual ~DrawingRequestData()
-  {}
+  virtual ~DrawingRequestData() {}
 };
 
 struct SurfaceRequest : public DrawingRequestData
 {
-  SurfaceRequest() :
-    surface()
-  {}
+  SurfaceRequest() : surface() {}
 
   const Surface* surface;
 
-private:
+ private:
   SurfaceRequest(const SurfaceRequest&) = delete;
   SurfaceRequest& operator=(const SurfaceRequest&) = delete;
 };
 
 struct SurfacePartRequest : public DrawingRequestData
 {
-  SurfacePartRequest() :
-    surface(),
-    srcrect(),
-    dstsize()
-  {}
+  SurfacePartRequest() : surface(), srcrect(), dstsize() {}
 
   const Surface* surface;
   Rectf srcrect;
   Sizef dstsize;
 
-private:
+ private:
   SurfacePartRequest(const SurfacePartRequest&) = delete;
   SurfacePartRequest& operator=(const SurfacePartRequest&) = delete;
 };
 
 struct TextRequest : public DrawingRequestData
 {
-  TextRequest() :
-    font(),
-    text(),
-    alignment()
-  {}
+  TextRequest() : font(), text(), alignment() {}
 
   const Font* font;
   std::string text;
   FontAlignment alignment;
 
-private:
+ private:
   TextRequest(const TextRequest&);
   TextRequest& operator=(const TextRequest&);
 };
 
 struct GradientRequest : public DrawingRequestData
 {
-  GradientRequest()  :
-    top(),
-    bottom(),
-    size(),
-    direction(),
-    region()
-  {}
+  GradientRequest() : top(), bottom(), size(), direction(), region() {}
 
   Color top;
   Color bottom;
@@ -110,25 +100,18 @@ struct GradientRequest : public DrawingRequestData
 
 struct FillRectRequest : public DrawingRequestData
 {
-  FillRectRequest() :
-    color(),
-    size(),
-    radius()
-  {}
+  FillRectRequest() : color(), size(), radius() {}
 
-  Color  color;
+  Color color;
   Vector size;
-  float  radius;
+  float radius;
 };
 
 struct InverseEllipseRequest : public DrawingRequestData
 {
-  InverseEllipseRequest() :
-    color(),
-    size()
-  {}
+  InverseEllipseRequest() : color(), size() {}
 
-  Color  color;
+  Color color;
   Vector size;
 };
 
@@ -147,18 +130,19 @@ struct DrawingRequest
 
   DrawingRequestData* request_data;
 
-  DrawingRequest() :
-    target(),
-    type(),
-    pos(),
-    layer(),
-    drawing_effect(),
-    alpha(),
-    blend(),
-    angle(0.0f),
-    color(1.0f, 1.0f, 1.0f, 1.0f),
-    request_data()
-  {}
+  DrawingRequest()
+      : target(),
+        type(),
+        pos(),
+        layer(),
+        drawing_effect(),
+        alpha(),
+        blend(),
+        angle(0.0f),
+        color(1.0f, 1.0f, 1.0f, 1.0f),
+        request_data()
+  {
+  }
 
   bool operator<(const DrawingRequest& other) const
   {
@@ -172,7 +156,7 @@ struct GetLightRequest : public DrawingRequestData
 
   Color* color_ptr;
 
-private:
+ private:
   GetLightRequest(const GetLightRequest&) = delete;
   GetLightRequest& operator=(const GetLightRequest&) = delete;
 };

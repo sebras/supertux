@@ -27,7 +27,7 @@ class Writer;
 
 class CometParticleSystem : public ParticleSystem_Interactive
 {
-public:
+ public:
   CometParticleSystem();
   virtual ~CometParticleSystem();
 
@@ -36,23 +36,24 @@ public:
 
   virtual void update(float elapsed_time);
 
-  std::string type() const
-  { return "CometParticleSystem"; }
+  std::string
+  type() const
+  {
+    return "CometParticleSystem";
+  }
 
-private:
+ private:
   class CometParticle : public Particle
   {
-  public:
+   public:
     float speed;
 
-    CometParticle() :
-      speed()
-    {}
+    CometParticle() : speed() {}
   };
 
   SurfacePtr cometimages[2];
 
-private:
+ private:
   CometParticleSystem(const CometParticleSystem&);
   CometParticleSystem& operator=(const CometParticleSystem&);
 };

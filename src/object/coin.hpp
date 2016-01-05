@@ -26,7 +26,7 @@ class TileMap;
 
 class Coin : public MovingSprite
 {
-public:
+ public:
   Coin(const Vector& pos);
   Coin(const Vector& pos, TileMap* tilemap);
   Coin(const ReaderMapping& reader);
@@ -36,7 +36,7 @@ public:
   void collect();
   virtual void update(float elapsed_time);
 
-private:
+ private:
   std::shared_ptr<Path> path;
   std::shared_ptr<PathWalker> walker;
   Vector offset;
@@ -46,14 +46,14 @@ private:
 
 class HeavyCoin : public Coin
 {
-public:
+ public:
   HeavyCoin(const Vector& pos, const Vector& init_velocity);
   HeavyCoin(const ReaderMapping& reader);
 
   virtual void update(float elapsed_time);
   virtual void collision_solid(const CollisionHit& hit);
 
-private:
+ private:
   Physic physic;
 };
 

@@ -27,13 +27,15 @@ class ProfileMenu;
 
 class MenuStorage
 {
-private:
+ private:
   static MenuStorage* s_instance;
-public:
+
+ public:
   static MenuStorage& instance();
 
-public:
-  enum MenuId {
+ public:
+  enum MenuId
+  {
     NO_MENU,
     MAIN_MENU,
     OPTIONS_MENU,
@@ -54,13 +56,13 @@ public:
     CHEAT_MENU
   };
 
-public:
+ public:
   MenuStorage();
   ~MenuStorage();
 
   std::unique_ptr<Menu> create(MenuId menu_id);
 
-private:
+ private:
   MenuStorage(const MenuStorage&);
   MenuStorage& operator=(const MenuStorage&);
 };

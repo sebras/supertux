@@ -27,7 +27,7 @@ class Player;
 
 class Block : public MovingObject
 {
-public:
+ public:
   Block(SpritePtr sprite);
   Block(const ReaderMapping& lisp, std::string sprite_file);
   ~Block();
@@ -36,7 +36,7 @@ public:
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-protected:
+ protected:
   friend class FlipLevelTransformer;
 
   virtual void hit(Player& player) = 0;
@@ -51,7 +51,7 @@ protected:
   float bounce_offset;
   float original_y;
 
-private:
+ private:
   Block(const Block&);
   Block& operator=(const Block&);
 };

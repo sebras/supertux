@@ -25,18 +25,20 @@
 
 #include <math.h>
 
-namespace {
+namespace
+{
 const float KICKSPEED = 500;
 const int MAXSQUISHES = 10;
 const float NOKICK_TIME = 0.1f;
 }
 
-MrIceBlock::MrIceBlock(const ReaderMapping& reader) :
-  WalkingBadguy(reader, "images/creatures/mr_iceblock/mr_iceblock.sprite", "left", "right"),
-  ice_state(ICESTATE_NORMAL),
-  nokick_timer(),
-  flat_timer(),
-  squishcount(0)
+MrIceBlock::MrIceBlock(const ReaderMapping& reader)
+    : WalkingBadguy(reader, "images/creatures/mr_iceblock/mr_iceblock.sprite",
+                    "left", "right"),
+      ice_state(ICESTATE_NORMAL),
+      nokick_timer(),
+      flat_timer(),
+      squishcount(0)
 {
   walk_speed = 80;
   max_drop_height = 600;
@@ -45,12 +47,13 @@ MrIceBlock::MrIceBlock(const ReaderMapping& reader) :
   SoundManager::current()->preload("sounds/kick.wav");
 }
 
-MrIceBlock::MrIceBlock(const Vector& pos, Direction d) :
-  WalkingBadguy(pos, d, "images/creatures/mr_iceblock/mr_iceblock.sprite", "left", "right"),
-  ice_state(ICESTATE_NORMAL),
-  nokick_timer(),
-  flat_timer(),
-  squishcount(0)
+MrIceBlock::MrIceBlock(const Vector& pos, Direction d)
+    : WalkingBadguy(pos, d, "images/creatures/mr_iceblock/mr_iceblock.sprite",
+                    "left", "right"),
+      ice_state(ICESTATE_NORMAL),
+      nokick_timer(),
+      flat_timer(),
+      squishcount(0)
 {
   walk_speed = 80;
   max_drop_height = 600;
@@ -69,10 +72,10 @@ MrIceBlock::initialize()
 void
 MrIceBlock::active_update(float elapsed_time)
 {
-  if(ice_state == ICESTATE_GRABBED)
-    return;
+  if (ice_state == ICESTATE_GRABBED) return;
 
-  if(ice_state == ICESTATE_FLAT && flat_timer.check()) {
+  if (ice_state == ICESTATE_FLAT && flat_timer.check())
+  {
     set_state(ICESTATE_NORMAL);
   }
 
@@ -86,7 +89,8 @@ MrIceBlock::active_update(float elapsed_time)
 }
 
 bool
-MrIceBlock::can_break() const {
+MrIceBlock::can_break() const
+{
   return ice_state == ICESTATE_KICKED;
 }
 
@@ -95,23 +99,28 @@ MrIceBlock::collision_solid(const CollisionHit& hit)
 {
   update_on_ground_flag(hit);
 
-  if(hit.top || hit.bottom) { // floor or roof
+  if (hit.top || hit.bottom)
+  {  // floor or roof
     physic.set_velocity_y(0);
   }
 
   // hit left or right
-  switch(ice_state) {
+  switch (ice_state)
+  {
     case ICESTATE_NORMAL:
       WalkingBadguy::collision_solid(hit);
       break;
-    case ICESTATE_KICKED: {
-      if((hit.right && dir == RIGHT) || (hit.left && dir == LEFT)) {
+    case ICESTATE_KICKED:
+    {
+      if ((hit.right && dir == RIGHT) || (hit.left && dir == LEFT))
+      {
         dir = (dir == LEFT) ? RIGHT : LEFT;
         SoundManager::current()->play("sounds/iceblock_bump.wav", get_pos());
-        physic.set_velocity_x(-physic.get_velocity_x()*.975);
+        physic.set_velocity_x(-physic.get_velocity_x() * .975);
       }
-      this->set_action(dir == LEFT ? "flat-left" : "flat-right", /* loops = */ -1);
-      if(fabsf(physic.get_velocity_x()) < walk_speed*1.5)
+      this->set_action(dir == LEFT ? "flat-left" : "flat-right",
+                       /* loops = */ -1);
+      if (fabsf(physic.get_velocity_x()) < walk_speed * 1.5)
         set_state(ICESTATE_NORMAL);
       break;
     }
@@ -126,8 +135,7 @@ MrIceBlock::collision_solid(const CollisionHit& hit)
 HitResponse
 MrIceBlock::collision(GameObject& object, const CollisionHit& hit)
 {
-  if(ice_state == ICESTATE_GRABBED)
-    return FORCE_MOVE;
+  if (ice_state == ICESTATE_GRABBED) return FORCE_MOVE;
 
   return BadGuy::collision(object, hit);
 }
@@ -136,13 +144,17 @@ HitResponse
 MrIceBlock::collision_player(Player& player, const CollisionHit& hit)
 {
   // handle kicks from left or right side
-  if(ice_state == ICESTATE_FLAT && get_state() == STATE_ACTIVE) {
-    if(hit.left) {
+  if (ice_state == ICESTATE_FLAT && get_state() == STATE_ACTIVE)
+  {
+    if (hit.left)
+    {
       dir = RIGHT;
       player.kick();
       set_state(ICESTATE_KICKED);
       return FORCE_MOVE;
-    } else if(hit.right) {
+    }
+    else if (hit.right)
+    {
       dir = LEFT;
       player.kick();
       set_state(ICESTATE_KICKED);
@@ -156,7 +168,8 @@ MrIceBlock::collision_player(Player& player, const CollisionHit& hit)
 HitResponse
 MrIceBlock::collision_badguy(BadGuy& badguy, const CollisionHit& hit)
 {
-  switch(ice_state) {
+  switch (ice_state)
+  {
     case ICESTATE_NORMAL:
       return WalkingBadguy::collision_badguy(badguy, hit);
     case ICESTATE_FLAT:
@@ -175,17 +188,20 @@ bool
 MrIceBlock::collision_squished(GameObject& object)
 {
   Player* player = dynamic_cast<Player*>(&object);
-  if(player && (player->does_buttjump || player->is_invincible())) {
+  if (player && (player->does_buttjump || player->is_invincible()))
+  {
     player->bounce(*this);
     kill_fall();
     return true;
   }
 
-  switch(ice_state) {
+  switch (ice_state)
+  {
     case ICESTATE_KICKED:
     {
       BadGuy* badguy = dynamic_cast<BadGuy*>(&object);
-      if (badguy) {
+      if (badguy)
+      {
         badguy->kill_fall();
         break;
       }
@@ -195,26 +211,30 @@ MrIceBlock::collision_squished(GameObject& object)
     case ICESTATE_NORMAL:
     {
       squishcount++;
-      if (squishcount >= MAXSQUISHES) {
+      if (squishcount >= MAXSQUISHES)
+      {
         kill_fall();
         return true;
       }
     }
 
-    set_state(ICESTATE_FLAT);
-    nokick_timer.start(NOKICK_TIME);
-    break;
+      set_state(ICESTATE_FLAT);
+      nokick_timer.start(NOKICK_TIME);
+      break;
     case ICESTATE_FLAT:
     {
       MovingObject* movingobject = dynamic_cast<MovingObject*>(&object);
-      if (movingobject && (movingobject->get_pos().x < get_pos().x)) {
+      if (movingobject && (movingobject->get_pos().x < get_pos().x))
+      {
         dir = RIGHT;
-      } else {
+      }
+      else
+      {
         dir = LEFT;
       }
     }
-    if (nokick_timer.check()) set_state(ICESTATE_KICKED);
-    break;
+      if (nokick_timer.check()) set_state(ICESTATE_KICKED);
+      break;
     case ICESTATE_GRABBED:
       assert(false);
       break;
@@ -227,30 +247,35 @@ MrIceBlock::collision_squished(GameObject& object)
 void
 MrIceBlock::set_state(IceState state_, bool up)
 {
-  if(ice_state == state_)
-    return;
+  if (ice_state == state_) return;
 
-  switch(state_) {
+  switch (state_)
+  {
     case ICESTATE_NORMAL:
       this->set_action(dir == LEFT ? "left" : "right", /* loops = */ -1);
       WalkingBadguy::initialize();
       break;
     case ICESTATE_FLAT:
-      if(up) {
+      if (up)
+      {
         physic.set_velocity_y(-KICKSPEED);
-      } else {
+      }
+      else
+      {
         SoundManager::current()->play("sounds/stomp.wav", get_pos());
         physic.set_velocity_x(0);
         physic.set_velocity_y(0);
       }
-      this->set_action(dir == LEFT ? "flat-left" : "flat-right", /* loops = */ -1);
+      this->set_action(dir == LEFT ? "flat-left" : "flat-right",
+                       /* loops = */ -1);
       flat_timer.start(4);
       break;
     case ICESTATE_KICKED:
       SoundManager::current()->play("sounds/kick.wav", get_pos());
 
       physic.set_velocity_x(dir == LEFT ? -KICKSPEED : KICKSPEED);
-      this->set_action(dir == LEFT ? "flat-left" : "flat-right", /* loops = */ -1);
+      this->set_action(dir == LEFT ? "flat-left" : "flat-right",
+                       /* loops = */ -1);
       // we should slide above 1 block holes now...
       bbox.set_size(34, 31.8f);
       break;
@@ -274,11 +299,14 @@ MrIceBlock::grab(MovingObject&, const Vector& pos, Direction dir_)
 }
 
 void
-MrIceBlock::ungrab(MovingObject& , Direction dir_)
+MrIceBlock::ungrab(MovingObject&, Direction dir_)
 {
-  if(dir_ == UP) {
+  if (dir_ == UP)
+  {
     set_state(ICESTATE_FLAT, true);
-  } else {
+  }
+  else
+  {
     this->dir = dir_;
     set_state(ICESTATE_KICKED);
   }
@@ -292,16 +320,17 @@ MrIceBlock::is_portable() const
 }
 
 void
-MrIceBlock::ignite() {
+MrIceBlock::ignite()
+{
   set_state(ICESTATE_NORMAL);
   BadGuy::ignite();
 }
 
-SmartBlock::SmartBlock(const ReaderMapping& reader) :
-  MrIceBlock(reader)
+SmartBlock::SmartBlock(const ReaderMapping& reader) : MrIceBlock(reader)
 {
   max_drop_height = 16;
-  sprite = SpriteManager::current()->create("images/creatures/mr_iceblock/smart_block/smart_block.sprite");
+  sprite = SpriteManager::current()->create(
+      "images/creatures/mr_iceblock/smart_block/smart_block.sprite");
 }
 
 /* EOF */

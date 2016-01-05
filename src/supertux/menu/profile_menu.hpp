@@ -21,7 +21,7 @@
 
 class ProfileMenu : public Menu
 {
-public:
+ public:
   ProfileMenu();
 
   void menu_action(MenuItem* item) override;

@@ -17,14 +17,13 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_DISPLAY_EFFECT_HPP
 #define HEADER_SUPERTUX_SCRIPTING_DISPLAY_EFFECT_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 class DisplayEffect
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~DisplayEffect()
-  {}
+  virtual ~DisplayEffect() {}
 #endif
 
   /// fade display to black
@@ -44,7 +43,6 @@ public:
   // (like what happens in some cartoons at the end)
   // void shrink_fade(Vector goal, float radius, float fadetime);
 };
-
 }
 
 #endif

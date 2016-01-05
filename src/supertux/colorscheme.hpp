@@ -21,10 +21,10 @@
 
 class ColorScheme
 {
-public:
+ public:
   class Menu
   {
-  public:
+   public:
     static Color default_color;
     static Color active_color;
     static Color inactive_color;

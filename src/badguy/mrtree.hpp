@@ -21,14 +21,13 @@
 
 class MrTree : public WalkingBadguy
 {
-public:
+ public:
   MrTree(const ReaderMapping& reader);
 
   bool is_freezable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-
 };
 
 #endif

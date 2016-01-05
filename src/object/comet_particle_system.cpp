@@ -25,22 +25,26 @@
 
 CometParticleSystem::CometParticleSystem()
 {
-  cometimages[0] = Surface::create("images/creatures/mr_bomb/exploding-left-0.png");
-  cometimages[1] = Surface::create("images/creatures/mr_bomb/exploding-left-0.png");
+  cometimages[0] =
+      Surface::create("images/creatures/mr_bomb/exploding-left-0.png");
+  cometimages[1] =
+      Surface::create("images/creatures/mr_bomb/exploding-left-0.png");
 
   virtual_width = SCREEN_WIDTH * 2;
 
   // create some random comets
   size_t cometcount = 2;
-  for(size_t i=0; i<cometcount; ++i) {
+  for (size_t i = 0; i < cometcount; ++i)
+  {
     CometParticle* particle = new CometParticle;
     particle->pos.x = graphicsRandom.rand(int(virtual_width));
     particle->pos.y = graphicsRandom.rand(int(virtual_height));
     int cometsize = graphicsRandom.rand(2);
     particle->texture = cometimages[cometsize];
-    do {
-      particle->speed = (cometsize+1)*30 + graphicsRandom.randf(3.6);
-    } while(particle->speed < 1);
+    do
+    {
+      particle->speed = (cometsize + 1) * 30 + graphicsRandom.randf(3.6);
+    } while (particle->speed < 1);
 
     particles.push_back(particle);
   }
@@ -49,16 +53,15 @@ CometParticleSystem::CometParticleSystem()
 void
 CometParticleSystem::parse(const ReaderMapping& reader)
 {
-  z_pos = reader_get_layer (reader, /* default = */ LAYER_BACKGROUND1);
+  z_pos = reader_get_layer(reader, /* default = */ LAYER_BACKGROUND1);
 }
 
-CometParticleSystem::~CometParticleSystem()
-{
-}
+CometParticleSystem::~CometParticleSystem() {}
 
-void CometParticleSystem::update(float elapsed_time)
+void
+CometParticleSystem::update(float elapsed_time)
 {
-  (void) elapsed_time;
+  (void)elapsed_time;
 #if 0
   std::vector<Particle*>::iterator i;
   for(

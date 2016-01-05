@@ -22,7 +22,7 @@
 
 class PowerUp : public MovingSprite
 {
-public:
+ public:
   PowerUp(const ReaderMapping& lisp);
   PowerUp(const Vector& pos, const std::string& sprite_name);
 
@@ -31,7 +31,7 @@ public:
   virtual void collision_solid(const CollisionHit& hit);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   Physic physic;
   std::string script;
   bool no_physics;

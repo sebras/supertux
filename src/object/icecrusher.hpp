@@ -1,5 +1,6 @@
 //  IceCrusher - A block to stand on, which can drop down to crush the player
-//  Copyright (C) 2008 Christoph Sommer <christoph.sommer@2008.expires.deltadevelopment.de>
+//  Copyright (C) 2008 Christoph Sommer
+//  <christoph.sommer@2008.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@ class Player;
  */
 class IceCrusher : public MovingSprite
 {
-public:
+ public:
   IceCrusher(const ReaderMapping& reader);
   IceCrusher(const IceCrusher& icecrusher);
 
@@ -43,8 +44,9 @@ public:
   }
 #endif
 
-protected:
-  enum IceCrusherState {
+ protected:
+  enum IceCrusherState
+  {
     IDLE,
     CRUSHING,
     RECOVERING
@@ -63,8 +65,9 @@ protected:
   SpritePtr righteye;
   SpritePtr whites;
 
-private:
-  enum IceCrusherSize {
+ private:
+  enum IceCrusherSize
+  {
     NORMAL,
     LARGE
   };

@@ -21,12 +21,14 @@
 #include "sprite/sprite.hpp"
 #include "supertux/sector.hpp"
 
-Bomb::Bomb(const Vector& pos, Direction dir_, std::string custom_sprite /*= "images/creatures/mr_bomb/mr_bomb.sprite"*/ ) :
-  BadGuy( pos, dir_, custom_sprite ),
-  state(),
-  grabbed(false),
-  grabber(NULL),
-  ticking()
+Bomb::Bomb(
+    const Vector& pos, Direction dir_,
+    std::string custom_sprite /*= "images/creatures/mr_bomb/mr_bomb.sprite"*/)
+    : BadGuy(pos, dir_, custom_sprite),
+      state(),
+      grabbed(false),
+      grabber(NULL),
+      ticking()
 {
   state = STATE_TICKING;
   set_action(dir_ == LEFT ? "ticking-left" : "ticking-right", 1);
@@ -43,27 +45,25 @@ Bomb::Bomb(const Vector& pos, Direction dir_, std::string custom_sprite /*= "ima
 void
 Bomb::collision_solid(const CollisionHit& hit)
 {
-  if(grabbed) {
+  if (grabbed)
+  {
     return;
   }
-  if(hit.top || hit.bottom)
-    physic.set_velocity_y(0);
-  if(hit.left || hit.right)
-    physic.set_velocity_x(-physic.get_velocity_x());
-  if(hit.crush)
-    physic.set_velocity(0, 0);
+  if (hit.top || hit.bottom) physic.set_velocity_y(0);
+  if (hit.left || hit.right) physic.set_velocity_x(-physic.get_velocity_x());
+  if (hit.crush) physic.set_velocity(0, 0);
 
   update_on_ground_flag(hit);
 }
 
 HitResponse
-Bomb::collision_player(Player& , const CollisionHit& )
+Bomb::collision_player(Player&, const CollisionHit&)
 {
   return ABORT_MOVE;
 }
 
 HitResponse
-Bomb::collision_badguy(BadGuy& , const CollisionHit& )
+Bomb::collision_badguy(BadGuy&, const CollisionHit&)
 {
   return ABORT_MOVE;
 }
@@ -74,10 +74,12 @@ Bomb::active_update(float elapsed_time)
   if (on_ground()) physic.set_velocity_x(0);
 
   ticking->set_position(get_pos());
-  if(sprite->animation_done()) {
+  if (sprite->animation_done())
+  {
     explode();
   }
-  else if (!grabbed) {
+  else if (!grabbed)
+  {
     movement = physic.get_movement(elapsed_time);
   }
 }
@@ -90,14 +92,15 @@ Bomb::explode()
   // Make the player let go before we explode, otherwise the player is holding
   // an invalid object. There's probably a better way to do this than in the
   // Bomb class.
-  if (grabber != NULL) {
+  if (grabber != NULL)
+  {
     Player* player = dynamic_cast<Player*>(grabber);
 
-    if (player)
-      player->stop_grabbing();
+    if (player) player->stop_grabbing();
   }
 
-  if(is_valid()) {
+  if (is_valid())
+  {
     remove_me();
     auto explosion = std::make_shared<Explosion>(bbox.get_middle());
     Sector::current()->add_object(explosion);
@@ -139,19 +142,21 @@ Bomb::ungrab(MovingObject& object, Direction dir_)
   // This object is now thrown.
   int toss_velocity_x = 0;
   int toss_velocity_y = 0;
-  Player* player = dynamic_cast<Player*> (&object);
+  Player* player = dynamic_cast<Player*>(&object);
 
   // toss upwards
-  if(dir_ == UP)
-    toss_velocity_y += -500;
+  if (dir_ == UP) toss_velocity_y += -500;
 
   // toss to the side when moving sideways
-  if(player && player->physic.get_velocity_x()*(dir_ == LEFT ? -1 : 1) > 1) {
+  if (player && player->physic.get_velocity_x() * (dir_ == LEFT ? -1 : 1) > 1)
+  {
     toss_velocity_x += (dir_ == LEFT) ? -200 : 200;
     toss_velocity_y = (toss_velocity_y < -200) ? toss_velocity_y : -200;
     // toss farther when running
-    if(player && player->physic.get_velocity_x()*(dir_ == LEFT ? -1 : 1) > 200)
-      toss_velocity_x += player->physic.get_velocity_x()-(190*(dir_ == LEFT ? -1 : 1));
+    if (player &&
+        player->physic.get_velocity_x() * (dir_ == LEFT ? -1 : 1) > 200)
+      toss_velocity_x +=
+          player->physic.get_velocity_x() - (190 * (dir_ == LEFT ? -1 : 1));
   }
 
   physic.set_velocity(toss_velocity_x, toss_velocity_y);

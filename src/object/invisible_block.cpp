@@ -21,17 +21,18 @@
 #include "sprite/sprite_manager.hpp"
 #include "supertux/constants.hpp"
 
-InvisibleBlock::InvisibleBlock(const Vector& pos) :
-   Block(SpriteManager::current()->create("images/objects/bonus_block/invisibleblock.sprite")),
-   visible(false)
+InvisibleBlock::InvisibleBlock(const Vector& pos)
+    : Block(SpriteManager::current()->create(
+          "images/objects/bonus_block/invisibleblock.sprite")),
+      visible(false)
 {
   bbox.set_pos(pos);
   SoundManager::current()->preload("sounds/brick.wav");
 }
 
-InvisibleBlock::InvisibleBlock(const ReaderMapping& lisp) :
-   Block(lisp, "images/objects/bonus_block/invisibleblock.sprite"),
-   visible(false)
+InvisibleBlock::InvisibleBlock(const ReaderMapping& lisp)
+    : Block(lisp, "images/objects/bonus_block/invisibleblock.sprite"),
+      visible(false)
 {
   SoundManager::current()->preload("sounds/brick.wav");
 }
@@ -39,21 +40,20 @@ InvisibleBlock::InvisibleBlock(const ReaderMapping& lisp) :
 void
 InvisibleBlock::draw(DrawingContext& context)
 {
-  if(visible)
-    sprite->draw(context, get_pos(), LAYER_OBJECTS);
+  if (visible) sprite->draw(context, get_pos(), LAYER_OBJECTS);
 }
 
 bool
-InvisibleBlock::collides(GameObject& other, const CollisionHit& ) const
+InvisibleBlock::collides(GameObject& other, const CollisionHit&) const
 {
-  if(visible)
-    return true;
+  if (visible) return true;
 
-  // if we're not visible, only register a collision if this will make us visible
-  Player* player = dynamic_cast<Player*> (&other);
-  if ((player)
-      && (player->get_movement().y <= 0)
-      && (player->get_bbox().get_top() > get_bbox().get_bottom() - SHIFT_DELTA)) {
+  // if we're not visible, only register a collision if this will make us
+  // visible
+  Player* player = dynamic_cast<Player*>(&other);
+  if ((player) && (player->get_movement().y <= 0) &&
+      (player->get_bbox().get_top() > get_bbox().get_bottom() - SHIFT_DELTA))
+  {
     return true;
   }
 
@@ -71,8 +71,7 @@ InvisibleBlock::hit(Player& player)
 {
   SoundManager::current()->play("sounds/brick.wav");
 
-  if(visible)
-    return;
+  if (visible) return;
 
   sprite->set_action("empty");
   start_bounce(&player);
@@ -80,6 +79,6 @@ InvisibleBlock::hit(Player& player)
   visible = true;
 }
 
-//IMPLEMENT_FACTORY(InvisibleBlock, "invisible_block");
+// IMPLEMENT_FACTORY(InvisibleBlock, "invisible_block");
 
 /* EOF */

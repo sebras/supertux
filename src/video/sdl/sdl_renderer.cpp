@@ -32,17 +32,18 @@
 
 #include "video/util.hpp"
 
-SDLRenderer::SDLRenderer() :
-  m_window(),
-  m_renderer(),
-  m_viewport(),
-  m_desktop_size(0, 0),
-  m_scale(1.0f, 1.0f)
+SDLRenderer::SDLRenderer()
+    : m_window(),
+      m_renderer(),
+      m_viewport(),
+      m_desktop_size(0, 0),
+      m_scale(1.0f, 1.0f)
 {
   SDL_DisplayMode mode;
   if (SDL_GetDesktopDisplayMode(0, &mode) != 0)
   {
-    log_warning << "Couldn't get desktop display mode: " << SDL_GetError() << std::endl;
+    log_warning << "Couldn't get desktop display mode: " << SDL_GetError()
+                << std::endl;
   }
   else
   {
@@ -50,11 +51,11 @@ SDLRenderer::SDLRenderer() :
   }
 
   log_info << "creating SDLRenderer" << std::endl;
-  int width  = g_config->window_size.width;
+  int width = g_config->window_size.width;
   int height = g_config->window_size.height;
 
   int flags = SDL_WINDOW_RESIZABLE;
-  if(g_config->use_fullscreen)
+  if (g_config->use_fullscreen)
   {
     if (g_config->fullscreen_size == Size(0, 0))
     {
@@ -65,7 +66,7 @@ SDLRenderer::SDLRenderer() :
     else
     {
       flags |= SDL_WINDOW_FULLSCREEN;
-      width  = g_config->fullscreen_size.width;
+      width = g_config->fullscreen_size.width;
       height = g_config->fullscreen_size.height;
     }
   }
@@ -80,10 +81,11 @@ SDLRenderer::SDLRenderer() :
 
   SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
-  int ret = SDL_CreateWindowAndRenderer(width, height, flags,
-                                        &m_window, &m_renderer);
+  int ret =
+      SDL_CreateWindowAndRenderer(width, height, flags, &m_window, &m_renderer);
 
-  if(ret != 0) {
+  if (ret != 0)
+  {
     std::stringstream msg;
     msg << "Couldn't set video mode (" << width << "x" << height
         << "): " << SDL_GetError();
@@ -99,14 +101,27 @@ SDLRenderer::SDLRenderer() :
   {
     log_info << "SDL_Renderer: " << info.name << std::endl;
     log_info << "SDL_RendererFlags: " << std::endl;
-    if (info.flags & SDL_RENDERER_SOFTWARE) { log_info << "  SDL_RENDERER_SOFTWARE" << std::endl; }
-    if (info.flags & SDL_RENDERER_ACCELERATED) { log_info << "  SDL_RENDERER_ACCELERATED" << std::endl; }
-    if (info.flags & SDL_RENDERER_PRESENTVSYNC) { log_info << "  SDL_RENDERER_PRESENTVSYNC" << std::endl; }
-    if (info.flags & SDL_RENDERER_TARGETTEXTURE) { log_info << "  SDL_RENDERER_TARGETTEXTURE" << std::endl; }
-    log_info << "Texture Formats: " << std::endl;
-    for(size_t i = 0; i < info.num_texture_formats; ++i)
+    if (info.flags & SDL_RENDERER_SOFTWARE)
     {
-      log_info << "  " << SDL_GetPixelFormatName(info.texture_formats[i]) << std::endl;
+      log_info << "  SDL_RENDERER_SOFTWARE" << std::endl;
+    }
+    if (info.flags & SDL_RENDERER_ACCELERATED)
+    {
+      log_info << "  SDL_RENDERER_ACCELERATED" << std::endl;
+    }
+    if (info.flags & SDL_RENDERER_PRESENTVSYNC)
+    {
+      log_info << "  SDL_RENDERER_PRESENTVSYNC" << std::endl;
+    }
+    if (info.flags & SDL_RENDERER_TARGETTEXTURE)
+    {
+      log_info << "  SDL_RENDERER_TARGETTEXTURE" << std::endl;
+    }
+    log_info << "Texture Formats: " << std::endl;
+    for (size_t i = 0; i < info.num_texture_formats; ++i)
+    {
+      log_info << "  " << SDL_GetPixelFormatName(info.texture_formats[i])
+               << std::endl;
     }
     log_info << "Max Texture Width: " << info.max_texture_width << std::endl;
     log_info << "Max Texture Height: " << info.max_texture_height << std::endl;
@@ -166,12 +181,14 @@ SDLRenderer::draw_inverse_ellipse(const DrawingRequest& request)
 void
 SDLRenderer::do_take_screenshot()
 {
-  // [Christoph] TODO: Yes, this method also takes care of the actual disk I/O. Split it?
+  // [Christoph] TODO: Yes, this method also takes care of the actual disk I/O.
+  // Split it?
   int width;
   int height;
   if (SDL_GetRendererOutputSize(m_renderer, &width, &height) != 0)
   {
-    log_warning << "SDL_GetRenderOutputSize failed: " << SDL_GetError() << std::endl;
+    log_warning << "SDL_GetRenderOutputSize failed: " << SDL_GetError()
+                << std::endl;
   }
   else
   {
@@ -186,21 +203,21 @@ SDLRenderer::do_take_screenshot()
     Uint32 bmask = 0x00ff0000;
     Uint32 amask = 0xff000000;
 #endif
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32,
-                                                rmask, gmask, bmask, amask);
+    SDL_Surface* surface =
+        SDL_CreateRGBSurface(0, width, height, 32, rmask, gmask, bmask, amask);
     if (!surface)
     {
-      log_warning << "SDL_CreateRGBSurface failed: " << SDL_GetError() << std::endl;
+      log_warning << "SDL_CreateRGBSurface failed: " << SDL_GetError()
+                  << std::endl;
     }
     else
     {
-      int ret = SDL_RenderReadPixels(m_renderer, NULL,
-                                     SDL_PIXELFORMAT_ABGR8888,
-                                     surface->pixels,
-                                     surface->pitch);
+      int ret = SDL_RenderReadPixels(m_renderer, NULL, SDL_PIXELFORMAT_ABGR8888,
+                                     surface->pixels, surface->pitch);
       if (ret != 0)
       {
-        log_warning << "SDL_RenderReadPixels failed: " << SDL_GetError() << std::endl;
+        log_warning << "SDL_RenderReadPixels failed: " << SDL_GetError()
+                    << std::endl;
       }
       else
       {
@@ -210,20 +227,24 @@ SDLRenderer::do_take_screenshot()
         static const std::string baseName = "screenshot";
         static const std::string fileExt = ".bmp";
         std::string fullFilename;
-        for (int num = 0; num < 1000; num++) {
+        for (int num = 0; num < 1000; num++)
+        {
           std::ostringstream oss;
           oss << baseName;
           oss << std::setw(3) << std::setfill('0') << num;
           oss << fileExt;
           std::string fileName = oss.str();
           fullFilename = writeDir + dirSep + fileName;
-          if (!PHYSFS_exists(fileName.c_str())) {
+          if (!PHYSFS_exists(fileName.c_str()))
+          {
             SDL_SaveBMP(surface, fullFilename.c_str());
-            log_info << "Wrote screenshot to \"" << fullFilename << "\"" << std::endl;
+            log_info << "Wrote screenshot to \"" << fullFilename << "\""
+                     << std::endl;
             return;
           }
         }
-        log_warning << "Did not save screenshot, because all files up to \"" << fullFilename << "\" already existed" << std::endl;
+        log_warning << "Did not save screenshot, because all files up to \""
+                    << fullFilename << "\" already existed" << std::endl;
       }
     }
   }
@@ -236,7 +257,7 @@ SDLRenderer::flip()
 }
 
 void
-SDLRenderer::resize(int w , int h)
+SDLRenderer::resize(int w, int h)
 {
   g_config->window_size = Size(w, h);
 
@@ -255,15 +276,15 @@ SDLRenderer::apply_video_mode()
     if (g_config->fullscreen_size.width == 0 &&
         g_config->fullscreen_size.height == 0)
     {
-        if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP) != 0)
-        {
-          log_warning << "failed to switch to desktop fullscreen mode: "
-                      << SDL_GetError() << std::endl;
-        }
-        else
-        {
-          log_info << "switched to desktop fullscreen mode" << std::endl;
-        }
+      if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP) != 0)
+      {
+        log_warning << "failed to switch to desktop fullscreen mode: "
+                    << SDL_GetError() << std::endl;
+      }
+      else
+      {
+        log_info << "switched to desktop fullscreen mode" << std::endl;
+      }
     }
     else
     {
@@ -276,22 +297,22 @@ SDLRenderer::apply_video_mode()
 
       if (SDL_SetWindowDisplayMode(m_window, &mode) != 0)
       {
-        log_warning << "failed to set display mode: "
-                    << mode.w << "x" << mode.h << "@" << mode.refresh_rate << ": "
-                    << SDL_GetError() << std::endl;
+        log_warning << "failed to set display mode: " << mode.w << "x" << mode.h
+                    << "@" << mode.refresh_rate << ": " << SDL_GetError()
+                    << std::endl;
       }
       else
       {
         if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN) != 0)
         {
-          log_warning << "failed to switch to fullscreen mode: "
-                      << mode.w << "x" << mode.h << "@" << mode.refresh_rate << ": "
+          log_warning << "failed to switch to fullscreen mode: " << mode.w
+                      << "x" << mode.h << "@" << mode.refresh_rate << ": "
                       << SDL_GetError() << std::endl;
         }
         else
         {
-          log_info << "switched to fullscreen mode: "
-                   << mode.w << "x" << mode.h << "@" << mode.refresh_rate << std::endl;
+          log_info << "switched to fullscreen mode: " << mode.w << "x" << mode.h
+                   << "@" << mode.refresh_rate << std::endl;
         }
       }
     }
@@ -301,20 +322,21 @@ SDLRenderer::apply_video_mode()
 void
 SDLRenderer::apply_viewport()
 {
-  Size target_size = (g_config->use_fullscreen && g_config->fullscreen_size != Size(0, 0)) ?
-    g_config->fullscreen_size :
-    g_config->window_size;
+  Size target_size =
+      (g_config->use_fullscreen && g_config->fullscreen_size != Size(0, 0))
+          ? g_config->fullscreen_size
+          : g_config->window_size;
 
   float pixel_aspect_ratio = 1.0f;
   if (g_config->aspect_size != Size(0, 0))
   {
-    pixel_aspect_ratio = calculate_pixel_aspect_ratio(m_desktop_size,
-                                                      g_config->aspect_size);
+    pixel_aspect_ratio =
+        calculate_pixel_aspect_ratio(m_desktop_size, g_config->aspect_size);
   }
   else if (g_config->use_fullscreen)
   {
-    pixel_aspect_ratio = calculate_pixel_aspect_ratio(m_desktop_size,
-                                                      target_size);
+    pixel_aspect_ratio =
+        calculate_pixel_aspect_ratio(m_desktop_size, target_size);
   }
 
   // calculate the viewport
@@ -322,11 +344,9 @@ SDLRenderer::apply_viewport()
   Size min_size(640, 480);
 
   Size logical_size;
-  calculate_viewport(min_size, max_size,
-                     target_size,
-                     pixel_aspect_ratio,
-                     g_config->magnification,
-                     m_scale, logical_size, m_viewport);
+  calculate_viewport(min_size, max_size, target_size, pixel_aspect_ratio,
+                     g_config->magnification, m_scale, logical_size,
+                     m_viewport);
 
   SCREEN_WIDTH = logical_size.width;
   SCREEN_HEIGHT = logical_size.height;
@@ -359,8 +379,10 @@ SDLRenderer::apply_config()
 Vector
 SDLRenderer::to_logical(int physical_x, int physical_y)
 {
-  return Vector(static_cast<float>(physical_x - m_viewport.x) * SCREEN_WIDTH / m_viewport.w,
-                static_cast<float>(physical_y - m_viewport.y) * SCREEN_HEIGHT / m_viewport.h);
+  return Vector(static_cast<float>(physical_x - m_viewport.x) * SCREEN_WIDTH /
+                    m_viewport.w,
+                static_cast<float>(physical_y - m_viewport.y) * SCREEN_HEIGHT /
+                    m_viewport.h);
 }
 
 void

@@ -24,19 +24,14 @@
 #include "util/reader_error.hpp"
 #include "util/reader_mapping.hpp"
 
-ReaderObject::ReaderObject(const ReaderDocument* doc, const sexp::Value* sx) :
-  m_doc(doc),
-  m_sx(sx)
+ReaderObject::ReaderObject(const ReaderDocument* doc, const sexp::Value* sx)
+    : m_doc(doc), m_sx(sx)
 {
   assert(m_doc);
   assert(m_sx);
 }
 
-ReaderObject::ReaderObject() :
-  m_doc(nullptr),
-  m_sx(nullptr)
-{
-}
+ReaderObject::ReaderObject() : m_doc(nullptr), m_sx(nullptr) {}
 
 std::string
 ReaderObject::get_name() const

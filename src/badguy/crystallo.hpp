@@ -24,17 +24,17 @@
  */
 class Crystallo : public WalkingBadguy
 {
-public:
+ public:
   Crystallo(const ReaderMapping& reader);
   Crystallo(const Vector& pos, Direction d);
 
   void active_update(float elapsed_time);
   bool is_flammable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   float radius;
 };
 

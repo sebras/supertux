@@ -21,7 +21,7 @@
 
 class SpiderMite : public BadGuy
 {
-public:
+ public:
   SpiderMite(const ReaderMapping& reader);
   SpiderMite(const Vector& pos);
 
@@ -33,16 +33,17 @@ public:
   void unfreeze();
   bool is_freezable() const;
 
-protected:
-  enum SpiderMiteMode {
+ protected:
+  enum SpiderMiteMode
+  {
     FLY_UP,
     FLY_DOWN
   };
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   SpiderMiteMode mode;
   Timer timer;
 };

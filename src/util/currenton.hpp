@@ -28,13 +28,13 @@
  *   in other words its a glorified global variable that points to the
  *   current instance of a class.
  */
-template<class C>
+template <class C>
 class Currenton
 {
-private:
+ private:
   static C* s_current;
 
-protected:
+ protected:
   Currenton()
   {
     // FIXME: temporarly disabled, as Sector() for the main menu,
@@ -51,11 +51,16 @@ protected:
     }
   }
 
-public:
-  static C* current() { return s_current; }
+ public:
+  static C*
+  current()
+  {
+    return s_current;
+  }
 };
 
-template<class C> C* Currenton<C>::s_current = 0;
+template <class C>
+C* Currenton<C>::s_current = 0;
 
 #endif
 

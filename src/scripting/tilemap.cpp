@@ -17,47 +17,49 @@
 #include "object/tilemap.hpp"
 #include "scripting/tilemap.hpp"
 
-#define NOIMPL      log_fatal << __PRETTY_FUNCTION__ << " not implemented."
+#define NOIMPL log_fatal << __PRETTY_FUNCTION__ << " not implemented."
 
-namespace scripting {
+namespace scripting
+{
+TileMap::TileMap(::TileMap* tilemap_) : tilemap(tilemap_) {}
 
-TileMap::TileMap(::TileMap* tilemap_)
-  : tilemap(tilemap_)
-{ }
+TileMap::~TileMap() {}
 
-TileMap::~TileMap()
-{ }
-
-void TileMap::goto_node(int node_no)
+void
+TileMap::goto_node(int node_no)
 {
   tilemap->goto_node(node_no);
 }
 
-void TileMap::start_moving()
+void
+TileMap::start_moving()
 {
   tilemap->start_moving();
 }
 
-void TileMap::stop_moving()
+void
+TileMap::stop_moving()
 {
   tilemap->stop_moving();
 }
 
-void TileMap::fade(float alpha, float seconds)
+void
+TileMap::fade(float alpha, float seconds)
 {
   tilemap->fade(alpha, seconds);
 }
 
-void TileMap::set_alpha(float alpha)
+void
+TileMap::set_alpha(float alpha)
 {
   tilemap->set_alpha(alpha);
 }
 
-float TileMap::get_alpha()
+float
+TileMap::get_alpha()
 {
   return tilemap->get_alpha();
 }
-
 }
 
 /* EOF */

@@ -21,7 +21,7 @@
 
 class CaptainSnowball : public WalkingBadguy
 {
-public:
+ public:
   CaptainSnowball(const ReaderMapping& reader);
   CaptainSnowball(const Vector& pos, Direction d);
 
@@ -30,9 +30,8 @@ public:
 
   bool might_climb(int width, int height) const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-
 };
 
 #endif

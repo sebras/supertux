@@ -18,20 +18,17 @@
 #include "sprite/sprite.hpp"
 #include "sprite/sprite_manager.hpp"
 
-Light::Light(const Vector& center, const Color& color_) :
-  position(center),
-  color(color_),
-  sprite()
+Light::Light(const Vector& center, const Color& color_)
+    : position(center), color(color_), sprite()
 {
-  sprite = SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light.sprite");
+  sprite = SpriteManager::current()->create(
+      "images/objects/lightmap_light/lightmap_light.sprite");
 }
 
-Light::~Light()
-{
-}
+Light::~Light() {}
 
 void
-Light::update(float )
+Light::update(float)
 {
 }
 
@@ -43,7 +40,7 @@ Light::draw(DrawingContext& context)
 
   sprite->set_color(color);
   sprite->set_blend(Blend(GL_SRC_ALPHA, GL_ONE));
-  sprite->set_angle(90); // FIXME: color won't get applied for angle=0
+  sprite->set_angle(90);  // FIXME: color won't get applied for angle=0
   sprite->draw(context, position, 0);
 
   context.pop_target();

@@ -22,27 +22,27 @@
 
 class SkyDive : public BadGuy, public Portable
 {
-  private:
-    bool is_grabbed;
+ private:
+  bool is_grabbed;
 
-  public:
-    SkyDive(const ReaderMapping& reader);
-    SkyDive(const Vector& pos, Direction d);
+ public:
+  SkyDive(const ReaderMapping& reader);
+  SkyDive(const Vector& pos, Direction d);
 
-    void collision_solid(const CollisionHit& hit);
-    HitResponse collision_badguy(BadGuy& badguy, const CollisionHit& hit);
+  void collision_solid(const CollisionHit& hit);
+  HitResponse collision_badguy(BadGuy& badguy, const CollisionHit& hit);
 
-    /* Inherited from Portable */
-    void grab(MovingObject& object, const Vector& pos, Direction dir);
-    void ungrab(MovingObject& object, Direction dir);
+  /* Inherited from Portable */
+  void grab(MovingObject& object, const Vector& pos, Direction dir);
+  void ungrab(MovingObject& object, Direction dir);
 
-  protected:
-    HitResponse collision_player(Player& player, const CollisionHit& hit);
-    bool collision_squished (GameObject& obj);
+ protected:
+  HitResponse collision_player(Player& player, const CollisionHit& hit);
+  bool collision_squished(GameObject& obj);
 
-    void active_update (float elapsed_time);
+  void active_update(float elapsed_time);
 
-    void explode();
+  void explode();
 };
 
 #endif /* HEADER_SUPERTUX_BADGUY_BOMBFISH_HPP */

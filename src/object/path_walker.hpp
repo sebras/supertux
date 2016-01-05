@@ -26,7 +26,7 @@
  */
 class PathWalker
 {
-public:
+ public:
   PathWalker(const Path* path, bool running = true);
   virtual ~PathWalker();
 
@@ -48,13 +48,15 @@ public:
   void stop_moving();
 
   /** returns true if PathWalker is currently moving */
-  bool is_moving() const {
+  bool
+  is_moving() const
+  {
     return running;
   }
 
   const Path* path;
 
-private:
+ private:
   void advance_node();
   void goback_node();
 
@@ -80,7 +82,7 @@ private:
 
   float walking_speed;
 
-private:
+ private:
   PathWalker(const PathWalker&);
   PathWalker& operator=(const PathWalker&);
 };

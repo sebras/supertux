@@ -25,7 +25,7 @@ class Player;
 
 class Door : public TriggerBase
 {
-public:
+ public:
   Door(const ReaderMapping& reader);
   Door(int x, int y, std::string sector, std::string spawnpoint);
   virtual ~Door();
@@ -35,20 +35,21 @@ public:
   virtual void event(Player& player, EventType type);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
-  enum DoorState {
+ private:
+  enum DoorState
+  {
     CLOSED,
     OPENING,
     OPEN,
     CLOSING
   };
 
-private:
-  DoorState state; /**< current state of the door */
-  std::string target_sector; /**< target sector to teleport to */
+ private:
+  DoorState state;               /**< current state of the door */
+  std::string target_sector;     /**< target sector to teleport to */
   std::string target_spawnpoint; /**< target spawnpoint to teleport to */
   std::string script;
-  SpritePtr sprite; /**< "door" sprite to render */
+  SpritePtr sprite;      /**< "door" sprite to render */
   Timer stay_open_timer; /**< time until door will close again */
 };
 

@@ -27,7 +27,7 @@
  */
 class RustyTrampoline : public Rock
 {
-public:
+ public:
   RustyTrampoline(const ReaderMapping& reader);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
@@ -38,10 +38,9 @@ public:
   void ungrab(MovingObject&, Direction);
   bool is_portable() const;
 
-private:
+ private:
   bool portable;
   int counter;
-
 };
 
 #endif

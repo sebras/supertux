@@ -26,12 +26,12 @@
 
 class World
 {
-private:
+ private:
   World();
 
   void load_(const std::string& directory);
 
-public:
+ public:
   /**
       Load a World
 
@@ -39,21 +39,41 @@ public:
   */
   static std::unique_ptr<World> load(const std::string& directory);
 
-public:
+ public:
   ~World();
 
   std::string get_basedir() const;
   std::string get_title() const;
 
-  bool hide_from_contribs() const { return m_hide_from_contribs; }
+  bool
+  hide_from_contribs() const
+  {
+    return m_hide_from_contribs;
+  }
 
-  bool is_levelset() const { return m_is_levelset; }
-  bool is_worldmap() const { return !m_is_levelset; }
+  bool
+  is_levelset() const
+  {
+    return m_is_levelset;
+  }
+  bool
+  is_worldmap() const
+  {
+    return !m_is_levelset;
+  }
 
-  std::string get_worldmap_filename() const { return m_worldmap_filename; }
-  std::string get_savegame_filename() const { return m_savegame_filename; }
+  std::string
+  get_worldmap_filename() const
+  {
+    return m_worldmap_filename;
+  }
+  std::string
+  get_savegame_filename() const
+  {
+    return m_savegame_filename;
+  }
 
-private:
+ private:
   std::string m_basedir;
   std::string m_worldmap_filename;
   std::string m_savegame_filename;
@@ -63,7 +83,7 @@ private:
   bool m_hide_from_contribs;
   bool m_is_levelset;
 
-private:
+ private:
   World(const World&) = delete;
   World& operator=(const World&) = delete;
 };

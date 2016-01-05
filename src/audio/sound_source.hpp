@@ -26,7 +26,7 @@ class Vector;
  */
 class SoundSource
 {
-public:
+ public:
   SoundSource() {}
   virtual ~SoundSource() {}
 
@@ -43,7 +43,7 @@ public:
   virtual void set_velocity(const Vector& velocity) = 0;
   virtual void set_reference_distance(float distance) = 0;
 
-private:
+ private:
   SoundSource(const SoundSource&) = delete;
   SoundSource& operator=(const SoundSource&) = delete;
 };

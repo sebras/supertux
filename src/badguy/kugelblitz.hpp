@@ -21,7 +21,7 @@
 
 class Kugelblitz : public BadGuy
 {
-public:
+ public:
   Kugelblitz(const ReaderMapping& reader);
 
   void initialize();
@@ -37,11 +37,11 @@ public:
 
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   void try_activate();
   HitResponse hit(const CollisionHit& hit);
 
-private:
+ private:
   Vector pos_groundhit;
   bool groundhit_pos_set;
   bool dying;

@@ -27,12 +27,12 @@
 
 class ItemAction : public MenuItem
 {
-  public:
-    ItemAction(const std::string& text_, int id = -1);
+ public:
+  ItemAction(const std::string& text_, int id = -1);
 
-  private:
-    ItemAction(const ItemAction&);
-    ItemAction& operator=(const ItemAction&);
+ private:
+  ItemAction(const ItemAction&);
+  ItemAction& operator=(const ItemAction&);
 };
 
 #endif

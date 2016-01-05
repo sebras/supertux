@@ -29,14 +29,15 @@ class Sprite;
 class FloatingText : public GameObject
 {
   static Color text_color;
-public:
+
+ public:
   FloatingText(const Vector& pos, const std::string& text_);
   FloatingText(const Vector& pos, int s);  // use this for score, for instance
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   Vector position;
   std::string text;
   Timer timer;

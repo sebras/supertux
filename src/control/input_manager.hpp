@@ -40,13 +40,13 @@ class JoystickConfig;
 
 class InputManager final : public Currenton<InputManager>
 {
-private:
+ private:
   friend class KeyboardMenu;
   friend class JoystickMenu;
 
   typedef Controller::Control Control;
 
-public:
+ public:
   InputManager(KeyboardConfig& keyboard_config,
                JoystickConfig& joystick_config);
   virtual ~InputManager();
@@ -57,20 +57,24 @@ public:
   void reset();
 
   void use_game_controller(bool v);
-  bool use_game_controller() const { return m_use_game_controller; }
+  bool
+  use_game_controller() const
+  {
+    return m_use_game_controller;
+  }
 
   Controller* get_controller() const;
 
-private:
+ private:
   std::unique_ptr<Controller> controller;
 
-public:
+ public:
   bool& m_use_game_controller;
   std::unique_ptr<KeyboardManager> keyboard_manager;
   std::unique_ptr<JoystickManager> joystick_manager;
   std::unique_ptr<GameControllerManager> game_controller_manager;
 
-private:
+ private:
   InputManager(const InputManager&);
   InputManager& operator=(const InputManager&);
 };

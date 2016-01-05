@@ -30,12 +30,13 @@ class MenuTransition;
 
 class MenuManager
 {
-private:
+ private:
   static MenuManager* s_instance;
-public:
+
+ public:
   static MenuManager& instance();
 
-private:
+ private:
   std::unique_ptr<Dialog> m_dialog;
   bool m_has_next_dialog;
   std::unique_ptr<Dialog> m_next_dialog;
@@ -43,7 +44,7 @@ private:
   std::vector<std::unique_ptr<Menu> > m_menu_stack;
   std::unique_ptr<MenuTransition> m_transition;
 
-public:
+ public:
   MenuManager();
   ~MenuManager();
 
@@ -63,17 +64,18 @@ public:
   void clear_menu_stack();
 
   void on_window_resize();
-  bool is_active() const
+  bool
+  is_active() const
   {
     return !m_menu_stack.empty();
   }
 
   Menu* current_menu() const;
 
-private:
+ private:
   void transition(Menu* from, Menu* to);
 
-private:
+ private:
   MenuManager(const MenuManager&);
   MenuManager& operator=(const MenuManager&);
 };

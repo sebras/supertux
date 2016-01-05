@@ -25,7 +25,7 @@ class DisplayEffect : public GameObject,
                       public scripting::DisplayEffect,
                       public ScriptInterface
 {
-public:
+ public:
   DisplayEffect(const std::string& name = std::string());
   virtual ~DisplayEffect();
 
@@ -51,9 +51,12 @@ public:
    * @}
    */
 
-private:
-  enum FadeType {
-    NO_FADE, FADE_IN, FADE_OUT
+ private:
+  enum FadeType
+  {
+    NO_FADE,
+    FADE_IN,
+    FADE_OUT
   };
   FadeType screen_fade;
   float screen_fadetime;

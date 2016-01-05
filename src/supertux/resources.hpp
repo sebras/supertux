@@ -28,7 +28,7 @@ class MouseCursor;
 
 class Resources
 {
-public:
+ public:
   static std::unique_ptr<MouseCursor> mouse_cursor;
 
   static FontPtr fixed_font;
@@ -42,7 +42,7 @@ public:
   static SurfacePtr arrow_left;
   static SurfacePtr arrow_right;
 
-public:
+ public:
   Resources();
   ~Resources();
 };

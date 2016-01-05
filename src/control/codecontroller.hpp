@@ -25,7 +25,7 @@
  */
 class CodeController : public Controller
 {
-public:
+ public:
   CodeController();
   virtual ~CodeController();
 

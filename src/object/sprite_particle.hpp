@@ -1,6 +1,7 @@
 //  SuperTux
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,15 +27,18 @@ class Player;
 
 class SpriteParticle : public GameObject
 {
-public:
-  SpriteParticle(std::string sprite_name, std::string action, Vector position, AnchorPoint anchor, Vector velocity, Vector acceleration, int drawing_layer = LAYER_OBJECTS-1);
+ public:
+  SpriteParticle(std::string sprite_name, std::string action, Vector position,
+                 AnchorPoint anchor, Vector velocity, Vector acceleration,
+                 int drawing_layer = LAYER_OBJECTS - 1);
   ~SpriteParticle();
-protected:
+
+ protected:
   virtual void hit(Player& player);
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   Vector position;
   Vector velocity;
@@ -44,7 +48,7 @@ private:
   SpritePtr lightsprite;
   bool glow;
 
-private:
+ private:
   SpriteParticle(const SpriteParticle&);
   SpriteParticle& operator=(const SpriteParticle&);
 };

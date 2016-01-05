@@ -37,14 +37,14 @@ static const float DEFAULT_SPEED = 20;
 static const float LEFT_BORDER = 50;
 static const float SCROLL = 60;
 
-TextScroller::TextScroller(const std::string& filename) :
-  defaultspeed(),
-  speed(),
-  music(),
-  background(),
-  lines(),
-  scroll(),
-  fading()
+TextScroller::TextScroller(const std::string& filename)
+    : defaultspeed(),
+      speed(),
+      music(),
+      background(),
+      lines(),
+      scroll(),
+      fading()
 {
   defaultspeed = DEFAULT_SPEED;
   speed = defaultspeed;
@@ -52,35 +52,43 @@ TextScroller::TextScroller(const std::string& filename) :
   std::string text;
   std::string background_file;
 
-  try {
+  try
+  {
     register_translation_directory(filename);
     auto doc = ReaderDocument::parse(filename);
     auto root = doc.get_root();
 
-    if(root.get_name() != "supertux-text") {
+    if (root.get_name() != "supertux-text")
+    {
       throw std::runtime_error("File isn't a supertux-text file");
-    } else {
+    }
+    else
+    {
       auto text_lisp = root.get_mapping();
 
-      if(!text_lisp.get("text", text)) {
+      if (!text_lisp.get("text", text))
+      {
         throw std::runtime_error("file doesn't contain a text field");
       }
 
-      if(!text_lisp.get("background", background_file)) {
+      if (!text_lisp.get("background", background_file))
+      {
         throw std::runtime_error("file doesn't contain a background file");
       }
 
       text_lisp.get("speed", defaultspeed);
       text_lisp.get("music", music);
     }
-  } catch(std::exception& e) {
+  }
+  catch (std::exception& e)
+  {
     std::ostringstream msg;
     msg << "Couldn't load file '" << filename << "': " << e.what() << std::endl;
     throw std::runtime_error(msg.str());
   }
 
   // Split text string lines into a vector
-  lines = InfoBoxLine::split(text, SCREEN_WIDTH - 2*LEFT_BORDER);
+  lines = InfoBoxLine::split(text, SCREEN_WIDTH - 2 * LEFT_BORDER);
 
   // load background image
   background = Surface::create("images/background/" + background_file);
@@ -89,17 +97,16 @@ TextScroller::TextScroller(const std::string& filename) :
   fading = false;
 }
 
-TextScroller::~TextScroller()
-{
-}
+TextScroller::~TextScroller() {}
 
 void
 TextScroller::setup()
 {
   SoundManager::current()->play_music(music);
-  if(g_config->transitions_enabled)
+  if (g_config->transitions_enabled)
   {
-    ScreenManager::current()->set_screen_fade(std::unique_ptr<ScreenFade>(new FadeIn(0.5)));
+    ScreenManager::current()->set_screen_fade(
+        std::unique_ptr<ScreenFade>(new FadeIn(0.5)));
   }
 }
 
@@ -107,23 +114,31 @@ void
 TextScroller::update(float elapsed_time)
 {
   Controller* controller = InputManager::current()->get_controller();
-  if(controller->hold(Controller::UP)) {
-    speed = -defaultspeed*5;
-  } else if(controller->hold(Controller::DOWN)) {
-    speed = defaultspeed*5;
-  } else {
+  if (controller->hold(Controller::UP))
+  {
+    speed = -defaultspeed * 5;
+  }
+  else if (controller->hold(Controller::DOWN))
+  {
+    speed = defaultspeed * 5;
+  }
+  else
+  {
     speed = defaultspeed;
   }
-  if((controller->pressed(Controller::JUMP)
-     || controller->pressed(Controller::ACTION)
-     || controller->pressed(Controller::MENU_SELECT)
-     )&& !(controller->pressed(Controller::UP))) // prevent skipping if jump with up is enabled
+  if ((controller->pressed(Controller::JUMP) ||
+       controller->pressed(Controller::ACTION) ||
+       controller->pressed(Controller::MENU_SELECT)) &&
+      !(controller->pressed(
+          Controller::UP)))  // prevent skipping if jump with up is enabled
     scroll += SCROLL;
-  if(controller->pressed(Controller::START) ||
-     controller->pressed(Controller::ESCAPE)) {
-    if(g_config->transitions_enabled)
+  if (controller->pressed(Controller::START) ||
+      controller->pressed(Controller::ESCAPE))
+  {
+    if (g_config->transitions_enabled)
     {
-      ScreenManager::current()->pop_screen(std::unique_ptr<ScreenFade>(new FadeOut(0.5)));
+      ScreenManager::current()->pop_screen(
+          std::unique_ptr<ScreenFade>(new FadeOut(0.5)));
     }
     else
     {
@@ -133,8 +148,7 @@ TextScroller::update(float elapsed_time)
 
   scroll += speed * elapsed_time;
 
-  if(scroll < 0)
-    scroll = 0;
+  if (scroll < 0) scroll = 0;
 }
 
 void
@@ -142,22 +156,28 @@ TextScroller::draw(DrawingContext& context)
 {
   context.draw_filled_rect(Vector(0, 0), Vector(SCREEN_WIDTH, SCREEN_HEIGHT),
                            Color(0.6f, 0.7f, 0.8f, 0.5f), 0);
-  context.draw_surface_part(background, Rectf(0, 0, background->get_width(), background->get_height()),
+  context.draw_surface_part(background, Rectf(0, 0, background->get_width(),
+                                              background->get_height()),
                             Rectf(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 0);
 
-
   float y = SCREEN_HEIGHT - scroll;
-  for(size_t i = 0; i < lines.size(); i++) {
-    if (y + lines[i]->get_height() >= 0 && SCREEN_HEIGHT - y >= 0) {
-      lines[i]->draw(context, Rectf(LEFT_BORDER, y, SCREEN_WIDTH - 2*LEFT_BORDER, y), LAYER_GUI);
+  for (size_t i = 0; i < lines.size(); i++)
+  {
+    if (y + lines[i]->get_height() >= 0 && SCREEN_HEIGHT - y >= 0)
+    {
+      lines[i]->draw(context,
+                     Rectf(LEFT_BORDER, y, SCREEN_WIDTH - 2 * LEFT_BORDER, y),
+                     LAYER_GUI);
     }
 
     y += lines[i]->get_height();
   }
 
-  if(y < 0 && !fading ) {
+  if (y < 0 && !fading)
+  {
     fading = true;
-    ScreenManager::current()->pop_screen(std::unique_ptr<ScreenFade>(new FadeOut(0.5)));
+    ScreenManager::current()->pop_screen(
+        std::unique_ptr<ScreenFade>(new FadeOut(0.5)));
   }
 }
 

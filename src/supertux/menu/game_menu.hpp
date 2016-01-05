@@ -21,7 +21,8 @@
 
 class Level;
 
-enum GameMenuIDs {
+enum GameMenuIDs
+{
   MNID_CONTINUE,
   MNID_RESETLEVEL,
   MNID_ABORTLEVEL
@@ -29,13 +30,13 @@ enum GameMenuIDs {
 
 class GameMenu : public Menu
 {
-private:
-public:
+ private:
+ public:
   GameMenu();
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   GameMenu(const GameMenu&);
   GameMenu& operator=(const GameMenu&);
 };

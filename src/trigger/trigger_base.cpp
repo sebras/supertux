@@ -19,19 +19,19 @@
 #include "object/player.hpp"
 #include "sprite/sprite.hpp"
 
-TriggerBase::TriggerBase() :
-  sprite(),
-  lasthit(false),
-  hit(false),
-  losetouch_listeners()
+TriggerBase::TriggerBase()
+    : sprite(), lasthit(false), hit(false), losetouch_listeners()
 {
   set_group(COLGROUP_TOUCHABLE);
 }
 
 TriggerBase::~TriggerBase()
 {
-  // unregister remove_listener hooks, so nobody will try to call us after we've been destroyed
-  for (std::list<Player*>::iterator i = losetouch_listeners.begin(); i != losetouch_listeners.end(); ++i) {
+  // unregister remove_listener hooks, so nobody will try to call us after we've
+  // been destroyed
+  for (std::list<Player*>::iterator i = losetouch_listeners.begin();
+       i != losetouch_listeners.end(); ++i)
+  {
     Player* p = *i;
     p->del_remove_listener(this);
   }
@@ -39,10 +39,13 @@ TriggerBase::~TriggerBase()
 }
 
 void
-TriggerBase::update(float )
+TriggerBase::update(float)
 {
-  if (lasthit && !hit) {
-    for (std::list<Player*>::iterator i = losetouch_listeners.begin(); i != losetouch_listeners.end(); ++i) {
+  if (lasthit && !hit)
+  {
+    for (std::list<Player*>::iterator i = losetouch_listeners.begin();
+         i != losetouch_listeners.end(); ++i)
+    {
       Player* p = *i;
       event(*p, EVENT_LOSETOUCH);
       p->del_remove_listener(this);
@@ -56,19 +59,20 @@ TriggerBase::update(float )
 void
 TriggerBase::draw(DrawingContext& context)
 {
-  if(!sprite.get())
-    return;
+  if (!sprite.get()) return;
 
-  sprite->draw(context, get_pos(), LAYER_TILES+1);
+  sprite->draw(context, get_pos(), LAYER_TILES + 1);
 }
 
 HitResponse
-TriggerBase::collision(GameObject& other, const CollisionHit& )
+TriggerBase::collision(GameObject& other, const CollisionHit&)
 {
-  Player* player = dynamic_cast<Player*> (&other);
-  if(player) {
+  Player* player = dynamic_cast<Player*>(&other);
+  if (player)
+  {
     hit = true;
-    if(!lasthit) {
+    if (!lasthit)
+    {
       losetouch_listeners.push_back(player);
       player->add_remove_listener(this);
       event(*player, EVENT_TOUCH);
@@ -81,9 +85,12 @@ TriggerBase::collision(GameObject& other, const CollisionHit& )
 void
 TriggerBase::object_removed(GameObject* object)
 {
-  for (std::list<Player*>::iterator i = losetouch_listeners.begin(); i != losetouch_listeners.end(); ++i) {
+  for (std::list<Player*>::iterator i = losetouch_listeners.begin();
+       i != losetouch_listeners.end(); ++i)
+  {
     Player* p = *i;
-    if (p == object) {
+    if (p == object)
+    {
       losetouch_listeners.erase(i);
       break;
     }

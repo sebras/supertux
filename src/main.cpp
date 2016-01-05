@@ -18,7 +18,8 @@
 
 #include "supertux/main.hpp"
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
   return Main().run(argc, argv);
 }

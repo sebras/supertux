@@ -34,7 +34,7 @@ class Savegame;
  */
 class TitleScreen : public Screen
 {
-public:
+ public:
   TitleScreen(Savegame& savegame);
   virtual ~TitleScreen();
 
@@ -45,16 +45,16 @@ public:
 
   virtual void update(float elapsed_time);
 
-private:
+ private:
   void make_tux_jump();
 
-private:
+ private:
   SurfacePtr frame;
   std::unique_ptr<CodeController> controller;
   std::unique_ptr<GameSession> titlesession;
   std::string copyright_text;
 
-private:
+ private:
   TitleScreen(const TitleScreen&);
   TitleScreen& operator=(const TitleScreen&);
 };

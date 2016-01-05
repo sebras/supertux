@@ -26,14 +26,14 @@
 
 class Light : public GameObject
 {
-public:
+ public:
   Light(const Vector& center, const Color& color = Color(1.0, 1.0, 1.0, 1.0));
   virtual ~Light();
 
   void update(float elapsed_time);
   void draw(DrawingContext& context);
 
-protected:
+ protected:
   Vector position;
   Color color;
   SpritePtr sprite;

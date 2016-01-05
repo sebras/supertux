@@ -22,28 +22,28 @@ class Candle;
 typedef Candle _Candle;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Candle
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   Candle(_Candle* candle);
   ~Candle();
 #endif
 
   bool get_burning(); /**< returns true if candle is lighted */
-  void set_burning(bool burning); /**< true: light candle, false: extinguish candle */
+  void set_burning(
+      bool burning); /**< true: light candle, false: extinguish candle */
 
 #ifndef SCRIPTING_API
   _Candle* candle;
 
-private:
+ private:
   Candle(const Candle&);
   Candle& operator=(const Candle&);
 #endif
 };
-
 }
 
 #endif

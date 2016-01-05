@@ -1,6 +1,7 @@
 //  SuperTux Path
 //  Copyright (C) 2005 Philipp <balinor@pnxs.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -24,15 +25,9 @@
 #include "util/reader_mapping.hpp"
 #include "util/log.hpp"
 
-Path::Path() :
-  nodes(),
-  mode()
-{
-}
+Path::Path() : nodes(), mode() {}
 
-Path::~Path()
-{
-}
+Path::~Path() {}
 
 void
 Path::read(const ReaderMapping& reader)
@@ -40,54 +35,61 @@ Path::read(const ReaderMapping& reader)
   auto iter = reader.get_iter();
 
   mode = CIRCULAR;
-  while(iter.next()) {
-    if(iter.get_key() == "mode") {
+  while (iter.next())
+  {
+    if (iter.get_key() == "mode")
+    {
       std::string mode_string;
       iter.get(mode_string);
 
-      if(mode_string == "oneshot")
+      if (mode_string == "oneshot")
         mode = ONE_SHOT;
-      else if(mode_string == "pingpong")
+      else if (mode_string == "pingpong")
         mode = PING_PONG;
-      else if(mode_string == "circular")
+      else if (mode_string == "circular")
         mode = CIRCULAR;
-      else if(mode_string == "unordered")
+      else if (mode_string == "unordered")
         mode = UNORDERED;
-      else {
+      else
+      {
         std::ostringstream msg;
         msg << "Unknown pathmode '" << mode_string << "' found";
         throw std::runtime_error(msg.str());
       }
       continue;
-    } else if (iter.get_key() == "node") {
+    }
+    else if (iter.get_key() == "node")
+    {
       ReaderMapping node_mapping = iter.as_mapping();
 
       // each new node will inherit all values from the last one
       Node node;
       node.time = 1;
-      if( (!node_mapping.get("x", node.position.x) ||
+      if ((!node_mapping.get("x", node.position.x) ||
            !node_mapping.get("y", node.position.y)))
-        throw std::runtime_error("Path node without x and y coordinate specified");
+        throw std::runtime_error(
+            "Path node without x and y coordinate specified");
       node_mapping.get("time", node.time);
 
-      if(node.time <= 0)
+      if (node.time <= 0)
         throw std::runtime_error("Path node with non-positive time");
 
       nodes.push_back(node);
-    } else {
-      log_warning << "unknown token '" << iter.get_key() << "' in Path nodes list. Ignored." << std::endl;
+    }
+    else
+    {
+      log_warning << "unknown token '" << iter.get_key()
+                  << "' in Path nodes list. Ignored." << std::endl;
     }
   }
 
-  if (nodes.empty())
-    throw std::runtime_error("Path with zero nodes");
+  if (nodes.empty()) throw std::runtime_error("Path with zero nodes");
 }
 
 Vector
 Path::get_base() const
 {
-  if(nodes.empty())
-    return Vector(0, 0);
+  if (nodes.empty()) return Vector(0, 0);
 
   return nodes[0].position;
 }
@@ -98,9 +100,12 @@ Path::get_nearest_node_no(Vector reference_point) const
   int nearest_node_id = -1;
   float nearest_node_dist = 0;
   int id = 0;
-  for (std::vector<Node>::const_iterator i = nodes.begin(); i != nodes.end(); ++i, ++id) {
+  for (std::vector<Node>::const_iterator i = nodes.begin(); i != nodes.end();
+       ++i, ++id)
+  {
     float dist = (i->position - reference_point).norm();
-    if ((nearest_node_id == -1) || (dist < nearest_node_dist)) {
+    if ((nearest_node_id == -1) || (dist < nearest_node_dist))
+    {
       nearest_node_id = id;
       nearest_node_dist = dist;
     }
@@ -114,9 +119,12 @@ Path::get_farthest_node_no(Vector reference_point) const
   int farthest_node_id = -1;
   float farthest_node_dist = 0;
   int id = 0;
-  for (std::vector<Node>::const_iterator i = nodes.begin(); i != nodes.end(); ++i, ++id) {
+  for (std::vector<Node>::const_iterator i = nodes.begin(); i != nodes.end();
+       ++i, ++id)
+  {
     float dist = (i->position - reference_point).norm();
-    if ((farthest_node_id == -1) || (dist > farthest_node_dist)) {
+    if ((farthest_node_id == -1) || (dist > farthest_node_dist))
+    {
       farthest_node_id = id;
       farthest_node_dist = dist;
     }

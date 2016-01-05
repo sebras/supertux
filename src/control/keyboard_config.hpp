@@ -26,7 +26,7 @@
 
 class KeyboardConfig
 {
-public:
+ public:
   KeyboardConfig();
 
   SDL_Keycode reversemap_key(Controller::Control c) const;

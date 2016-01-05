@@ -18,16 +18,9 @@
 
 #include "supertux/timer.hpp"
 
-Timer::Timer() :
-  period(0),
-cycle_start(0),
-  cyclic(false)
-{
-}
+Timer::Timer() : period(0), cycle_start(0), cyclic(false) {}
 
-Timer::~Timer()
-{
-}
+Timer::~Timer() {}
 
 void
 Timer::start(float period_, bool cyclic_)
@@ -40,13 +33,16 @@ Timer::start(float period_, bool cyclic_)
 bool
 Timer::check()
 {
-  if(period == 0)
-    return false;
+  if (period == 0) return false;
 
-  if(game_time - cycle_start >= period) {
-    if(cyclic) {
+  if (game_time - cycle_start >= period)
+  {
+    if (cyclic)
+    {
       cycle_start = game_time - fmodf(game_time - cycle_start, period);
-    } else {
+    }
+    else
+    {
       period = 0;
     }
     return true;

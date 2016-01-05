@@ -21,26 +21,28 @@
 #include "supertux/sector.hpp"
 #include "worldmap/worldmap.hpp"
 
-namespace scripting {
-
-FloatingImage::FloatingImage(const std::string& spritefile) :
-  floating_image(std::make_shared<_FloatingImage>(spritefile))
+namespace scripting
+{
+FloatingImage::FloatingImage(const std::string& spritefile)
+    : floating_image(std::make_shared<_FloatingImage>(spritefile))
 {
   using namespace worldmap;
 
-  if(Sector::current() != NULL) {
+  if (Sector::current() != NULL)
+  {
     Sector::current()->add_object(floating_image);
-  } else if(WorldMap::current() != NULL) {
+  }
+  else if (WorldMap::current() != NULL)
+  {
     WorldMap::current()->add_object(floating_image);
-  } else {
+  }
+  else
+  {
     throw new std::runtime_error("Neither sector nor worldmap active");
   }
 }
 
-FloatingImage::~FloatingImage()
-{
-  floating_image->remove_me();
-}
+FloatingImage::~FloatingImage() { floating_image->remove_me(); }
 
 void
 FloatingImage::set_layer(int layer)
@@ -75,13 +77,13 @@ FloatingImage::get_pos_y()
 void
 FloatingImage::set_anchor_point(int anchor)
 {
-  floating_image->set_anchor_point((AnchorPoint) anchor);
+  floating_image->set_anchor_point((AnchorPoint)anchor);
 }
 
 int
 FloatingImage::get_anchor_point()
 {
-  return (int) floating_image->get_anchor_point();
+  return (int)floating_image->get_anchor_point();
 }
 
 bool
@@ -119,7 +121,6 @@ FloatingImage::fade_out(float fadetime)
 {
   floating_image->fade_out(fadetime);
 }
-
 }
 
 /* EOF */

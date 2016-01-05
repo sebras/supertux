@@ -21,7 +21,7 @@
 
 class YetiStalactite : public Stalactite
 {
-public:
+ public:
   YetiStalactite(const ReaderMapping& lisp);
   virtual ~YetiStalactite();
 

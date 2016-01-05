@@ -21,15 +21,15 @@
 #include "video/drawing_context.hpp"
 #include "worldmap/sprite_change.hpp"
 
-namespace worldmap {
-
-SpriteChange::SpriteChange(const ReaderMapping& lisp) :
-  pos(),
-  change_on_touch(false),
-  sprite(),
-  stay_action(),
-  stay_group(),
-  in_stay_action(false)
+namespace worldmap
+{
+SpriteChange::SpriteChange(const ReaderMapping& lisp)
+    : pos(),
+      change_on_touch(false),
+      sprite(),
+      stay_action(),
+      stay_group(),
+      in_stay_action(false)
 {
   lisp.get("x", pos.x);
   lisp.get("y", pos.y);
@@ -47,22 +47,20 @@ SpriteChange::SpriteChange(const ReaderMapping& lisp) :
   all_sprite_changes.push_back(this);
 }
 
-SpriteChange::~SpriteChange()
-{
-  all_sprite_changes.remove(this);
-}
+SpriteChange::~SpriteChange() { all_sprite_changes.remove(this); }
 
 void
 SpriteChange::draw(DrawingContext& context)
 {
-  if(in_stay_action && stay_action != "") {
+  if (in_stay_action && stay_action != "")
+  {
     sprite->set_action(stay_action);
-    sprite->draw(context, pos * 32, LAYER_OBJECTS-1);
+    sprite->draw(context, pos * 32, LAYER_OBJECTS - 1);
   }
 }
 
 void
-SpriteChange::update(float )
+SpriteChange::update(float)
 {
 }
 
@@ -78,8 +76,11 @@ SpriteChange::clear_stay_action()
   in_stay_action = false;
 
   // if we are in a stay_group, also clear all stay actions in this group
-  if (stay_group != "") {
-    for (std::list<SpriteChange*>::iterator i = all_sprite_changes.begin(); i != all_sprite_changes.end(); ++i) {
+  if (stay_group != "")
+  {
+    for (std::list<SpriteChange*>::iterator i = all_sprite_changes.begin();
+         i != all_sprite_changes.end(); ++i)
+    {
       SpriteChange* sc = *i;
       if (sc->stay_group != stay_group) continue;
       sc->in_stay_action = false;
@@ -88,7 +89,6 @@ SpriteChange::clear_stay_action()
 }
 
 std::list<SpriteChange*> SpriteChange::all_sprite_changes;
-
 }
 
 /* EOF */

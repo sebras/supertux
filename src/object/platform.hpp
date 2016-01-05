@@ -24,17 +24,17 @@
 /**
  * This class is the base class for platforms that tux can stand on
  */
-class Platform : public MovingSprite,
-                 public ScriptInterface
+class Platform : public MovingSprite, public ScriptInterface
 {
-public:
+ public:
   Platform(const ReaderMapping& reader);
   Platform(const Platform& platform);
 
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
   virtual void update(float elapsed_time);
 
-  const Vector& get_speed() const
+  const Vector&
+  get_speed() const
   {
     return speed;
   }
@@ -60,20 +60,25 @@ public:
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
   virtual void unexpose(HSQUIRRELVM vm, SQInteger table_idx);
 
-  Path& get_path() const {
+  Path&
+  get_path() const
+  {
     return *path.get();
   }
 
-private:
+ private:
   std::unique_ptr<Path> path;
   std::unique_ptr<PathWalker> walker;
 
   Vector speed;
 
-  bool automatic; /**< true if Platform will automatically pick a destination based on collisions and current Player position */
-  bool player_contact; /**< true if a Player touched the Platform during the last round of collision detections */
-  bool last_player_contact; /**< true if a Player touched the Platform during the round before the last round of collision detections */
-
+  bool automatic; /**< true if Platform will automatically pick a destination
+                     based on collisions and current Player position */
+  bool player_contact; /**< true if a Player touched the Platform during the
+                          last round of collision detections */
+  bool last_player_contact; /**< true if a Player touched the Platform during
+                               the round before the last round of collision
+                               detections */
 };
 
 #endif

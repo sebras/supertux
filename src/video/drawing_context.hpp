@@ -36,7 +36,8 @@ class Texture;
 class VideoSystem;
 
 // some constants for predefined layer values
-enum {
+enum
+{
   // Image/gradient backgrounds (should cover entire screen)
   LAYER_BACKGROUND0 = -300,
   // Particle backgrounds
@@ -58,28 +59,32 @@ enum {
   // Hitpoints, time, coins, etc.
   LAYER_HUD = 500,
   // Menus, mouse, console etc.
-  LAYER_GUI         = 600
+  LAYER_GUI = 600
 };
 
-enum GradientDirection { VERTICAL, HORIZONTAL, VERTICAL_SECTOR, HORIZONTAL_SECTOR };
+enum GradientDirection
+{
+  VERTICAL,
+  HORIZONTAL,
+  VERTICAL_SECTOR,
+  HORIZONTAL_SECTOR
+};
 
 class Blend
 {
-public:
+ public:
   GLenum sfactor;
   GLenum dfactor;
 
-  Blend()
-    : sfactor(GL_SRC_ALPHA), dfactor(GL_ONE_MINUS_SRC_ALPHA)
-  {}
+  Blend() : sfactor(GL_SRC_ALPHA), dfactor(GL_ONE_MINUS_SRC_ALPHA) {}
 
-  Blend(GLenum s, GLenum d)
-    : sfactor(s), dfactor(d)
-  {}
+  Blend(GLenum s, GLenum d) : sfactor(s), dfactor(d) {}
 };
 
-enum Target {
-  NORMAL, LIGHTMAP
+enum Target
+{
+  NORMAL,
+  LIGHTMAP
 };
 
 /**
@@ -88,39 +93,41 @@ enum Target {
  */
 class DrawingContext
 {
-public:
+ public:
   DrawingContext(VideoSystem& video_system);
   ~DrawingContext();
 
   /// Adds a drawing request for a surface into the request list.
-  void draw_surface(SurfacePtr surface, const Vector& position,
-                    int layer);
+  void draw_surface(SurfacePtr surface, const Vector& position, int layer);
   /// Adds a drawing request for a surface into the request list.
-  void draw_surface(SurfacePtr surface, const Vector& position,
-                    float angle, const Color& color, const Blend& blend,
-                    int layer);
+  void draw_surface(SurfacePtr surface, const Vector& position, float angle,
+                    const Color& color, const Blend& blend, int layer);
   /// Adds a drawing request for part of a surface.
-  void draw_surface_part(SurfacePtr surface,
-                         const Rectf& srcrect, const Rectf& dstrect,
-                         int layer);
+  void draw_surface_part(SurfacePtr surface, const Rectf& srcrect,
+                         const Rectf& dstrect, int layer);
   /// Draws a text.
-  void draw_text(FontPtr font, const std::string& text,
-                 const Vector& position, FontAlignment alignment, int layer, Color color = Color(1.0,1.0,1.0));
+  void draw_text(FontPtr font, const std::string& text, const Vector& position,
+                 FontAlignment alignment, int layer,
+                 Color color = Color(1.0, 1.0, 1.0));
 
   /// Draws text on screen center (feed Vector.x with a 0).
   /// This is the same as draw_text() with a SCREEN_WIDTH/2 position and
   /// alignment set to LEFT_ALIGN
   void draw_center_text(FontPtr font, const std::string& text,
-                        const Vector& position, int layer, Color color = Color(1.0,1.0,1.0));
+                        const Vector& position, int layer,
+                        Color color = Color(1.0, 1.0, 1.0));
   /// Draws a color gradient onto the whole screen */
-  void draw_gradient(const Color& from, const Color& to, int layer, const GradientDirection& direction, const Rectf& region);
+  void draw_gradient(const Color& from, const Color& to, int layer,
+                     const GradientDirection& direction, const Rectf& region);
   /// Fills a rectangle.
   void draw_filled_rect(const Vector& topleft, const Vector& size,
                         const Color& color, int layer);
   void draw_filled_rect(const Rectf& rect, const Color& color, int layer);
-  void draw_filled_rect(const Rectf& rect, const Color& color, float radius, int layer);
+  void draw_filled_rect(const Rectf& rect, const Color& color, float radius,
+                        int layer);
 
-  void draw_inverse_ellipse(const Vector& pos, const Vector& size, const Color& color, int layer);
+  void draw_inverse_ellipse(const Vector& pos, const Vector& size,
+                            const Color& color, int layer);
 
   /// Returns the visible area in world coordinates
   Rectf get_cliprect() const;
@@ -128,11 +135,17 @@ public:
   /// Processes all pending drawing requests and flushes the list.
   void do_drawing();
 
-  const Vector& get_translation() const
-  {  return transform.translation;  }
+  const Vector&
+  get_translation() const
+  {
+    return transform.translation;
+  }
 
-  void set_translation(const Vector& newtranslation)
-  {  transform.translation = newtranslation;  }
+  void
+  set_translation(const Vector& newtranslation)
+  {
+    transform.translation = newtranslation;
+  }
 
   void push_transform();
   void pop_transform();
@@ -147,7 +160,7 @@ public:
   float get_alpha() const;
 
   /// on next update, set color to lightmap's color at position
-  void get_light(const Vector& position, Color* color );
+  void get_light(const Vector& position, Color* color);
 
   typedef ::Target Target;
   static const Target NORMAL = ::NORMAL;
@@ -156,34 +169,31 @@ public:
   void pop_target();
   void set_target(Target target);
 
-  void set_ambient_color( Color new_color );
+  void set_ambient_color(Color new_color);
 
   /**
    * requests that a screenshot be taken after the next frame has been rendered
    */
   void take_screenshot();
 
-private:
+ private:
   typedef std::vector<DrawingRequest*> DrawingRequests;
 
-private:
+ private:
   void handle_drawing_requests(DrawingRequests& requests);
 
-private:
+ private:
   class Transform
   {
-  public:
+   public:
     Vector translation;
     DrawingEffect drawing_effect;
     float alpha;
 
-    Transform() :
-      translation(),
-      drawing_effect(NO_EFFECT),
-      alpha(1.0f)
-    { }
+    Transform() : translation(), drawing_effect(NO_EFFECT), alpha(1.0f) {}
 
-    Vector apply(const Vector& v) const
+    Vector
+    apply(const Vector& v) const
     {
       return v - translation;
     }
@@ -191,7 +201,7 @@ private:
 
   void clear_drawing_requests(DrawingRequests& requests);
 
-private:
+ private:
   VideoSystem& video_system;
 
   /// the transform stack
@@ -214,9 +224,11 @@ private:
   /* obstack holding the memory of the drawing requests */
   struct obstack obst;
 
-  bool screenshot_requested; /**< true if a screenshot should be taken after the next frame has been rendered */
+  bool
+      screenshot_requested; /**< true if a screenshot should be taken after the
+                               next frame has been rendered */
 
-private:
+ private:
   DrawingContext(const DrawingContext&);
   DrawingContext& operator=(const DrawingContext&);
 };

@@ -24,21 +24,22 @@
 
 class WaterDrop : public MovingSprite
 {
-public:
+ public:
   WaterDrop(const Vector& pos, std::string sprite_path_, Vector velocity);
 
   virtual void update(float elapsed_time);
   virtual void collision_solid(const CollisionHit& hit);
-  virtual HitResponse collision(GameObject& other, const CollisionHit& );
+  virtual HitResponse collision(GameObject& other, const CollisionHit&);
 
-private:
+ private:
   Physic physic;
 
-  typedef enum {
+  typedef enum
+  {
     WDS_FALLING,
     WDS_SPLASH,
     WDS_PUDDLE
-  }WaterDropState;
+  } WaterDropState;
 
   WaterDropState wd_state;
 

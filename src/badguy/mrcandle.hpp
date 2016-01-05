@@ -23,7 +23,7 @@ class Color;
 
 class MrCandle : public WalkingBadguy
 {
-public:
+ public:
   MrCandle(const ReaderMapping& reader);
 
   bool is_freezable() const;
@@ -32,10 +32,9 @@ public:
   void draw(DrawingContext& context);
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-  void kill_fall() { };
+  void kill_fall(){};
 
-private:
-
+ private:
   Color lightcolor;
   SpritePtr candle_light;
 };

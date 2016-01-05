@@ -19,20 +19,22 @@
 #include "supertux/sequence.hpp"
 #include "util/log.hpp"
 
-Sequence string_to_sequence(const std::string& sequencename) {
-  if (sequencename == "endsequence")
-    return SEQ_ENDSEQUENCE;
-  if (sequencename == "stoptux")
-    return SEQ_STOPTUX;
-  if (sequencename == "fireworks")
-    return SEQ_FIREWORKS;
+Sequence
+string_to_sequence(const std::string& sequencename)
+{
+  if (sequencename == "endsequence") return SEQ_ENDSEQUENCE;
+  if (sequencename == "stoptux") return SEQ_STOPTUX;
+  if (sequencename == "fireworks") return SEQ_FIREWORKS;
 
   log_warning << "Unknown sequence: " << sequencename << std::endl;
   return SEQ_ENDSEQUENCE;
 }
 
-std::string sequence_to_string(const Sequence& seq) {
-  switch (seq) {
+std::string
+sequence_to_string(const Sequence& seq)
+{
+  switch (seq)
+  {
     case SEQ_ENDSEQUENCE:
       return "endsequence";
     case SEQ_STOPTUX:
@@ -40,7 +42,7 @@ std::string sequence_to_string(const Sequence& seq) {
     case SEQ_FIREWORKS:
       return "fireworks";
     default:
-      return "unknown sequence " + std::to_string( (int)seq );
+      return "unknown sequence " + std::to_string((int)seq);
   }
 }
 

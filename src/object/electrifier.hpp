@@ -21,19 +21,21 @@
 #include "supertux/timer.hpp"
 #include <stdint.h>
 
-//Changes all tiles with the given ID to a new one for a given amount of time, then removes itself
-//Used by the Kugelblitz to electrify water - can be used for other effects, too
+// Changes all tiles with the given ID to a new one for a given amount of time,
+// then removes itself
+// Used by the Kugelblitz to electrify water - can be used for other effects,
+// too
 class Electrifier : public GameObject
 {
-public:
+ public:
   Electrifier(uint32_t oldtile, uint32_t newtile, float seconds);
   ~Electrifier();
 
-protected:
+ protected:
   virtual void update(float time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   uint32_t change_from;
   uint32_t change_to;
   Timer duration;

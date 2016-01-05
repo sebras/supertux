@@ -44,7 +44,8 @@ extern std::unique_ptr<tinygettext::DictionaryManager> g_dictionary_manager;
  *     std::cout << boost::format(_("You collected %d coins")) % num;
  */
 
-static inline std::string _(const std::string& message)
+static inline std::string
+_(const std::string& message)
 {
   if (g_dictionary_manager)
   {

@@ -1,5 +1,6 @@
 //  SuperTux - Decal
-//  Copyright (C) 2008 Christoph Sommer <christoph.sommer@2008.expires.deltadevelopment.de>
+//  Copyright (C) 2008 Christoph Sommer
+//  <christoph.sommer@2008.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,22 +21,18 @@
 #include "util/reader.hpp"
 #include "util/reader_mapping.hpp"
 
-Decal::Decal(const ReaderMapping& reader) :
-  MovingSprite(reader, LAYER_OBJECTS, COLGROUP_DISABLED)
+Decal::Decal(const ReaderMapping& reader)
+    : MovingSprite(reader, LAYER_OBJECTS, COLGROUP_DISABLED)
 {
-  layer = reader_get_layer (reader, /* default = */ LAYER_OBJECTS);
+  layer = reader_get_layer(reader, /* default = */ LAYER_OBJECTS);
 
   bool solid = false;
   reader.get("solid", solid);
-  if(solid)
-    set_group(COLGROUP_STATIC);
+  if (solid) set_group(COLGROUP_STATIC);
   std::string action;
-  if(reader.get("action", action))
-    set_action(action, -1);
+  if (reader.get("action", action)) set_action(action, -1);
 }
 
-Decal::~Decal()
-{
-}
+Decal::~Decal() {}
 
 /* EOF */

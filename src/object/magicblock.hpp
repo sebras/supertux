@@ -26,9 +26,9 @@
 
 #include "object/moving_sprite.hpp"
 
-class MagicBlock: public MovingSprite
+class MagicBlock : public MovingSprite
 {
-public:
+ public:
   MagicBlock(const ReaderMapping& reader);
 
   bool collides(GameObject& other, const CollisionHit& hit) const;
@@ -36,7 +36,7 @@ public:
   void update(float elapsed_time);
   void draw(DrawingContext& context);
 
-private:
+ private:
   bool is_solid;
   float trigger_red;
   float trigger_green;

@@ -35,31 +35,33 @@ LevelParser::from_file(const std::string& filename)
   return level;
 }
 
-LevelParser::LevelParser(Level& level) :
-  m_level(level)
-{
-}
+LevelParser::LevelParser(Level& level) : m_level(level) {}
 
 void
 LevelParser::load(const std::string& filepath)
 {
-  try {
+  try
+  {
     m_level.filename = filepath;
     register_translation_directory(filepath);
     auto doc = ReaderDocument::parse(filepath);
     auto root = doc.get_root();
 
-    if(root.get_name() != "supertux-level")
+    if (root.get_name() != "supertux-level")
       throw std::runtime_error("file is not a supertux-level file.");
 
     auto level = root.get_mapping();
 
     int version = 1;
     level.get("version", version);
-    if(version == 1) {
-      log_info << "[" <<  filepath << "] level uses old format: version 1" << std::endl;
+    if (version == 1)
+    {
+      log_info << "[" << filepath << "] level uses old format: version 1"
+               << std::endl;
       load_old_format(level);
-    } else if (version == 2) {
+    }
+    else if (version == 2)
+    {
       level.get("tileset", m_level.tileset);
 
       level.get("name", m_level.name);
@@ -70,23 +72,32 @@ LevelParser::load(const std::string& filepath)
       level.get("target-time", m_level.target_time);
 
       auto iter = level.get_iter();
-      while(iter.next()) {
-        if (iter.get_key() == "sector") {
+      while (iter.next())
+      {
+        if (iter.get_key() == "sector")
+        {
           auto sector = SectorParser::from_reader(m_level, iter.as_mapping());
           m_level.add_sector(std::move(sector));
         }
       }
 
-      if (m_level.license.empty()) {
-        log_warning << "[" <<  filepath << "] The level author \"" << m_level.author
+      if (m_level.license.empty())
+      {
+        log_warning << "[" << filepath << "] The level author \""
+                    << m_level.author
                     << "\" did not specify a license for this level \""
-                    << m_level.name << "\". You might not be allowed to share it."
-                    << std::endl;
+                    << m_level.name
+                    << "\". You might not be allowed to share it." << std::endl;
       }
-    } else {
-      log_warning << "[" <<  filepath << "] level format version " << version << " is not supported" << std::endl;
     }
-  } catch(std::exception& e) {
+    else
+    {
+      log_warning << "[" << filepath << "] level format version " << version
+                  << " is not supported" << std::endl;
+    }
+  }
+  catch (std::exception& e)
+  {
     std::stringstream msg;
     msg << "Problem when reading level '" << filepath << "': " << e.what();
     throw std::runtime_error(msg.str());

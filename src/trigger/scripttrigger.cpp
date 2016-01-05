@@ -23,9 +23,8 @@
 #include "trigger/scripttrigger.hpp"
 #include "util/reader_mapping.hpp"
 
-ScriptTrigger::ScriptTrigger(const ReaderMapping& reader) :
-  triggerevent(),
-  script()
+ScriptTrigger::ScriptTrigger(const ReaderMapping& reader)
+    : triggerevent(), script()
 {
   bool must_activate = false;
 
@@ -37,7 +36,8 @@ ScriptTrigger::ScriptTrigger(const ReaderMapping& reader) :
   bbox.set_size(w, h);
   reader.get("script", script);
   reader.get("button", must_activate);
-  if(script.empty()) {
+  if (script.empty())
+  {
     throw std::runtime_error("Need to specify a script for trigger object");
   }
 
@@ -47,9 +47,8 @@ ScriptTrigger::ScriptTrigger(const ReaderMapping& reader) :
     triggerevent = EVENT_TOUCH;
 }
 
-ScriptTrigger::ScriptTrigger(const Vector& pos, const std::string& script_) :
-  triggerevent(),
-  script()
+ScriptTrigger::ScriptTrigger(const Vector& pos, const std::string& script_)
+    : triggerevent(), script()
 {
   bbox.set_pos(pos);
   bbox.set_size(32, 32);
@@ -57,15 +56,12 @@ ScriptTrigger::ScriptTrigger(const Vector& pos, const std::string& script_) :
   triggerevent = EVENT_TOUCH;
 }
 
-ScriptTrigger::~ScriptTrigger()
-{
-}
+ScriptTrigger::~ScriptTrigger() {}
 
 void
-ScriptTrigger::event(Player& , EventType type)
+ScriptTrigger::event(Player&, EventType type)
 {
-  if(type != triggerevent)
-    return;
+  if (type != triggerevent) return;
 
   std::istringstream stream(script);
   Sector::current()->run_script(stream, "ScriptTrigger");

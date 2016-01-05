@@ -28,7 +28,8 @@
 #include "video/color.hpp"
 #include "object/anchor_point.hpp"
 
-namespace collision {
+namespace collision
+{
 class Constraints;
 }
 
@@ -50,7 +51,8 @@ class Portable;
 class DrawingContext;
 class DisplayEffect;
 
-enum MusicType {
+enum MusicType
+{
   LEVEL_MUSIC,
   HERRING_MUSIC,
   HERRING_WARNING_MUSIC
@@ -63,10 +65,10 @@ enum MusicType {
  */
 class Sector : public scripting::SSector
 {
-public:
+ public:
   friend class SectorParser;
 
-public:
+ public:
   Sector(Level* parent);
   ~Sector();
 
@@ -92,10 +94,16 @@ public:
   /// adds a gameobject
   void add_object(GameObjectPtr object);
 
-  void set_name(const std::string& name_)
-  { this->name = name_; }
-  const std::string& get_name() const
-  { return name; }
+  void
+  set_name(const std::string& name_)
+  {
+    this->name = name_;
+  }
+  const std::string&
+  get_name() const
+  {
+    return name;
+  }
 
   /**
    * tests if a given rectangle is inside the sector
@@ -107,22 +115,32 @@ public:
   void resume_music();
   MusicType get_music_type() const;
 
-  int get_active_bullets() const
-  { return (int)bullets.size(); }
+  int
+  get_active_bullets() const
+  {
+    return (int)bullets.size();
+  }
   bool add_smoke_cloud(const Vector& pos);
 
   /** get currently activated sector. */
-  static Sector* current()
-  { return _current; }
+  static Sector*
+  current()
+  {
+    return _current;
+  }
 
   /** Get total number of badguys */
   int get_total_badguys() const;
 
   /** Get total number of GameObjects of given type */
-  template<class T> int get_total_count()
+  template <class T>
+  int
+  get_total_count()
   {
     int total = 0;
-    for(GameObjects::iterator i = gameobjects.begin(); i != gameobjects.end(); ++i) {
+    for (GameObjects::iterator i = gameobjects.begin(); i != gameobjects.end();
+         ++i)
+    {
       if (dynamic_cast<T*>(i->get())) total++;
     }
     return total;
@@ -130,44 +148,54 @@ public:
 
   void collision_tilemap(collision::Constraints* constraints,
                          const Vector& movement, const Rectf& dest,
-                         MovingObject &object) const;
+                         MovingObject& object) const;
 
   /**
    * Checks if the specified rectangle is free of (solid) tiles.
    * Note that this does not include static objects, e.g. bonus blocks.
    */
-  bool is_free_of_tiles(const Rectf& rect, const bool ignoreUnisolid = false) const;
+  bool is_free_of_tiles(const Rectf& rect,
+                        const bool ignoreUnisolid = false) const;
   /**
    * Checks if the specified rectangle is free of both
    * 1.) solid tiles and
    * 2.) MovingObjects in COLGROUP_STATIC.
    * Note that this does not include badguys or players.
    */
-  bool is_free_of_statics(const Rectf& rect, const MovingObject* ignore_object = 0, const bool ignoreUnisolid = false) const;
+  bool is_free_of_statics(const Rectf& rect,
+                          const MovingObject* ignore_object = 0,
+                          const bool ignoreUnisolid = false) const;
   /**
    * Checks if the specified rectangle is free of both
    * 1.) solid tiles and
-   * 2.) MovingObjects in COLGROUP_STATIC, COLGROUP_MOVINGSTATIC or COLGROUP_MOVING.
+   * 2.) MovingObjects in COLGROUP_STATIC, COLGROUP_MOVINGSTATIC or
+   * COLGROUP_MOVING.
    * This includes badguys and players.
    */
-  bool is_free_of_movingstatics(const Rectf& rect, const MovingObject* ignore_object = 0) const;
+  bool is_free_of_movingstatics(const Rectf& rect,
+                                const MovingObject* ignore_object = 0) const;
 
-  bool free_line_of_sight(const Vector& line_start, const Vector& line_end, const MovingObject* ignore_object = 0) const;
+  bool free_line_of_sight(const Vector& line_start, const Vector& line_end,
+                          const MovingObject* ignore_object = 0) const;
   bool can_see_player(const Vector& eye) const;
 
-/**
-   * returns a list of players currently in the sector
-   */
-  std::vector<Player*> get_players() const {
+  /**
+     * returns a list of players currently in the sector
+     */
+  std::vector<Player*>
+  get_players() const
+  {
     return std::vector<Player*>(1, this->player);
   }
-  Player *get_nearest_player (const Vector& pos) const;
-  Player *get_nearest_player (const Rectf& pos) const
+  Player* get_nearest_player(const Vector& pos) const;
+  Player*
+  get_nearest_player(const Rectf& pos) const
   {
-    return (get_nearest_player (get_anchor_pos (pos, ANCHOR_MIDDLE)));
+    return (get_nearest_player(get_anchor_pos(pos, ANCHOR_MIDDLE)));
   }
 
-  std::vector<MovingObject*> get_nearby_objects (const Vector& center, float max_distance) const;
+  std::vector<MovingObject*> get_nearby_objects(const Vector& center,
+                                                float max_distance) const;
 
   Rectf get_active_region() const;
 
@@ -208,8 +236,9 @@ public:
   void set_gravity(float gravity);
   float get_gravity() const;
 
-private:
-  uint32_t collision_tile_attributes(const Rectf& dest, const Vector& mov) const;
+ private:
+  uint32_t collision_tile_attributes(const Rectf& dest,
+                                     const Vector& mov) const;
 
   void before_object_remove(GameObjectPtr object);
   bool before_object_add(GameObjectPtr object);
@@ -240,17 +269,19 @@ private:
    * (because of ABORT_MOVE in the collision response or no collisions)
    */
   void collision_static(collision::Constraints* constraints,
-                        const Vector& movement, const Rectf& dest, MovingObject& object);
+                        const Vector& movement, const Rectf& dest,
+                        MovingObject& object);
 
   void collision_static_constrains(MovingObject& object);
 
-  GameObjectPtr parse_object(const std::string& name, const ReaderMapping& lisp);
+  GameObjectPtr parse_object(const std::string& name,
+                             const ReaderMapping& lisp);
 
   void fix_old_tiles();
 
   int calculate_foremost_layer() const;
 
-private:
+ private:
   static Sector* _current;
 
   Level* level; /**< Parent level containing this sector */
@@ -275,7 +306,7 @@ private:
 
   int foremost_layer;
 
-public: // TODO make this private again
+ public:  // TODO make this private again
   /// show collision rectangles of moving objects (for debugging)
   static bool show_collrects;
   static bool draw_solids_only;
@@ -295,7 +326,7 @@ public: // TODO make this private again
   Camera* camera;
   DisplayEffect* effect;
 
-private:
+ private:
   Sector(const Sector&);
   Sector& operator=(const Sector&);
 };

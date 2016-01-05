@@ -19,11 +19,14 @@
 
 #include "aatriangle.hpp"
 
-int AATriangle::vertical_flip(int dir) {
+int
+AATriangle::vertical_flip(int dir)
+{
   int direction = dir & AATriangle::DIRECTION_MASK;
   direction = 3 - direction;
   int deform = dir & AATriangle::DEFORM_MASK;
-  switch (deform) {
+  switch (deform)
+  {
     case AATriangle::DEFORM_BOTTOM:
       deform = AATriangle::DEFORM_TOP;
       break;

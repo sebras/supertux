@@ -1,5 +1,6 @@
 //  SuperTux - Badguy "Snail"
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,17 +24,19 @@
 
 #include <math.h>
 
-namespace {
+namespace
+{
 const float SNAIL_KICK_SPEED = 500;
 const int MAX_SNAIL_SQUISHES = 10;
 const float SNAIL_KICK_SPEED_Y = -500; /**< y-velocity gained when kicked */
 }
 
-Snail::Snail(const ReaderMapping& reader) :
-  WalkingBadguy(reader, "images/creatures/snail/snail.sprite", "left", "right"),
-  state(STATE_NORMAL),
-  kicked_delay_timer(),
-  squishcount(0)
+Snail::Snail(const ReaderMapping& reader)
+    : WalkingBadguy(reader, "images/creatures/snail/snail.sprite", "left",
+                    "right"),
+      state(STATE_NORMAL),
+      kicked_delay_timer(),
+      squishcount(0)
 {
   walk_speed = 80;
   max_drop_height = 600;
@@ -42,11 +45,12 @@ Snail::Snail(const ReaderMapping& reader) :
   SoundManager::current()->preload("sounds/kick.wav");
 }
 
-Snail::Snail(const Vector& pos, Direction d) :
-  WalkingBadguy(pos, d, "images/creatures/snail/snail.sprite", "left", "right"),
-  state(STATE_NORMAL),
-  kicked_delay_timer(),
-  squishcount(0)
+Snail::Snail(const Vector& pos, Direction d)
+    : WalkingBadguy(pos, d, "images/creatures/snail/snail.sprite", "left",
+                    "right"),
+      state(STATE_NORMAL),
+      kicked_delay_timer(),
+      squishcount(0)
 {
   walk_speed = 80;
   max_drop_height = 600;
@@ -90,49 +94,56 @@ Snail::be_kicked()
   physic.set_velocity_x(dir == LEFT ? -SNAIL_KICK_SPEED : SNAIL_KICK_SPEED);
   physic.set_velocity_y(0);
 
-  // start a timer to delay addition of upward movement until we are (hopefully) out from under the player
+  // start a timer to delay addition of upward movement until we are (hopefully)
+  // out from under the player
   kicked_delay_timer.start(0.05f);
 }
 
 bool
-Snail::can_break() const {
+Snail::can_break() const
+{
   return state == STATE_KICKED;
 }
 
 void
 Snail::active_update(float elapsed_time)
 {
-  if(frozen)
+  if (frozen)
   {
     BadGuy::active_update(elapsed_time);
     return;
   }
 
-  switch (state) {
-
+  switch (state)
+  {
     case STATE_NORMAL:
       WalkingBadguy::active_update(elapsed_time);
       return;
 
     case STATE_FLAT:
-      if (sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         be_normal();
       }
       break;
 
     case STATE_KICKED_DELAY:
-      if (kicked_delay_timer.check()) {
-        physic.set_velocity_x(dir == LEFT ? -SNAIL_KICK_SPEED : SNAIL_KICK_SPEED);
+      if (kicked_delay_timer.check())
+      {
+        physic.set_velocity_x(dir == LEFT ? -SNAIL_KICK_SPEED
+                                          : SNAIL_KICK_SPEED);
         physic.set_velocity_y(SNAIL_KICK_SPEED_Y);
         state = STATE_KICKED;
       }
       break;
 
     case STATE_KICKED:
-      physic.set_velocity_x(physic.get_velocity_x() * pow(0.99, elapsed_time/0.02));
-      if (sprite->animation_done() || (fabsf(physic.get_velocity_x()) < walk_speed)) be_normal();
+      physic.set_velocity_x(physic.get_velocity_x() *
+                            pow(0.99, elapsed_time / 0.02));
+      if (sprite->animation_done() ||
+          (fabsf(physic.get_velocity_x()) < walk_speed))
+        be_normal();
       break;
-
   }
 
   BadGuy::active_update(elapsed_time);
@@ -147,47 +158,50 @@ Snail::is_freezable() const
 void
 Snail::collision_solid(const CollisionHit& hit)
 {
-  if(frozen)
+  if (frozen)
   {
     WalkingBadguy::collision_solid(hit);
     return;
   }
 
-  switch (state) {
+  switch (state)
+  {
     case STATE_NORMAL:
       WalkingBadguy::collision_solid(hit);
       return;
     case STATE_KICKED:
-      if(hit.left || hit.right) {
+      if (hit.left || hit.right)
+      {
         SoundManager::current()->play("sounds/iceblock_bump.wav", get_pos());
 
-        if( ( dir == LEFT && hit.left ) || ( dir == RIGHT && hit.right) ){
+        if ((dir == LEFT && hit.left) || (dir == RIGHT && hit.right))
+        {
           dir = (dir == LEFT) ? RIGHT : LEFT;
           sprite->set_action(dir == LEFT ? "flat-left" : "flat-right");
 
           physic.set_velocity_x(-physic.get_velocity_x());
         }
       }
-      /* fall-through */
+    /* fall-through */
     case STATE_FLAT:
     case STATE_KICKED_DELAY:
-      if(hit.top || hit.bottom) {
+      if (hit.top || hit.bottom)
+      {
         physic.set_velocity_y(0);
       }
       break;
   }
 
   update_on_ground_flag(hit);
-
 }
 
 HitResponse
 Snail::collision_badguy(BadGuy& badguy, const CollisionHit& hit)
 {
-  if(frozen)
-    return WalkingBadguy::collision_badguy(badguy, hit);
+  if (frozen) return WalkingBadguy::collision_badguy(badguy, hit);
 
-  switch(state) {
+  switch (state)
+  {
     case STATE_NORMAL:
       return WalkingBadguy::collision_badguy(badguy, hit);
     case STATE_FLAT:
@@ -206,14 +220,17 @@ Snail::collision_badguy(BadGuy& badguy, const CollisionHit& hit)
 HitResponse
 Snail::collision_player(Player& player, const CollisionHit& hit)
 {
-  if(frozen)
-    return WalkingBadguy::collision_player(player, hit);
+  if (frozen) return WalkingBadguy::collision_player(player, hit);
 
   // handle kicks from left or right side
-  if(state == STATE_FLAT && (hit.left || hit.right)) {
-    if(hit.left) {
+  if (state == STATE_FLAT && (hit.left || hit.right))
+  {
+    if (hit.left)
+    {
       dir = RIGHT;
-    } else if(hit.right) {
+    }
+    else if (hit.right)
+    {
       dir = LEFT;
     }
     player.kick();
@@ -227,27 +244,27 @@ Snail::collision_player(Player& player, const CollisionHit& hit)
 bool
 Snail::collision_squished(GameObject& object)
 {
-  if(frozen)
-    return WalkingBadguy::collision_squished(object);
+  if (frozen) return WalkingBadguy::collision_squished(object);
 
   Player* player = dynamic_cast<Player*>(&object);
-  if(player && (player->does_buttjump || player->is_invincible())) {
+  if (player && (player->does_buttjump || player->is_invincible()))
+  {
     kill_fall();
     player->bounce(*this);
     return true;
   }
 
-  switch(state) {
-
+  switch (state)
+  {
     case STATE_KICKED:
     case STATE_NORMAL:
 
       // Can't stomp in midair
-      if(!on_ground())
-        break;
+      if (!on_ground()) break;
 
       squishcount++;
-      if (squishcount >= MAX_SNAIL_SQUISHES) {
+      if (squishcount >= MAX_SNAIL_SQUISHES)
+      {
         kill_fall();
         return true;
       }
@@ -259,9 +276,12 @@ Snail::collision_squished(GameObject& object)
       SoundManager::current()->play("sounds/kick.wav", get_pos());
       {
         MovingObject* movingobject = dynamic_cast<MovingObject*>(&object);
-        if (movingobject && (movingobject->get_pos().x < get_pos().x)) {
+        if (movingobject && (movingobject->get_pos().x < get_pos().x))
+        {
           dir = RIGHT;
-        } else {
+        }
+        else
+        {
           dir = LEFT;
         }
       }
@@ -270,7 +290,6 @@ Snail::collision_squished(GameObject& object)
 
     case STATE_KICKED_DELAY:
       break;
-
   }
 
   if (player) player->bounce(*this);

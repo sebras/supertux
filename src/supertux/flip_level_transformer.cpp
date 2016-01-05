@@ -30,56 +30,69 @@ FlipLevelTransformer::transform_sector(Sector* sector)
 {
   float height = sector->get_height();
 
-  for(Sector::GameObjects::iterator i = sector->gameobjects.begin();
-      i != sector->gameobjects.end(); ++i) {
+  for (Sector::GameObjects::iterator i = sector->gameobjects.begin();
+       i != sector->gameobjects.end(); ++i)
+  {
     GameObjectPtr object = *i;
 
     TileMap* tilemap = dynamic_cast<TileMap*>(object.get());
-    if(tilemap) {
+    if (tilemap)
+    {
       transform_tilemap(height, *tilemap);
     }
     Player* player = dynamic_cast<Player*>(object.get());
-    if(player) {
+    if (player)
+    {
       Vector pos = player->get_pos();
       pos.y = height - pos.y - player->get_bbox().get_height();
       player->move(pos);
       continue;
     }
     BadGuy* badguy = dynamic_cast<BadGuy*>(object.get());
-    if(badguy) {
+    if (badguy)
+    {
       transform_badguy(height, *badguy);
     }
     Flower* flower = dynamic_cast<Flower*>(object.get());
-    if(flower) {
+    if (flower)
+    {
       transform_flower(*flower);
     }
     Platform* platform = dynamic_cast<Platform*>(object.get());
-    if(platform) {
+    if (platform)
+    {
       transform_platform(height, *platform);
     }
     Block* block = dynamic_cast<Block*>(object.get());
-    if(block) {
+    if (block)
+    {
       transform_block(height, *block);
     }
     MovingObject* mobject = dynamic_cast<MovingObject*>(object.get());
-    if(mobject) {
+    if (mobject)
+    {
       transform_moving_object(height, *mobject);
     }
   }
-  for(auto i = sector->spawnpoints.begin(); i != sector->spawnpoints.end(); ++i) {
+  for (auto i = sector->spawnpoints.begin(); i != sector->spawnpoints.end();
+       ++i)
+  {
     transform_spawnpoint(height, **i);
   }
 
-  if(sector->camera != 0 && sector->player != 0)
+  if (sector->camera != 0 && sector->player != 0)
     sector->camera->reset(sector->player->get_pos());
 }
 
 DrawingEffect
 FlipLevelTransformer::transform_drawing_effect(DrawingEffect effect)
 {
-  if (effect & VERTICAL_FLIP) {
+  if (effect & VERTICAL_FLIP)
+  {
     return effect & ~VERTICAL_FLIP;
-  } else {
+  }
+  else
+  {
     return effect | VERTICAL_FLIP;
   }
 }
@@ -87,7 +100,9 @@ FlipLevelTransformer::transform_drawing_effect(DrawingEffect effect)
 void
 FlipLevelTransformer::transform_path(float height, float obj_height, Path& path)
 {
-  for (std::vector<Path::Node>::iterator i = path.nodes.begin(); i != path.nodes.end(); ++i) {
+  for (std::vector<Path::Node>::iterator i = path.nodes.begin();
+       i != path.nodes.end(); ++i)
+  {
     Vector& pos = i->position;
     pos.y = height - pos.y - obj_height;
   }
@@ -96,23 +111,25 @@ FlipLevelTransformer::transform_path(float height, float obj_height, Path& path)
 void
 FlipLevelTransformer::transform_tilemap(float height, TileMap& tilemap)
 {
-  for(size_t x = 0; x < tilemap.get_width(); ++x) {
-    for(size_t y = 0; y < tilemap.get_height()/2; ++y) {
+  for (size_t x = 0; x < tilemap.get_width(); ++x)
+  {
+    for (size_t y = 0; y < tilemap.get_height() / 2; ++y)
+    {
       // swap tiles
-      int y2 = tilemap.get_height()-1-y;
+      int y2 = tilemap.get_height() - 1 - y;
       uint32_t t1 = tilemap.get_tile_id(x, y);
       uint32_t t2 = tilemap.get_tile_id(x, y2);
       tilemap.change(x, y, t2);
       tilemap.change(x, y2, t1);
     }
   }
-  tilemap.set_drawing_effect(transform_drawing_effect(tilemap.get_drawing_effect()));
+  tilemap.set_drawing_effect(
+      transform_drawing_effect(tilemap.get_drawing_effect()));
   Vector offset = tilemap.get_offset();
   offset.y = height - offset.y - tilemap.get_bbox().get_height();
   tilemap.set_offset(offset);
   Path* path = tilemap.get_path().get();
-  if (path)
-    transform_path(height, tilemap.get_bbox().get_height(), *path);
+  if (path) transform_path(height, tilemap.get_bbox().get_height(), *path);
 }
 
 void
@@ -132,7 +149,8 @@ FlipLevelTransformer::transform_spawnpoint(float height, SpawnPoint& spawn)
 }
 
 void
-FlipLevelTransformer::transform_moving_object(float height, MovingObject& object)
+FlipLevelTransformer::transform_moving_object(float height,
+                                              MovingObject& object)
 {
   Vector pos = object.get_pos();
   pos.y = height - pos.y - object.get_bbox().get_height();
@@ -154,7 +172,9 @@ FlipLevelTransformer::transform_platform(float height, Platform& platform)
 void
 FlipLevelTransformer::transform_block(float height, Block& block)
 {
-  if (block.original_y != -1) block.original_y = height - block.original_y - block.get_bbox().get_height();
+  if (block.original_y != -1)
+    block.original_y =
+        height - block.original_y - block.get_bbox().get_height();
 }
 
 /* EOF */

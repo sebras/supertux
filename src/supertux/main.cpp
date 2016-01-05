@@ -61,23 +61,26 @@ extern "C" {
 
 class ConfigSubsystem
 {
-public:
+ public:
   ConfigSubsystem()
   {
     g_config.reset(new Config);
-    try {
+    try
+    {
       g_config->load();
     }
-    catch(const std::exception& e)
+    catch (const std::exception& e)
     {
-      log_info << "Couldn't load config file: " << e.what() << ", using default settings" << std::endl;
+      log_info << "Couldn't load config file: " << e.what()
+               << ", using default settings" << std::endl;
     }
 
     // init random number stuff
     g_config->random_seed = gameRandom.srand(g_config->random_seed);
     graphicsRandom.srand(0);
-    //const char *how = config->random_seed? ", user fixed.": ", from time().";
-    //log_info << "Using random seed " << config->random_seed << how << std::endl;
+    // const char *how = config->random_seed? ", user fixed.": ", from time().";
+    // log_info << "Using random seed " << config->random_seed << how <<
+    // std::endl;
   }
 
   ~ConfigSubsystem()
@@ -93,7 +96,8 @@ public:
 void
 Main::init_tinygettext()
 {
-  g_dictionary_manager.reset(new tinygettext::DictionaryManager(std::unique_ptr<tinygettext::FileSystem>(new PhysFSFileSystem), "UTF-8"));
+  g_dictionary_manager.reset(new tinygettext::DictionaryManager(
+      std::unique_ptr<tinygettext::FileSystem>(new PhysFSFileSystem), "UTF-8"));
 
   tinygettext::Log::set_log_info_callback(log_info_callback);
   tinygettext::Log::set_log_warning_callback(log_warning_callback);
@@ -104,13 +108,17 @@ Main::init_tinygettext()
   // Config setting "locale" overrides language detection
   if (g_config->locale != "")
   {
-    g_dictionary_manager->set_language(tinygettext::Language::from_name(g_config->locale));
+    g_dictionary_manager->set_language(
+        tinygettext::Language::from_name(g_config->locale));
   }
   else
   {
-    FL_Locale *locale;
+    FL_Locale* locale;
     FL_FindLocale(&locale);
-    tinygettext::Language language = tinygettext::Language::from_spec( locale->lang?locale->lang:"", locale->country?locale->country:"", locale->variant?locale->variant:"");
+    tinygettext::Language language = tinygettext::Language::from_spec(
+        locale->lang ? locale->lang : "",
+        locale->country ? locale->country : "",
+        locale->variant ? locale->variant : "");
     FL_FreeLocale(&locale);
     g_dictionary_manager->set_language(language);
   }
@@ -118,16 +126,15 @@ Main::init_tinygettext()
 
 class PhysfsSubsystem
 {
-private:
+ private:
   boost::optional<std::string> m_forced_datadir;
   boost::optional<std::string> m_forced_userdir;
 
-public:
+ public:
   PhysfsSubsystem(const char* argv0,
                   boost::optional<std::string> forced_datadir,
-                  boost::optional<std::string> forced_userdir) :
-    m_forced_datadir(forced_datadir),
-    m_forced_userdir(forced_userdir)
+                  boost::optional<std::string> forced_userdir)
+      : m_forced_datadir(forced_datadir), m_forced_userdir(forced_userdir)
   {
     if (!PHYSFS_init(argv0))
     {
@@ -145,7 +152,8 @@ public:
     }
   }
 
-  void find_datadir()
+  void
+  find_datadir()
   {
     std::string datadir;
     if (m_forced_datadir)
@@ -163,14 +171,14 @@ public:
       std::string basepath = basepath_c;
       SDL_free(basepath_c);
 
-      // If we are on windows, the data directory is one directory above the binary
+// If we are on windows, the data directory is one directory above the binary
 #ifdef WIN32
-      const std::array<std::string, 2> subdirs = { { "data", "../data" } };
+      const std::array<std::string, 2> subdirs = {{"data", "../data"}};
 #else
-      const std::array<std::string, 1> subdirs = { { "data" } };
+      const std::array<std::string, 1> subdirs = {{"data"}};
 #endif
       bool found = false;
-      for (const std::string &subdir : subdirs)
+      for (const std::string& subdir : subdirs)
       {
         datadir = FileSystem::join(basepath, subdir);
         if (FileSystem::exists(FileSystem::join(datadir, "credits.txt")))
@@ -190,11 +198,14 @@ public:
 
     if (!PHYSFS_addToSearchPath(datadir.c_str(), 1))
     {
-      log_warning << "Couldn't add '" << datadir << "' to physfs searchpath: " << PHYSFS_getLastError() << std::endl;
+      log_warning << "Couldn't add '" << datadir
+                  << "' to physfs searchpath: " << PHYSFS_getLastError()
+                  << std::endl;
     }
   }
 
-  void find_userdir()
+  void
+  find_userdir()
   {
     std::string userdir;
     if (m_forced_userdir)
@@ -224,39 +235,39 @@ public:
     if (!PHYSFS_setWriteDir(userdir.c_str()))
     {
       std::ostringstream msg;
-      msg << "Failed to use userdir directory '"
-          <<  userdir << "': " << PHYSFS_getLastError();
+      msg << "Failed to use userdir directory '" << userdir
+          << "': " << PHYSFS_getLastError();
       throw std::runtime_error(msg.str());
     }
 
     PHYSFS_addToSearchPath(userdir.c_str(), 0);
   }
 
-  void print_search_path()
+  void
+  print_search_path()
   {
     const char* writedir = PHYSFS_getWriteDir();
-    log_info << "PhysfsWriteDir: " << (writedir ? writedir : "(null)") << std::endl;
+    log_info << "PhysfsWriteDir: " << (writedir ? writedir : "(null)")
+             << std::endl;
     log_info << "PhysfsSearchPath:" << std::endl;
     char** searchpath = PHYSFS_getSearchPath();
-    for(char** i = searchpath; *i != NULL; ++i)
+    for (char** i = searchpath; *i != NULL; ++i)
     {
       log_info << "  " << *i << std::endl;
     }
     PHYSFS_freeList(searchpath);
   }
 
-  ~PhysfsSubsystem()
-  {
-    PHYSFS_deinit();
-  }
+  ~PhysfsSubsystem() { PHYSFS_deinit(); }
 };
 
 class SDLSubsystem
 {
-public:
+ public:
   SDLSubsystem()
   {
-    if(SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
+    if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK |
+                 SDL_INIT_GAMECONTROLLER) < 0)
     {
       std::stringstream msg;
       msg << "Couldn't initialize SDL: " << SDL_GetError();
@@ -266,45 +277,50 @@ public:
     atexit(SDL_Quit);
   }
 
-  ~SDLSubsystem()
-  {
-    SDL_Quit();
-  }
+  ~SDLSubsystem() { SDL_Quit(); }
 };
 
 void
 Main::init_video()
 {
-  SDL_SetWindowTitle(VideoSystem::current()->get_renderer().get_window(), PACKAGE_NAME " " PACKAGE_VERSION);
+  SDL_SetWindowTitle(VideoSystem::current()->get_renderer().get_window(),
+                     PACKAGE_NAME " " PACKAGE_VERSION);
 
   const char* icon_fname = "images/engine/icons/supertux-256x256.png";
   SDL_Surface* icon = IMG_Load_RW(get_physfs_SDLRWops(icon_fname), true);
   if (!icon)
   {
-    log_warning << "Couldn't load icon '" << icon_fname << "': " << SDL_GetError() << std::endl;
+    log_warning << "Couldn't load icon '" << icon_fname
+                << "': " << SDL_GetError() << std::endl;
   }
   else
   {
-    SDL_SetWindowIcon(VideoSystem::current()->get_renderer().get_window(), icon);
+    SDL_SetWindowIcon(VideoSystem::current()->get_renderer().get_window(),
+                      icon);
     SDL_FreeSurface(icon);
   }
   SDL_ShowCursor(0);
 
-  log_info << (g_config->use_fullscreen?"fullscreen ":"window ")
-           << " Window: "     << g_config->window_size
-           << " Fullscreen: " << g_config->fullscreen_size << "@" << g_config->fullscreen_refresh_rate
-           << " Area: "       << g_config->aspect_size << std::endl;
+  log_info << (g_config->use_fullscreen ? "fullscreen " : "window ")
+           << " Window: " << g_config->window_size
+           << " Fullscreen: " << g_config->fullscreen_size << "@"
+           << g_config->fullscreen_refresh_rate
+           << " Area: " << g_config->aspect_size << std::endl;
 }
 
 static Uint32 last_timelog_ticks = 0;
 static const char* last_timelog_component = 0;
 
-static inline void timelog(const char* component)
+static inline void
+timelog(const char* component)
 {
   Uint32 current_ticks = SDL_GetTicks();
 
-  if(last_timelog_component != 0) {
-    log_info << "Component '" << last_timelog_component <<  "' finished after " << (current_ticks - last_timelog_ticks) / 1000.0 << " seconds" << std::endl;
+  if (last_timelog_component != 0)
+  {
+    log_info << "Component '" << last_timelog_component << "' finished after "
+             << (current_ticks - last_timelog_ticks) / 1000.0 << " seconds"
+             << std::endl;
   }
 
   last_timelog_ticks = current_ticks;
@@ -318,12 +334,14 @@ Main::launch_game()
   ConsoleBuffer console_buffer;
 
   timelog("controller");
-  InputManager input_manager(g_config->keyboard_config, g_config->joystick_config);
+  InputManager input_manager(g_config->keyboard_config,
+                             g_config->joystick_config);
 
   timelog("commandline");
 
   timelog("video");
-  std::unique_ptr<VideoSystem> video_system = VideoSystem::create(g_config->video);
+  std::unique_ptr<VideoSystem> video_system =
+      VideoSystem::create(g_config->video);
   DrawingContext context(*video_system);
   init_video();
 
@@ -352,46 +370,55 @@ Main::launch_game()
   GameManager game_manager;
   ScreenManager screen_manager;
 
-  if(g_config->start_level != "") {
+  if (g_config->start_level != "")
+  {
     // we have a normal path specified at commandline, not a physfs path.
     // So we simply mount that path here...
     std::string dir = FileSystem::dirname(g_config->start_level);
     std::string filename = FileSystem::basename(g_config->start_level);
     std::string fileProtocol = "file://";
     std::string::size_type position = dir.find(fileProtocol);
-    if(position != std::string::npos) {
+    if (position != std::string::npos)
+    {
       dir = dir.replace(position, fileProtocol.length(), "");
     }
     log_debug << "Adding dir: " << dir << std::endl;
     PHYSFS_addToSearchPath(dir.c_str(), true);
 
-    if(g_config->start_level.size() > 4 &&
-       g_config->start_level.compare(g_config->start_level.size() - 5, 5, ".stwm") == 0)
+    if (g_config->start_level.size() > 4 &&
+        g_config->start_level.compare(g_config->start_level.size() - 5, 5,
+                                      ".stwm") == 0)
     {
       screen_manager.push_screen(std::unique_ptr<Screen>(
-                                              new worldmap::WorldMap(filename, *default_savegame)));
-    } else {
-      std::unique_ptr<GameSession> session (
-        new GameSession(filename, *default_savegame));
+          new worldmap::WorldMap(filename, *default_savegame)));
+    }
+    else
+    {
+      std::unique_ptr<GameSession> session(
+          new GameSession(filename, *default_savegame));
 
-      g_config->random_seed = session->get_demo_random_seed(g_config->start_demo);
+      g_config->random_seed =
+          session->get_demo_random_seed(g_config->start_demo);
       g_config->random_seed = gameRandom.srand(g_config->random_seed);
       graphicsRandom.srand(0);
-      
+
       if (g_config->tux_spawn_pos)
       {
-        session->get_current_sector()->player->set_pos(*g_config->tux_spawn_pos);
+        session->get_current_sector()->player->set_pos(
+            *g_config->tux_spawn_pos);
       }
 
-      if(g_config->start_demo != "")
-        session->play_demo(g_config->start_demo);
+      if (g_config->start_demo != "") session->play_demo(g_config->start_demo);
 
-      if(g_config->record_demo != "")
+      if (g_config->record_demo != "")
         session->record_demo(g_config->record_demo);
       screen_manager.push_screen(std::move(session));
     }
-  } else {
-    screen_manager.push_screen(std::unique_ptr<Screen>(new TitleScreen(*default_savegame)));
+  }
+  else
+  {
+    screen_manager.push_screen(
+        std::unique_ptr<Screen>(new TitleScreen(*default_savegame)));
   }
 
   screen_manager.run(context);
@@ -411,7 +438,7 @@ Main::run(int argc, char** argv)
       args.parse_args(argc, argv);
       g_log_level = args.get_log_level();
     }
-    catch(const std::exception& err)
+    catch (const std::exception& err)
     {
       std::cout << "Error: " << err.what() << std::endl;
       return EXIT_FAILURE;
@@ -446,12 +473,12 @@ Main::run(int argc, char** argv)
         break;
     }
   }
-  catch(const std::exception& e)
+  catch (const std::exception& e)
   {
     log_fatal << "Unexpected exception: " << e.what() << std::endl;
     result = 1;
   }
-  catch(...)
+  catch (...)
   {
     log_fatal << "Unexpected exception" << std::endl;
     result = 1;

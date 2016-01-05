@@ -25,22 +25,22 @@
 
 class Torch : public MovingObject
 {
-public:
+ public:
   Torch(const ReaderMapping& reader);
 
   void draw(DrawingContext& context) override;
   void update(float) override;
 
-  HitResponse collision(GameObject& other, const CollisionHit& ) override;
+  HitResponse collision(GameObject& other, const CollisionHit&) override;
 
-private:
+ private:
   SpritePtr m_torch;
   SpritePtr m_flame;
   SpritePtr m_flame_glow;
   SpritePtr m_flame_light;
   bool m_burning;
 
-private:
+ private:
   Torch(const Torch&) = delete;
   Torch& operator=(const Torch&) = delete;
 };

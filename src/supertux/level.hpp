@@ -30,7 +30,7 @@ class Sector;
  */
 class Level : public Currenton<Level>
 {
-public:
+ public:
   std::string name;
   std::string author;
   std::string contact;
@@ -38,36 +38,48 @@ public:
   std::string filename;
   std::string on_menukey_script;
   std::vector<std::unique_ptr<Sector> > sectors;
-  Statistics  stats;
-  float       target_time;
+  Statistics stats;
+  float target_time;
   std::string tileset;
 
   friend class LevelParser;
 
-public:
+ public:
   Level();
   ~Level();
 
-  const std::string& get_name() const { return name; }
-  const std::string& get_author() const { return author; }
+  const std::string&
+  get_name() const
+  {
+    return name;
+  }
+  const std::string&
+  get_author() const
+  {
+    return author;
+  }
 
   Sector* get_sector(const std::string& name) const;
 
   size_t get_sector_count() const;
   Sector* get_sector(size_t num) const;
 
-  std::string get_tileset() const { return tileset; }
+  std::string
+  get_tileset() const
+  {
+    return tileset;
+  }
 
   int get_total_coins() const;
   int get_total_badguys() const;
   int get_total_secrets() const;
 
-private:
+ private:
   void load(const std::string& filename);
   void add_sector(std::unique_ptr<Sector> sector);
   void load_old_format(const ReaderMapping& reader);
 
-private:
+ private:
   Level(const Level&);
   Level& operator=(const Level&);
 };

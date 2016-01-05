@@ -25,19 +25,19 @@ class ReaderMapping;
 
 class LevelParser
 {
-public:
+ public:
   static std::unique_ptr<Level> from_file(const std::string& filename);
 
-private:
+ private:
   LevelParser(Level& level);
 
   void load(const std::string& filepath);
   void load_old_format(const ReaderMapping& reader);
 
-private:
+ private:
   Level& m_level;
 
-private:
+ private:
   LevelParser(const LevelParser&) = delete;
   LevelParser& operator=(const LevelParser&) = delete;
 };

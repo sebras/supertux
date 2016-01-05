@@ -29,17 +29,19 @@
 
 static const std::string FLAME_SOUND = "sounds/flame.wav";
 
-Flame::Flame(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/flame/flame.sprite", LAYER_FLOATINGOBJECTS),
-  angle(0),
-  radius(),
-  speed(),
-  light(0.0f,0.0f,0.0f),
-  lightsprite(SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light-small.sprite")),
-  sound_source()
+Flame::Flame(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/flame/flame.sprite",
+             LAYER_FLOATINGOBJECTS),
+      angle(0),
+      radius(),
+      speed(),
+      light(0.0f, 0.0f, 0.0f),
+      lightsprite(SpriteManager::current()->create(
+          "images/objects/lightmap_light/lightmap_light-small.sprite")),
+      sound_source()
 {
-  if ( !reader.get("radius", radius)) radius = 100;
-  if ( !reader.get("speed", speed)) speed = 2;
+  if (!reader.get("radius", radius)) radius = 100;
+  if (!reader.get("speed", speed)) speed = 2;
   bbox.set_pos(Vector(start_position.x + cos(angle) * radius,
                       start_position.y + sin(angle) * radius));
   countMe = false;
@@ -54,7 +56,7 @@ Flame::Flame(const ReaderMapping& reader) :
 void
 Flame::active_update(float elapsed_time)
 {
-  angle = fmodf(angle + elapsed_time * speed, (float) (2*M_PI));
+  angle = fmodf(angle + elapsed_time * speed, (float)(2 * M_PI));
   Vector newpos(start_position.x + cos(angle) * radius,
                 start_position.y + sin(angle) * radius);
   movement = newpos - get_pos();
@@ -67,12 +69,14 @@ Flame::active_update(float elapsed_time)
 void
 Flame::draw(DrawingContext& context)
 {
-  //Draw the Sprite.
+  // Draw the Sprite.
   sprite->draw(context, get_pos(), LAYER_OBJECTS);
-  //Draw the light if dark
-  if(true){
-    context.get_light( bbox.get_middle(), &light );
-    if (light.red + light.green < 2.0){
+  // Draw the light if dark
+  if (true)
+  {
+    context.get_light(bbox.get_middle(), &light);
+    if (light.red + light.green < 2.0)
+    {
       context.push_target();
       context.set_target(DrawingContext::LIGHTMAP);
       sprite->draw(context, get_pos(), layer);
@@ -99,7 +103,6 @@ Flame::deactivate()
   sound_source.reset();
 }
 
-
 void
 Flame::kill_fall()
 {
@@ -110,10 +113,9 @@ Flame::freeze()
 {
   SoundManager::current()->play("sounds/sizzle.ogg", get_pos());
   sprite->set_action("fade", 1);
-  Sector::current()->add_object(std::make_shared<SpriteParticle>("images/objects/particles/smoke.sprite",
-                                                                 "default",
-                                                                 bbox.get_middle(), ANCHOR_MIDDLE,
-                                                                 Vector(0, -150), Vector(0,0), LAYER_BACKGROUNDTILES+2));
+  Sector::current()->add_object(std::make_shared<SpriteParticle>(
+      "images/objects/particles/smoke.sprite", "default", bbox.get_middle(),
+      ANCHOR_MIDDLE, Vector(0, -150), Vector(0, 0), LAYER_BACKGROUNDTILES + 2));
   set_group(COLGROUP_DISABLED);
 
   // start dead-script

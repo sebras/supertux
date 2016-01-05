@@ -24,12 +24,12 @@
 
 class CoinExplode : public GameObject
 {
-public:
+ public:
   CoinExplode(const Vector& pos);
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   Vector position;
 };
 

@@ -21,13 +21,13 @@
 
 class Spiky : public WalkingBadguy
 {
-public:
+ public:
   Spiky(const ReaderMapping& reader);
 
   bool is_freezable() const;
   bool is_flammable() const;
 
-private:
+ private:
 };
 
 #endif

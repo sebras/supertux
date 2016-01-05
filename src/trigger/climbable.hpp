@@ -1,5 +1,6 @@
 //  SuperTux - Climbable area
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -28,7 +29,8 @@ class Player;
 class Climbable : public TriggerBase
 {
   static Color text_color;
-public:
+
+ public:
   Climbable(const ReaderMapping& reader);
   Climbable(const Rectf& area);
   ~Climbable();
@@ -42,12 +44,14 @@ public:
    */
   bool may_climb(Player& player);
 
-protected:
-  Player* climbed_by; /**< set to player who's currently climbing us, null if nobody is */
-  Timer activate_try_timer; /**< try to correct mis-alignment while this timer runs */
+ protected:
+  Player* climbed_by; /**< set to player who's currently climbing us, null if
+                         nobody is */
+  Timer activate_try_timer; /**< try to correct mis-alignment while this timer
+                               runs */
   std::string message;
 
-private:
+ private:
   Climbable(const Climbable&);
   Climbable& operator=(const Climbable&);
 };

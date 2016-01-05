@@ -27,12 +27,9 @@
 
 class SDLSurfaceData : public SurfaceData
 {
-private:
-
-public:
-  SDLSurfaceData(const Surface &surface)
-  {
-  }
+ private:
+ public:
+  SDLSurfaceData(const Surface &surface) {}
 };
 
 #endif

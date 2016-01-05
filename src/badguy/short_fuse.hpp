@@ -22,13 +22,13 @@
 
 class ShortFuse : public WalkingBadguy
 {
-public:
+ public:
   ShortFuse(const ReaderMapping& reader);
 
-protected:
-  HitResponse collision_player (Player& player, const CollisionHit& hit);
-  HitResponse collision_bullet (Bullet& bullet, const CollisionHit& );
-  bool collision_squished (GameObject& object);
+ protected:
+  HitResponse collision_player(Player& player, const CollisionHit& hit);
+  HitResponse collision_bullet(Bullet& bullet, const CollisionHit&);
+  bool collision_squished(GameObject& object);
   void kill_fall();
   void ignite();
   void explode();

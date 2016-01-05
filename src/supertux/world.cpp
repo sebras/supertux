@@ -40,7 +40,7 @@ World::load(const std::string& directory)
 
   world->load_(directory);
 
-  { // generate savegame filename
+  {  // generate savegame filename
     std::string worlddirname = FileSystem::basename(directory);
     std::ostringstream stream;
     stream << "profile" << g_config->profile << "/" << worlddirname << ".stsg";
@@ -50,20 +50,18 @@ World::load(const std::string& directory)
   return world;
 }
 
-World::World() :
-  m_basedir(),
-  m_worldmap_filename(),
-  m_savegame_filename(),
-  m_title(),
-  m_description(),
-  m_hide_from_contribs(false),
-  m_is_levelset(true)
+World::World()
+    : m_basedir(),
+      m_worldmap_filename(),
+      m_savegame_filename(),
+      m_title(),
+      m_description(),
+      m_hide_from_contribs(false),
+      m_is_levelset(true)
 {
 }
 
-World::~World()
-{
-}
+World::~World() {}
 
 void
 World::load_(const std::string& directory)
@@ -76,8 +74,8 @@ World::load_(const std::string& directory)
   auto doc = ReaderDocument::parse(filename);
   auto root = doc.get_root();
 
-  if(root.get_name() != "supertux-world" &&
-     root.get_name() != "supertux-level-subset")
+  if (root.get_name() != "supertux-world" &&
+      root.get_name() != "supertux-level-subset")
   {
     throw std::runtime_error("File is not a world or levelsubset file");
   }

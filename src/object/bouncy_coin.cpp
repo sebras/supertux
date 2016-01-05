@@ -24,23 +24,20 @@ static const float FADE_TIME = .2f;
 /** this is the total life time of a bouncy coin */
 static const float LIFE_TIME = .5f;
 
-BouncyCoin::BouncyCoin(const Vector& pos, bool emerge, const std::string& sprite_path) :
-  sprite(),
-  position(pos),
-  timer(),
-  emerge_distance(0)
+BouncyCoin::BouncyCoin(const Vector& pos, bool emerge,
+                       const std::string& sprite_path)
+    : sprite(), position(pos), timer(), emerge_distance(0)
 {
   timer.start(LIFE_TIME);
   sprite = SpriteManager::current()->create(sprite_path);
 
-  if(emerge) {
+  if (emerge)
+  {
     emerge_distance = sprite->get_height();
   }
 }
 
-BouncyCoin::~BouncyCoin()
-{
-}
+BouncyCoin::~BouncyCoin() {}
 
 void
 BouncyCoin::update(float elapsed_time)
@@ -49,8 +46,7 @@ BouncyCoin::update(float elapsed_time)
   position.y += dist;
   emerge_distance += dist;
 
-  if(timer.check())
-    remove_me();
+  if (timer.check()) remove_me();
 }
 
 void
@@ -58,21 +54,26 @@ BouncyCoin::draw(DrawingContext& context)
 {
   float time_left = timer.get_timeleft();
   bool fading = time_left < FADE_TIME;
-  if(fading) {
-    float alpha = time_left/FADE_TIME;
+  if (fading)
+  {
+    float alpha = time_left / FADE_TIME;
     context.push_transform();
     context.set_alpha(alpha);
   }
 
   int layer;
-  if(emerge_distance > 0) {
+  if (emerge_distance > 0)
+  {
     layer = LAYER_OBJECTS - 5;
-  } else {
+  }
+  else
+  {
     layer = LAYER_OBJECTS + 5;
   }
   sprite->draw(context, position, layer);
 
-  if(fading) {
+  if (fading)
+  {
     context.pop_transform();
   }
 }

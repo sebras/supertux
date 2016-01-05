@@ -21,38 +21,36 @@
 
 #include <assert.h>
 
-IFileStreambuf::IFileStreambuf(const std::string& filename) :
-  file(),
-  buf()
+IFileStreambuf::IFileStreambuf(const std::string& filename) : file(), buf()
 {
   // check this as PHYSFS seems to be buggy and still returns a
   // valid pointer in this case
-  if(filename.empty()) {
+  if (filename.empty())
+  {
     throw std::runtime_error("Couldn't open file: empty filename");
   }
   file = PHYSFS_openRead(filename.c_str());
-  if(file == 0) {
+  if (file == 0)
+  {
     std::stringstream msg;
-    msg << "Couldn't open file '" << filename << "': "
-        << PHYSFS_getLastError();
+    msg << "Couldn't open file '" << filename << "': " << PHYSFS_getLastError();
     throw std::runtime_error(msg.str());
   }
 }
 
-IFileStreambuf::~IFileStreambuf()
-{
-  PHYSFS_close(file);
-}
+IFileStreambuf::~IFileStreambuf() { PHYSFS_close(file); }
 
 int
 IFileStreambuf::underflow()
 {
-  if(PHYSFS_eof(file)) {
+  if (PHYSFS_eof(file))
+  {
     return traits_type::eof();
   }
 
   PHYSFS_sint64 bytesread = PHYSFS_read(file, buf, 1, sizeof(buf));
-  if(bytesread <= 0) {
+  if (bytesread <= 0)
+  {
     return traits_type::eof();
   }
   setg(buf, buf, buf + bytesread);
@@ -63,7 +61,8 @@ IFileStreambuf::underflow()
 IFileStreambuf::pos_type
 IFileStreambuf::seekpos(const pos_type& pos, std::ios_base::openmode)
 {
-  if(PHYSFS_seek(file, static_cast<PHYSFS_uint64> (pos)) == 0) {
+  if (PHYSFS_seek(file, static_cast<PHYSFS_uint64>(pos)) == 0)
+  {
     return pos_type(off_type(-1));
   }
 
@@ -79,23 +78,26 @@ IFileStreambuf::seekoff(off_type off, std::ios_base::seekdir dir,
   off_type pos = off;
   PHYSFS_sint64 ptell = PHYSFS_tell(file);
 
-  switch(dir) {
+  switch (dir)
+  {
     case std::ios_base::beg:
       break;
     case std::ios_base::cur:
-      if(off == 0)
-        return static_cast<pos_type> (ptell) - static_cast<pos_type> (egptr() - gptr());
-      pos += static_cast<off_type> (ptell) - static_cast<off_type> (egptr() - gptr());
+      if (off == 0)
+        return static_cast<pos_type>(ptell) -
+               static_cast<pos_type>(egptr() - gptr());
+      pos += static_cast<off_type>(ptell) -
+             static_cast<off_type>(egptr() - gptr());
       break;
     case std::ios_base::end:
-      pos += static_cast<off_type> (PHYSFS_fileLength(file));
+      pos += static_cast<off_type>(PHYSFS_fileLength(file));
       break;
     default:
       assert(false);
       return pos_type(off_type(-1));
   }
 
-  return seekpos(static_cast<pos_type> (pos), mode);
+  return seekpos(static_cast<pos_type>(pos), mode);
 }
 
 /* EOF */

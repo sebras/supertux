@@ -26,57 +26,67 @@
  */
 class GLTexture : public Texture
 {
-protected:
+ protected:
   GLuint m_handle;
   unsigned int m_texture_width;
   unsigned int m_texture_height;
   unsigned int m_image_width;
   unsigned int m_image_height;
 
-public:
+ public:
   GLTexture(unsigned int width, unsigned int height);
   GLTexture(SDL_Surface* image);
   ~GLTexture();
 
-  const GLuint &get_handle() const {
+  const GLuint&
+  get_handle() const
+  {
     return m_handle;
   }
 
-  void set_handle(GLuint handle) {
+  void
+  set_handle(GLuint handle)
+  {
     m_handle = handle;
   }
 
-  unsigned int get_texture_width() const
+  unsigned int
+  get_texture_width() const
   {
     return m_texture_width;
   }
 
-  unsigned int get_texture_height() const
+  unsigned int
+  get_texture_height() const
   {
     return m_texture_height;
   }
 
-  unsigned int get_image_width() const
+  unsigned int
+  get_image_width() const
   {
     return m_image_width;
   }
 
-  unsigned int get_image_height() const
+  unsigned int
+  get_image_height() const
   {
     return m_image_height;
   }
 
-  void set_image_width(unsigned int width)
+  void
+  set_image_width(unsigned int width)
   {
     m_image_width = width;
   }
 
-  void set_image_height(unsigned int height)
+  void
+  set_image_height(unsigned int height)
   {
     m_image_height = height;
   }
 
-private:
+ private:
   void set_texture_params();
 };
 

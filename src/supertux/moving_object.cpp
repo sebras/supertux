@@ -16,16 +16,11 @@
 
 #include "supertux/moving_object.hpp"
 
-MovingObject::MovingObject() :
-  bbox(),
-  movement(),
-  group(COLGROUP_MOVING),
-  dest()
+MovingObject::MovingObject()
+    : bbox(), movement(), group(COLGROUP_MOVING), dest()
 {
 }
 
-MovingObject::~MovingObject()
-{
-}
+MovingObject::~MovingObject() {}
 
 /* EOF */

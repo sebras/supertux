@@ -41,7 +41,8 @@ static const float TUX_INVINCIBLE_TIME = 14.0f;
 static const float TUX_INVINCIBLE_TIME_WARNING = 2.0f;
 static const float GROWING_TIME = 0.35f;
 static const int GROWING_FRAMES = 7;
-static const float TUX_BACKFLIP_TIME = 2.1f; // minimum air time that backflip results in a loss of control
+static const float TUX_BACKFLIP_TIME =
+    2.1f;  // minimum air time that backflip results in a loss of control
 
 class Camera;
 class PlayerStatus;
@@ -50,13 +51,20 @@ class Player : public MovingObject,
                public scripting::Player,
                public ScriptInterface
 {
-public:
-  enum FallMode { ON_GROUND, JUMPING, TRAMPOLINE_JUMP, FALLING };
-  //Tux can only go this fast. If set to 0 no special limit is used, only the default limits.
+ public:
+  enum FallMode
+  {
+    ON_GROUND,
+    JUMPING,
+    TRAMPOLINE_JUMP,
+    FALLING
+  };
+  // Tux can only go this fast. If set to 0 no special limit is used, only the
+  // default limits.
   void set_speedlimit(float newlimit);
   float get_speedlimit() const;
 
-public:
+ public:
   Player(PlayerStatus* player_status, const std::string& name);
   virtual ~Player();
 
@@ -68,12 +76,14 @@ public:
    * Level solved. Don't kill Tux any more.
    */
   void set_winning();
-  bool is_winning() const
+  bool
+  is_winning() const
   {
     return winning;
   }
 
-  Controller* get_controller() const
+  Controller*
+  get_controller() const
   {
     return controller;
   }
@@ -88,20 +98,24 @@ public:
   virtual void collision_tile(uint32_t tile_attributes);
 
   void make_invincible();
-  bool is_invincible() const
+  bool
+  is_invincible() const
   {
     return invincible_timer.started();
   }
-  bool is_dying() const
+  bool
+  is_dying() const
   {
     return dying;
   }
-  Direction peeking_direction_x() const
+  Direction
+  peeking_direction_x() const
   {
     return peekingX;
   }
 
-  Direction peeking_direction_y() const
+  Direction
+  peeking_direction_y() const
   {
     return peekingY;
   }
@@ -116,10 +130,12 @@ public:
   virtual int get_coins() const;
 
   /**
-   * picks up a bonus, taking care not to pick up lesser bonus items than we already have
+   * picks up a bonus, taking care not to pick up lesser bonus items than we
+   *already have
    *
    * @returns true if the bonus has been set (or was already good enough)
-   *          false if the bonus could not be set (for example no space for big tux)
+   *          false if the bonus could not be set (for example no space for big
+   *tux)
    */
   bool add_bonus(BonusType type, bool animate = false);
   /**
@@ -127,7 +143,8 @@ public:
    */
   bool set_bonus(BonusType type, bool animate = false);
 
-  PlayerStatus* get_status() const
+  PlayerStatus*
+  get_status() const
   {
     return player_status;
   }
@@ -136,7 +153,8 @@ public:
 
   /**
    * play cheer animation.
-   * This might need some space and behave in an unpredictable way. Best to use this at level end.
+   * This might need some space and behave in an unpredictable way. Best to use
+   * this at level end.
    */
   void do_cheer();
 
@@ -158,7 +176,8 @@ public:
 
   /**
    * jump in the air if possible
-   * sensible values for yspeed are negative - unless we want to jump into the ground of course
+   * sensible values for yspeed are negative - unless we want to jump into the
+   * ground of course
    */
   void do_jump(float yspeed);
 
@@ -179,22 +198,30 @@ public:
 
   void bounce(BadGuy& badguy);
 
-  bool is_dead() const
-  { return dead; }
+  bool
+  is_dead() const
+  {
+    return dead;
+  }
   bool is_big() const;
-  bool is_stone() const
-  { return stone; }
+  bool
+  is_stone() const
+  {
+    return stone;
+  }
 
   void set_visible(bool visible);
   bool get_visible() const;
 
   bool on_ground() const;
 
-  Portable* get_grabbed_object() const
+  Portable*
+  get_grabbed_object() const
   {
     return grabbed_object;
   }
-  void stop_grabbing()
+  void
+  stop_grabbing()
   {
     grabbed_object = NULL;
   }
@@ -214,7 +241,11 @@ public:
   /**
    * Returns whether ghost mode is currently enabled
    */
-  bool get_ghost_mode() const { return ghost_mode; }
+  bool
+  get_ghost_mode() const
+  {
+    return ghost_mode;
+  }
 
   /**
    * Changes height of bounding box.
@@ -238,11 +269,15 @@ public:
    */
   void stop_climbing(Climbable& climbable);
 
-  Physic& get_physic() { return physic; }
+  Physic&
+  get_physic()
+  {
+    return physic;
+  }
 
-private:
+ private:
   void handle_input();
-  void handle_input_ghost(); /**< input handling while in ghost mode */
+  void handle_input_ghost();    /**< input handling while in ghost mode */
   void handle_input_climbing(); /**< input handling while climbing */
 
   void init();
@@ -267,34 +302,38 @@ private:
    */
   void apply_friction();
 
-private:
+ private:
   bool deactivated;
 
   Controller* controller;
-  std::unique_ptr<CodeController> scripting_controller; /**< This controller is used when the Player is controlled via scripting */
+  std::unique_ptr<CodeController>
+      scripting_controller; /**< This controller is used when the Player is
+                               controlled via scripting */
   PlayerStatus* player_status;
   bool duck;
   bool dead;
 
-private:
+ private:
   bool dying;
   bool winning;
   bool backflipping;
-  int  backflip_direction;
+  int backflip_direction;
   Direction peekingX;
   Direction peekingY;
   float ability_time;
   bool stone;
   bool swimming;
   float speedlimit;
-  Controller* scripting_controller_old; /**< Saves the old controller while the scripting_controller is used */
+  Controller*
+      scripting_controller_old; /**< Saves the old controller while the
+                                   scripting_controller is used */
   bool jump_early_apex;
   bool on_ice;
   bool ice_this_frame;
   SpritePtr lightsprite;
   SpritePtr powersprite;
 
-public:
+ public:
   Direction dir;
   Direction old_dir;
 
@@ -304,7 +343,9 @@ public:
   bool on_ground_flag;
   bool jumping;
   bool can_jump;
-  Timer jump_button_timer; /**< started when player presses the jump button; runs until Tux jumps or JUMP_GRACE_TIME runs out */
+  Timer jump_button_timer; /**< started when player presses the jump button;
+                              runs until Tux jumps or JUMP_GRACE_TIME runs out
+                              */
   bool wants_buttjump;
   bool does_buttjump;
 
@@ -312,9 +353,10 @@ public:
   Timer skidding_timer;
   Timer safe_timer;
   Timer kick_timer;
-  Timer shooting_timer;   // used to show the arm when Tux is shooting
+  Timer shooting_timer;  // used to show the arm when Tux is shooting
   Timer ability_timer;  // maximum lengh of time that special abilities can last
-  Timer cooldown_timer; // minimum time period between successive uses of a special ability
+  Timer cooldown_timer;  // minimum time period between successive uses of a
+                         // special ability
   Timer dying_timer;
   bool growing;
   Timer backflip_timer;
@@ -327,23 +369,30 @@ public:
 
   SpritePtr sprite; /**< The main sprite representing Tux */
 
-  SurfacePtr airarrow; /**< arrow indicating Tux' position when he's above the camera */
+  SurfacePtr airarrow; /**< arrow indicating Tux' position when he's above the
+                          camera */
 
   Vector floor_normal;
   void position_grabbed_object();
   void try_grab();
 
-  bool ghost_mode; /**< indicates if Tux should float around and through solid objects */
-  bool edit_mode; /**< indicates if Tux should switch to ghost mode rather than dying */
+  bool ghost_mode; /**< indicates if Tux should float around and through solid
+                      objects */
+  bool
+      edit_mode; /**< indicates if Tux should switch to ghost mode rather than
+                    dying */
 
-  Timer unduck_hurt_timer; /**< if Tux wants to stand up again after ducking and cannot, this timer is started */
+  Timer
+      unduck_hurt_timer; /**< if Tux wants to stand up again after ducking and
+                            cannot, this timer is started */
 
   Timer idle_timer;
   unsigned int idle_stage;
 
-  Climbable* climbing; /**< Climbable object we are currently climbing, null if none */
+  Climbable*
+      climbing; /**< Climbable object we are currently climbing, null if none */
 
-private:
+ private:
   Player(const Player&);
   Player& operator=(const Player&);
 };

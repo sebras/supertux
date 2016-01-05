@@ -1,5 +1,6 @@
 //  SuperTux - Wind
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,10 +27,9 @@ class Player;
 /**
  * Defines an area that will gently push Players in one direction
  */
-class Wind : public MovingObject,
-             public ScriptInterface
+class Wind : public MovingObject, public ScriptInterface
 {
-public:
+ public:
   Wind(const ReaderMapping& reader);
 
   void update(float elapsed_time);
@@ -58,7 +58,7 @@ public:
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
   virtual void unexpose(HSQUIRRELVM vm, SQInteger table_idx);
 
-private:
+ private:
   bool blowing; /**< true if wind is currently switched on */
   Vector speed;
   float acceleration;

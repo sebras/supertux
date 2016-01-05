@@ -25,8 +25,8 @@
 #define __custom(x)
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 /**
  * Display the value of the argument. This is useful for inspecting tables.
  */
@@ -223,7 +223,7 @@ void record_demo(const std::string& filename);
  */
 void play_demo(const std::string& filename);
 
-} // namespace scripting
+}  // namespace scripting
 
 #endif
 

@@ -31,34 +31,36 @@
 #include "video/util.hpp"
 
 #ifdef USE_GLBINDING
-#  include <glbinding/Binding.h>
-#  include <glbinding/ContextInfo.h>
-#  include <glbinding/gl/extension.h>
-#  include <glbinding/callbacks.h>
+#include <glbinding/Binding.h>
+#include <glbinding/ContextInfo.h>
+#include <glbinding/gl/extension.h>
+#include <glbinding/callbacks.h>
 #endif
 
 #define LIGHTMAP_DIV 5
 
 #ifdef GL_VERSION_ES_CM_1_0
-#  define glOrtho glOrthof
+#define glOrtho glOrthof
 #endif
 
-GLRenderer::GLRenderer() :
-  m_window(),
-  m_glcontext(),
-  m_viewport(),
-  m_desktop_size(0, 0),
-  m_fullscreen_active(false)
+GLRenderer::GLRenderer()
+    : m_window(),
+      m_glcontext(),
+      m_viewport(),
+      m_desktop_size(0, 0),
+      m_fullscreen_active(false)
 {
   SDL_DisplayMode mode;
   SDL_GetCurrentDisplayMode(0, &mode);
   m_desktop_size = Size(mode.w, mode.h);
 
-  if(g_config->try_vsync) {
+  if (g_config->try_vsync)
+  {
     /* we want vsync for smooth scrolling */
     if (SDL_GL_SetSwapInterval(-1) != 0)
     {
-      log_info << "no support for late swap tearing vsync: " << SDL_GetError() << std::endl;
+      log_info << "no support for late swap tearing vsync: " << SDL_GetError()
+               << std::endl;
       if (SDL_GL_SetSwapInterval(1))
       {
         log_info << "no support for vsync: " << SDL_GetError() << std::endl;
@@ -68,9 +70,9 @@ GLRenderer::GLRenderer() :
 
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-  SDL_GL_SetAttribute(SDL_GL_RED_SIZE,   5);
+  SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,  5);
+  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
 
   apply_video_mode();
 
@@ -79,32 +81,38 @@ GLRenderer::GLRenderer() :
   glbinding::Binding::initialize();
 
 #ifdef USE_GLBINDING_DEBUG_OUTPUT
-  glbinding::setCallbackMask(glbinding::CallbackMask::After | glbinding::CallbackMask::ParametersAndReturnValue);
+  glbinding::setCallbackMask(glbinding::CallbackMask::After |
+                             glbinding::CallbackMask::ParametersAndReturnValue);
 
-  glbinding::setAfterCallback([](const glbinding::FunctionCall & call) {
-    std::cout << call.function.name() << "(";
+  glbinding::setAfterCallback(
+      [](const glbinding::FunctionCall& call)
+      {
+        std::cout << call.function.name() << "(";
 
-    for (unsigned i = 0; i < call.parameters.size(); ++i)
-    {
-      std::cout << call.parameters[i]->asString();
-      if (i < call.parameters.size() - 1)
-        std::cout << ", ";
-    }
+        for (unsigned i = 0; i < call.parameters.size(); ++i)
+        {
+          std::cout << call.parameters[i]->asString();
+          if (i < call.parameters.size() - 1) std::cout << ", ";
+        }
 
-      std::cout << ")";
+        std::cout << ")";
 
-    if (call.returnValue)
-    {
-      std::cout << " -> " << call.returnValue->asString();
-    }
+        if (call.returnValue)
+        {
+          std::cout << " -> " << call.returnValue->asString();
+        }
 
-    std::cout << std::endl;
-  });
+        std::cout << std::endl;
+      });
 #endif
 
   static auto extensions = glbinding::ContextInfo::extensions();
   log_info << "Using glbinding" << std::endl;
-  log_info << "ARB_texture_non_power_of_two: " << static_cast<int>(extensions.find(GLextension::GL_ARB_texture_non_power_of_two) != extensions.end()) << std::endl;
+  log_info << "ARB_texture_non_power_of_two: "
+           << static_cast<int>(
+                  extensions.find(
+                      GLextension::GL_ARB_texture_non_power_of_two) !=
+                  extensions.end()) << std::endl;
 
 #endif
 
@@ -121,7 +129,7 @@ GLRenderer::GLRenderer() :
   apply_config();
 
 #ifndef GL_VERSION_ES_CM_1_0
-  #ifndef USE_GLBINDING
+#ifndef USE_GLBINDING
   GLenum err = glewInit();
   if (GLEW_OK != err)
   {
@@ -130,8 +138,9 @@ GLRenderer::GLRenderer() :
     throw std::runtime_error(out.str());
   }
   log_info << "Using GLEW " << glewGetString(GLEW_VERSION) << std::endl;
-  log_info << "GLEW_ARB_texture_non_power_of_two: " << static_cast<int>(GLEW_ARB_texture_non_power_of_two) << std::endl;
-#  endif
+  log_info << "GLEW_ARB_texture_non_power_of_two: "
+           << static_cast<int>(GLEW_ARB_texture_non_power_of_two) << std::endl;
+#endif
 #endif
 }
 
@@ -144,40 +153,48 @@ GLRenderer::~GLRenderer()
 void
 GLRenderer::do_take_screenshot()
 {
-  // [Christoph] TODO: Yes, this method also takes care of the actual disk I/O. Split it?
+  // [Christoph] TODO: Yes, this method also takes care of the actual disk I/O.
+  // Split it?
 
-  SDL_Surface *shot_surf;
-  // create surface to hold screenshot
+  SDL_Surface* shot_surf;
+// create surface to hold screenshot
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  shot_surf = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 24, 0x00FF0000, 0x0000FF00, 0x000000FF, 0);
+  shot_surf = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 24,
+                                   0x00FF0000, 0x0000FF00, 0x000000FF, 0);
 #else
-  shot_surf = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0);
+  shot_surf = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 24,
+                                   0x000000FF, 0x0000FF00, 0x00FF0000, 0);
 #endif
-  if (!shot_surf) {
-    log_warning << "Could not create RGB Surface to contain screenshot" << std::endl;
+  if (!shot_surf)
+  {
+    log_warning << "Could not create RGB Surface to contain screenshot"
+                << std::endl;
     return;
   }
 
   // read pixels into array
   char* pixels = new char[3 * SCREEN_WIDTH * SCREEN_HEIGHT];
-  if (!pixels) {
+  if (!pixels)
+  {
     log_warning << "Could not allocate memory to store screenshot" << std::endl;
     SDL_FreeSurface(shot_surf);
     return;
   }
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
-  glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+  glReadPixels(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE,
+               pixels);
 
   // copy array line-by-line
-  for (int i = 0; i < SCREEN_HEIGHT; i++) {
+  for (int i = 0; i < SCREEN_HEIGHT; i++)
+  {
     char* src = pixels + (3 * SCREEN_WIDTH * (SCREEN_HEIGHT - i - 1));
-    if(SDL_MUSTLOCK(shot_surf))
+    if (SDL_MUSTLOCK(shot_surf))
     {
       SDL_LockSurface(shot_surf);
     }
     char* dst = ((char*)shot_surf->pixels) + i * shot_surf->pitch;
     memcpy(dst, src, 3 * SCREEN_WIDTH);
-    if(SDL_MUSTLOCK(shot_surf))
+    if (SDL_MUSTLOCK(shot_surf))
     {
       SDL_UnlockSurface(shot_surf);
     }
@@ -192,21 +209,24 @@ GLRenderer::do_take_screenshot()
   static const std::string baseName = "screenshot";
   static const std::string fileExt = ".bmp";
   std::string fullFilename;
-  for (int num = 0; num < 1000; num++) {
+  for (int num = 0; num < 1000; num++)
+  {
     std::ostringstream oss;
     oss << baseName;
     oss << std::setw(3) << std::setfill('0') << num;
     oss << fileExt;
     std::string fileName = oss.str();
     fullFilename = writeDir + dirSep + fileName;
-    if (!PHYSFS_exists(fileName.c_str())) {
+    if (!PHYSFS_exists(fileName.c_str()))
+    {
       SDL_SaveBMP(shot_surf, fullFilename.c_str());
       log_info << "Wrote screenshot to \"" << fullFilename << "\"" << std::endl;
       SDL_FreeSurface(shot_surf);
       return;
     }
   }
-  log_warning << "Did not save screenshot, because all files up to \"" << fullFilename << "\" already existed" << std::endl;
+  log_warning << "Did not save screenshot, because all files up to \""
+              << fullFilename << "\" already existed" << std::endl;
   SDL_FreeSurface(shot_surf);
 }
 
@@ -230,20 +250,22 @@ GLRenderer::apply_config()
 {
   apply_video_mode();
 
-  Size target_size = g_config->use_fullscreen ?
-    ((g_config->fullscreen_size == Size(0, 0)) ? m_desktop_size : g_config->fullscreen_size) :
-    g_config->window_size;
+  Size target_size = g_config->use_fullscreen
+                         ? ((g_config->fullscreen_size == Size(0, 0))
+                                ? m_desktop_size
+                                : g_config->fullscreen_size)
+                         : g_config->window_size;
 
   float pixel_aspect_ratio = 1.0f;
   if (g_config->aspect_size != Size(0, 0))
   {
-    pixel_aspect_ratio = calculate_pixel_aspect_ratio(m_desktop_size,
-                                                      g_config->aspect_size);
+    pixel_aspect_ratio =
+        calculate_pixel_aspect_ratio(m_desktop_size, g_config->aspect_size);
   }
   else if (g_config->use_fullscreen)
   {
-    pixel_aspect_ratio = calculate_pixel_aspect_ratio(m_desktop_size,
-                                                      target_size);
+    pixel_aspect_ratio =
+        calculate_pixel_aspect_ratio(m_desktop_size, target_size);
   }
 
   Size max_size(1280, 800);
@@ -251,12 +273,8 @@ GLRenderer::apply_config()
 
   Vector scale;
   Size logical_size;
-  calculate_viewport(min_size, max_size, target_size,
-                     pixel_aspect_ratio,
-                     g_config->magnification,
-                     scale,
-                     logical_size,
-                     m_viewport);
+  calculate_viewport(min_size, max_size, target_size, pixel_aspect_ratio,
+                     g_config->magnification, scale, logical_size, m_viewport);
 
   SCREEN_WIDTH = logical_size.width;
   SCREEN_HEIGHT = logical_size.height;
@@ -297,7 +315,8 @@ GLRenderer::apply_video_mode()
       if (g_config->fullscreen_size.width == 0 &&
           g_config->fullscreen_size.height == 0)
       {
-        if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP) != 0)
+        if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP) !=
+            0)
         {
           log_warning << "failed to switch to desktop fullscreen mode: "
                       << SDL_GetError() << std::endl;
@@ -318,22 +337,22 @@ GLRenderer::apply_video_mode()
 
         if (SDL_SetWindowDisplayMode(m_window, &mode) != 0)
         {
-          log_warning << "failed to set display mode: "
-                      << mode.w << "x" << mode.h << "@" << mode.refresh_rate << ": "
+          log_warning << "failed to set display mode: " << mode.w << "x"
+                      << mode.h << "@" << mode.refresh_rate << ": "
                       << SDL_GetError() << std::endl;
         }
         else
         {
           if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN) != 0)
           {
-            log_warning << "failed to switch to fullscreen mode: "
-                        << mode.w << "x" << mode.h << "@" << mode.refresh_rate << ": "
+            log_warning << "failed to switch to fullscreen mode: " << mode.w
+                        << "x" << mode.h << "@" << mode.refresh_rate << ": "
                         << SDL_GetError() << std::endl;
           }
           else
           {
-            log_info << "switched to fullscreen mode: "
-                     << mode.w << "x" << mode.h << "@" << mode.refresh_rate << std::endl;
+            log_info << "switched to fullscreen mode: " << mode.w << "x"
+                     << mode.h << "@" << mode.refresh_rate << std::endl;
           }
         }
       }
@@ -353,7 +372,7 @@ GLRenderer::apply_video_mode()
       else
       {
         flags |= SDL_WINDOW_FULLSCREEN;
-        size.width  = g_config->fullscreen_size.width;
+        size.width = g_config->fullscreen_size.width;
         size.height = g_config->fullscreen_size.height;
       }
     }
@@ -362,14 +381,14 @@ GLRenderer::apply_video_mode()
       size = g_config->window_size;
     }
 
-    m_window = SDL_CreateWindow("SuperTux",
-                              SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              size.width, size.height,
-                              flags);
+    m_window = SDL_CreateWindow("SuperTux", SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED, size.width,
+                                size.height, flags);
     if (!m_window)
     {
       std::ostringstream msg;
-      msg << "Couldn't set video mode " << size.width << "x" << size.height << ": " << SDL_GetError();
+      msg << "Couldn't set video mode " << size.width << "x" << size.height
+          << ": " << SDL_GetError();
       throw std::runtime_error(msg.str());
     }
     else
@@ -427,8 +446,10 @@ GLRenderer::draw_inverse_ellipse(const DrawingRequest& request)
 Vector
 GLRenderer::to_logical(int physical_x, int physical_y)
 {
-  return Vector(static_cast<float>(physical_x - m_viewport.x) * SCREEN_WIDTH / m_viewport.w,
-                static_cast<float>(physical_y - m_viewport.y) * SCREEN_HEIGHT / m_viewport.h);
+  return Vector(static_cast<float>(physical_x - m_viewport.x) * SCREEN_WIDTH /
+                    m_viewport.w,
+                static_cast<float>(physical_y - m_viewport.y) * SCREEN_HEIGHT /
+                    m_viewport.h);
 }
 
 void

@@ -21,7 +21,7 @@
 
 class Ghostflame : public BadGuy
 {
-public:
+ public:
   Ghostflame(const ReaderMapping& reader);
   Ghostflame(const Ghostflame& ghostflame);
 
@@ -30,13 +30,12 @@ public:
   void kill_fall();
   bool is_flammable() const;
 
-private:
+ private:
   float angle;
   float radius;
   float speed;
   Color light;
   SpritePtr lightsprite;
-
 };
 
 #endif

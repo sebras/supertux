@@ -26,14 +26,14 @@
 
 class GLRenderer : public Renderer
 {
-private:
+ private:
   SDL_Window* m_window;
   SDL_GLContext m_glcontext;
   SDL_Rect m_viewport;
   Size m_desktop_size;
   bool m_fullscreen_active;
 
-public:
+ public:
   GLRenderer();
   ~GLRenderer();
 
@@ -51,12 +51,16 @@ public:
   Vector to_logical(int physical_x, int physical_y) override;
   void set_gamma(float gamma) override;
 
-  SDL_Window* get_window() const override { return m_window; }
+  SDL_Window*
+  get_window() const override
+  {
+    return m_window;
+  }
 
-private:
+ private:
   void apply_video_mode();
 
-private:
+ private:
   GLRenderer(const GLRenderer&) = delete;
   GLRenderer& operator=(const GLRenderer&) = delete;
 };

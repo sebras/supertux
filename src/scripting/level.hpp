@@ -17,8 +17,8 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_LEVEL_HPP
 #define HEADER_SUPERTUX_SCRIPTING_LEVEL_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 /** Instantly finish the currently played level */
 void Level_finish(bool win);
 /** spawn tux at specified sector and spawnpoint */

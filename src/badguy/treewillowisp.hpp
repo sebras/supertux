@@ -24,7 +24,7 @@ class SoundSource;
 
 class TreeWillOWisp : public BadGuy
 {
-public:
+ public:
   TreeWillOWisp(GhostTree* tree, const Vector& pos, float radius, float speed);
   virtual ~TreeWillOWisp();
 
@@ -40,25 +40,40 @@ public:
   void set_color(const Color& color);
   Color get_color() const;
 
-  virtual bool is_flammable() const { return false; }
-  virtual bool is_freezable() const { return false; }
-  virtual void kill_fall() { vanish(); }
+  virtual bool
+  is_flammable() const
+  {
+    return false;
+  }
+  virtual bool
+  is_freezable() const
+  {
+    return false;
+  }
+  virtual void
+  kill_fall()
+  {
+    vanish();
+  }
 
   virtual void draw(DrawingContext& context);
 
-protected:
+ protected:
   virtual bool collides(GameObject& other, const CollisionHit& hit) const;
   HitResponse collision_player(Player& player, const CollisionHit& hit);
 
-private:
-  enum MyState {
-    STATE_DEFAULT, STATE_VANISHING, STATE_SUCKED
+ private:
+  enum MyState
+  {
+    STATE_DEFAULT,
+    STATE_VANISHING,
+    STATE_SUCKED
   };
 
-public:
+ public:
   bool was_sucked;
 
-private:
+ private:
   MyState mystate;
 
   Color color;
@@ -71,7 +86,7 @@ private:
 
   Vector suck_target;
 
-private:
+ private:
   TreeWillOWisp(const TreeWillOWisp&);
   TreeWillOWisp& operator=(const TreeWillOWisp&);
 };

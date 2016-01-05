@@ -23,7 +23,7 @@
 
 class GrowUp : public MovingSprite
 {
-public:
+ public:
   GrowUp(Direction direction = RIGHT);
 
   virtual void update(float elapsed_time);
@@ -32,7 +32,7 @@ public:
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
   void do_jump();
 
-private:
+ private:
   Physic physic;
   Color light;
   SpritePtr shadesprite;

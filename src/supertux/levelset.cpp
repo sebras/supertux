@@ -22,20 +22,19 @@
 #include "util/log.hpp"
 #include "util/string_util.hpp"
 
-Levelset::Levelset(const std::string& basedir) :
-  m_basedir(basedir),
-  m_levels()
+Levelset::Levelset(const std::string& basedir) : m_basedir(basedir), m_levels()
 {
   char** files = PHYSFS_enumerateFiles(m_basedir.c_str());
   if (!files)
   {
-    log_warning << "Couldn't read subset dir '" << m_basedir << "'" << std::endl;
+    log_warning << "Couldn't read subset dir '" << m_basedir << "'"
+                << std::endl;
     return;
   }
 
-  for(const char* const* filename = files; *filename != 0; ++filename)
+  for (const char* const* filename = files; *filename != 0; ++filename)
   {
-    if(StringUtil::has_suffix(*filename, ".stl"))
+    if (StringUtil::has_suffix(*filename, ".stl"))
     {
       m_levels.push_back(*filename);
     }

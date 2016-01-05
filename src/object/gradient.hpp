@@ -25,27 +25,36 @@ class DisplayManager;
 
 class Gradient : public GameObject
 {
-public:
+ public:
   Gradient();
   Gradient(const ReaderMapping& reader);
   virtual ~Gradient();
 
   void set_gradient(Color top, Color bottom);
 
-  Color get_gradient_top() const
-  { return gradient_top; }
+  Color
+  get_gradient_top() const
+  {
+    return gradient_top;
+  }
 
-  Color get_gradient_bottom() const
-  { return gradient_bottom; }
+  Color
+  get_gradient_bottom() const
+  {
+    return gradient_bottom;
+  }
 
-  GradientDirection get_gradient_direction() const
-  { return gradient_direction; }
+  GradientDirection
+  get_gradient_direction() const
+  {
+    return gradient_direction;
+  }
 
   virtual void update(float elapsed_time);
 
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   int layer;
   Color gradient_top;
   Color gradient_bottom;

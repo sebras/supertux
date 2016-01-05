@@ -19,10 +19,11 @@
 
 class Controller
 {
-public:
+ public:
   static const char* controlNames[];
 
-  enum Control {
+  enum Control
+  {
     LEFT = 0,
     RIGHT,
     UP,
@@ -61,7 +62,7 @@ public:
   virtual void reset();
   virtual void update();
 
-protected:
+ protected:
   /** current control status */
   bool controls[CONTROLCOUNT];
   /** control status at last frame */

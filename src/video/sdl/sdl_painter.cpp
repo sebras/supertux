@@ -22,12 +22,12 @@
 #include "video/drawing_request.hpp"
 #include "video/sdl/sdl_texture.hpp"
 
-namespace {
-
-SDL_BlendMode blend2sdl(const Blend& blend)
+namespace
 {
-  if (blend.sfactor == GL_ONE &&
-      blend.dfactor == GL_ZERO)
+SDL_BlendMode
+blend2sdl(const Blend& blend)
+{
+  if (blend.sfactor == GL_ONE && blend.dfactor == GL_ZERO)
   {
     return SDL_BLENDMODE_NONE;
   }
@@ -36,30 +36,31 @@ SDL_BlendMode blend2sdl(const Blend& blend)
   {
     return SDL_BLENDMODE_BLEND;
   }
-  else if (blend.sfactor == GL_SRC_ALPHA &&
-           blend.dfactor == GL_ONE)
+  else if (blend.sfactor == GL_SRC_ALPHA && blend.dfactor == GL_ONE)
   {
     return SDL_BLENDMODE_ADD;
   }
-  else if (blend.sfactor == GL_DST_COLOR &&
-           blend.dfactor == GL_ZERO)
+  else if (blend.sfactor == GL_DST_COLOR && blend.dfactor == GL_ZERO)
   {
     return SDL_BLENDMODE_MOD;
   }
   else
   {
-    log_warning << "unknown blend mode combinations: sfactor=" << blend.sfactor << " dfactor=" << blend.dfactor << std::endl;
+    log_warning << "unknown blend mode combinations: sfactor=" << blend.sfactor
+                << " dfactor=" << blend.dfactor << std::endl;
     return SDL_BLENDMODE_BLEND;
   }
 }
 
-} // namespace
+}  // namespace
 
 void
 SDLPainter::draw_surface(SDL_Renderer* renderer, const DrawingRequest& request)
 {
-  const Surface* surface = static_cast<const SurfaceRequest*>(request.request_data)->surface;
-  std::shared_ptr<SDLTexture> sdltexture = std::dynamic_pointer_cast<SDLTexture>(surface->get_texture());
+  const Surface* surface =
+      static_cast<const SurfaceRequest*>(request.request_data)->surface;
+  std::shared_ptr<SDLTexture> sdltexture =
+      std::dynamic_pointer_cast<SDLTexture>(surface->get_texture());
 
   SDL_Rect dst_rect;
   dst_rect.x = request.pos.x;
@@ -86,17 +87,22 @@ SDLPainter::draw_surface(SDL_Renderer* renderer, const DrawingRequest& request)
     flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);
   }
 
-  SDL_RenderCopyEx(renderer, sdltexture->get_texture(), NULL, &dst_rect, request.angle, NULL, flip);
+  SDL_RenderCopyEx(renderer, sdltexture->get_texture(), NULL, &dst_rect,
+                   request.angle, NULL, flip);
 }
 
 void
-SDLPainter::draw_surface_part(SDL_Renderer* renderer, const DrawingRequest& request)
+SDLPainter::draw_surface_part(SDL_Renderer* renderer,
+                              const DrawingRequest& request)
 {
-  //FIXME: support parameters request.blend
-  const SurfacePartRequest* surface = static_cast<const SurfacePartRequest*>(request.request_data);
-  const SurfacePartRequest* surfacepartrequest = static_cast<SurfacePartRequest*>(request.request_data);
+  // FIXME: support parameters request.blend
+  const SurfacePartRequest* surface =
+      static_cast<const SurfacePartRequest*>(request.request_data);
+  const SurfacePartRequest* surfacepartrequest =
+      static_cast<SurfacePartRequest*>(request.request_data);
 
-  std::shared_ptr<SDLTexture> sdltexture = std::dynamic_pointer_cast<SDLTexture>(surface->surface->get_texture());
+  std::shared_ptr<SDLTexture> sdltexture =
+      std::dynamic_pointer_cast<SDLTexture>(surface->surface->get_texture());
 
   SDL_Rect src_rect;
   src_rect.x = surfacepartrequest->srcrect.p1.x;
@@ -129,14 +135,15 @@ SDLPainter::draw_surface_part(SDL_Renderer* renderer, const DrawingRequest& requ
     flip = static_cast<SDL_RendererFlip>(flip | SDL_FLIP_VERTICAL);
   }
 
-  SDL_RenderCopyEx(renderer, sdltexture->get_texture(), &src_rect, &dst_rect, request.angle, NULL, flip);
+  SDL_RenderCopyEx(renderer, sdltexture->get_texture(), &src_rect, &dst_rect,
+                   request.angle, NULL, flip);
 }
 
 void
 SDLPainter::draw_gradient(SDL_Renderer* renderer, const DrawingRequest& request)
 {
-  const GradientRequest* gradientrequest
-    = static_cast<GradientRequest*>(request.request_data);
+  const GradientRequest* gradientrequest =
+      static_cast<GradientRequest*>(request.request_data);
   const Color& top = gradientrequest->top;
   const Color& bottom = gradientrequest->bottom;
   const GradientDirection& direction = gradientrequest->direction;
@@ -146,43 +153,52 @@ SDLPainter::draw_gradient(SDL_Renderer* renderer, const DrawingRequest& request)
   int n = static_cast<int>(std::max(std::max(fabsf(top.red - bottom.red),
                                              fabsf(top.green - bottom.green)),
                                     std::max(fabsf(top.blue - bottom.blue),
-                                             fabsf(top.alpha - bottom.alpha))) * 255);
+                                             fabsf(top.alpha - bottom.alpha))) *
+                           255);
   n = std::max(n, 1);
-  for(int i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
   {
     SDL_Rect rect;
-    if(direction == VERTICAL || direction == VERTICAL_SECTOR)
+    if (direction == VERTICAL || direction == VERTICAL_SECTOR)
     {
       rect.x = region.p1.x;
       rect.y = region.p2.y * i / n;
       rect.w = region.p2.x;
-      rect.h = (region.p2.y * (i+1) / n) - rect.y;
+      rect.h = (region.p2.y * (i + 1) / n) - rect.y;
     }
     else
     {
       rect.x = region.p2.x * i / n;
       rect.y = region.p1.y;
-      rect.w = (region.p2.x * (i+1) / n) - rect.x;
+      rect.w = (region.p2.x * (i + 1) / n) - rect.x;
       rect.h = region.p2.y;
     }
 
-    float p = static_cast<float>(i+1) / static_cast<float>(n);
+    float p = static_cast<float>(i + 1) / static_cast<float>(n);
     Uint8 r, g, b, a;
 
-    if( direction == HORIZONTAL_SECTOR || direction == VERTICAL_SECTOR)
+    if (direction == HORIZONTAL_SECTOR || direction == VERTICAL_SECTOR)
     {
-        float begin_percentage = region.p1.x * -1 / region.p2.x;
-        r = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.red + (p + begin_percentage) * bottom.red)  * 255);
-        g = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.green + (p + begin_percentage) * bottom.green) * 255);
-        b = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.blue + (p + begin_percentage) * bottom.blue) * 255);
-        a = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.alpha + (p + begin_percentage) * bottom.alpha) * 255);
+      float begin_percentage = region.p1.x * -1 / region.p2.x;
+      r = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.red +
+                              (p + begin_percentage) * bottom.red) *
+                             255);
+      g = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.green +
+                              (p + begin_percentage) * bottom.green) *
+                             255);
+      b = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.blue +
+                              (p + begin_percentage) * bottom.blue) *
+                             255);
+      a = static_cast<Uint8>(((1.0f - begin_percentage - p) * top.alpha +
+                              (p + begin_percentage) * bottom.alpha) *
+                             255);
     }
     else
     {
-        r = static_cast<Uint8>(((1.0f - p) * top.red + p * bottom.red)  * 255);
-        g = static_cast<Uint8>(((1.0f - p) * top.green + p * bottom.green) * 255);
-        b = static_cast<Uint8>(((1.0f - p) * top.blue + p * bottom.blue) * 255);
-        a = static_cast<Uint8>(((1.0f - p) * top.alpha + p * bottom.alpha) * 255);
+      r = static_cast<Uint8>(((1.0f - p) * top.red + p * bottom.red) * 255);
+      g = static_cast<Uint8>(((1.0f - p) * top.green + p * bottom.green) * 255);
+      b = static_cast<Uint8>(((1.0f - p) * top.blue + p * bottom.blue) * 255);
+      a = static_cast<Uint8>(((1.0f - p) * top.alpha + p * bottom.alpha) * 255);
     }
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -192,10 +208,11 @@ SDLPainter::draw_gradient(SDL_Renderer* renderer, const DrawingRequest& request)
 }
 
 void
-SDLPainter::draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& request)
+SDLPainter::draw_filled_rect(SDL_Renderer* renderer,
+                             const DrawingRequest& request)
 {
-  const FillRectRequest* fillrectrequest
-    = static_cast<FillRectRequest*>(request.request_data);
+  const FillRectRequest* fillrectrequest =
+      static_cast<FillRectRequest*>(request.request_data);
 
   SDL_Rect rect;
   rect.x = request.pos.x;
@@ -217,23 +234,23 @@ SDLPainter::draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& reque
 
     // rounded top and bottom parts
     std::vector<SDL_Rect> rects;
-    rects.reserve(2*slices + 1);
-    for(int i = 0; i < slices; ++i)
+    rects.reserve(2 * slices + 1);
+    for (int i = 0; i < slices; ++i)
     {
       float p = (static_cast<float>(i) + 0.5f) / static_cast<float>(slices);
-      int xoff = radius - static_cast<int>(sqrtf(1.0f - p*p) * radius);
+      int xoff = radius - static_cast<int>(sqrtf(1.0f - p * p) * radius);
 
       SDL_Rect tmp;
       tmp.x = rect.x + xoff;
       tmp.y = rect.y + (radius - i);
-      tmp.w = rect.w - 2*(xoff);
+      tmp.w = rect.w - 2 * (xoff);
       tmp.h = 1;
       rects.push_back(tmp);
 
       SDL_Rect tmp2;
       tmp2.x = rect.x + xoff;
       tmp2.y = rect.y + rect.h - radius + i;
-      tmp2.w = rect.w - 2*xoff;
+      tmp2.w = rect.w - 2 * xoff;
       tmp2.h = 1;
 
       if (tmp2.y != tmp.y)
@@ -242,14 +259,14 @@ SDLPainter::draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& reque
       }
     }
 
-    if (2*radius < rect.h)
+    if (2 * radius < rect.h)
     {
       // center rectangle
       SDL_Rect tmp;
       tmp.x = rect.x;
       tmp.y = rect.y + radius + 1;
       tmp.w = rect.w;
-      tmp.h = rect.h - 2*radius - 1;
+      tmp.h = rect.h - 2 * radius - 1;
       rects.push_back(tmp);
     }
 
@@ -259,7 +276,7 @@ SDLPainter::draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& reque
   }
   else
   {
-    if((rect.w != 0) && (rect.h != 0))
+    if ((rect.w != 0) && (rect.h != 0))
     {
       SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
       SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -269,9 +286,11 @@ SDLPainter::draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& reque
 }
 
 void
-SDLPainter::draw_inverse_ellipse(SDL_Renderer* renderer, const DrawingRequest& request)
+SDLPainter::draw_inverse_ellipse(SDL_Renderer* renderer,
+                                 const DrawingRequest& request)
 {
-  const InverseEllipseRequest* ellipse = static_cast<InverseEllipseRequest*>(request.request_data);
+  const InverseEllipseRequest* ellipse =
+      static_cast<InverseEllipseRequest*>(request.request_data);
 
   float x = request.pos.x;
   float w = ellipse->size.x;
@@ -280,20 +299,22 @@ SDLPainter::draw_inverse_ellipse(SDL_Renderer* renderer, const DrawingRequest& r
   int top = request.pos.y - (h / 2);
 
   const int max_slices = 256;
-  SDL_Rect rects[2*max_slices+2];
+  SDL_Rect rects[2 * max_slices + 2];
   int slices = std::min(static_cast<int>(ellipse->size.y), max_slices);
-  for(int i = 0; i < slices; ++i)
+  for (int i = 0; i < slices; ++i)
   {
-    float p = ((static_cast<float>(i) + 0.5f) / static_cast<float>(slices)) * 2.0f - 1.0f;
-    int xoff = static_cast<int>(sqrtf(1.0f - p*p) * w / 2);
+    float p =
+        ((static_cast<float>(i) + 0.5f) / static_cast<float>(slices)) * 2.0f -
+        1.0f;
+    int xoff = static_cast<int>(sqrtf(1.0f - p * p) * w / 2);
 
-    SDL_Rect& left  = rects[2*i+0];
-    SDL_Rect& right = rects[2*i+1];
+    SDL_Rect& left = rects[2 * i + 0];
+    SDL_Rect& right = rects[2 * i + 1];
 
     left.x = 0;
     left.y = top + (i * h / slices);
     left.w = x - xoff;
-    left.h = (top + ((i+1) * h / slices)) - left.y;
+    left.h = (top + ((i + 1) * h / slices)) - left.y;
 
     right.x = x + xoff;
     right.y = left.y;
@@ -301,8 +322,8 @@ SDLPainter::draw_inverse_ellipse(SDL_Renderer* renderer, const DrawingRequest& r
     right.h = left.h;
   }
 
-  SDL_Rect& top_rect = rects[2*slices+0];
-  SDL_Rect& bottom_rect = rects[2*slices+1];
+  SDL_Rect& top_rect = rects[2 * slices + 0];
+  SDL_Rect& bottom_rect = rects[2 * slices + 1];
 
   top_rect.x = 0;
   top_rect.y = 0;
@@ -321,7 +342,7 @@ SDLPainter::draw_inverse_ellipse(SDL_Renderer* renderer, const DrawingRequest& r
 
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   SDL_SetRenderDrawColor(renderer, r, g, b, a);
-  SDL_RenderFillRects(renderer, rects, 2*slices+2);
+  SDL_RenderFillRects(renderer, rects, 2 * slices + 2);
 }
 
 /* EOF */

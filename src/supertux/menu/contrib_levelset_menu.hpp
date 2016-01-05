@@ -24,16 +24,16 @@ class World;
 
 class ContribLevelsetMenu : public Menu
 {
-private:
+ private:
   std::unique_ptr<World> m_world;
   std::unique_ptr<Levelset> m_levelset;
 
-public:
+ public:
   ContribLevelsetMenu(std::unique_ptr<World> current_world);
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   ContribLevelsetMenu(const ContribLevelsetMenu&);
   ContribLevelsetMenu& operator=(const ContribLevelsetMenu&);
 };

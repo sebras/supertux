@@ -21,7 +21,7 @@
 
 class LiveFire : public WalkingBadguy
 {
-public:
+ public:
   LiveFire(const ReaderMapping& reader);
 
   void collision_solid(const CollisionHit& hit);
@@ -35,12 +35,13 @@ public:
 
   virtual void kill_fall();
 
-private:
+ private:
   SpritePtr lightsprite;
   std::string death_sound;
 
-protected:
-  enum SState {
+ protected:
+  enum SState
+  {
     STATE_SLEEPING,
     STATE_WAKING,
     STATE_WALKING,
@@ -51,7 +52,7 @@ protected:
 
 class LiveFireAsleep : public LiveFire
 {
-public:
+ public:
   LiveFireAsleep(const ReaderMapping& reader);
 
   void initialize();
@@ -59,7 +60,7 @@ public:
 
 class LiveFireDormant : public LiveFire
 {
-public:
+ public:
   LiveFireDormant(const ReaderMapping& reader);
 
   void initialize();

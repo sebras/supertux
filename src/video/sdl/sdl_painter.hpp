@@ -22,14 +22,19 @@
 
 class SDLPainter
 {
-public:
-  static void draw_surface(SDL_Renderer* renderer, const DrawingRequest& request);
-  static void draw_surface_part(SDL_Renderer* renderer, const DrawingRequest& request);
-  static void draw_gradient(SDL_Renderer* renderer, const DrawingRequest& request);
-  static void draw_filled_rect(SDL_Renderer* renderer, const DrawingRequest& request);
-  static void draw_inverse_ellipse(SDL_Renderer* renderer, const DrawingRequest& request);
+ public:
+  static void draw_surface(SDL_Renderer* renderer,
+                           const DrawingRequest& request);
+  static void draw_surface_part(SDL_Renderer* renderer,
+                                const DrawingRequest& request);
+  static void draw_gradient(SDL_Renderer* renderer,
+                            const DrawingRequest& request);
+  static void draw_filled_rect(SDL_Renderer* renderer,
+                               const DrawingRequest& request);
+  static void draw_inverse_ellipse(SDL_Renderer* renderer,
+                                   const DrawingRequest& request);
 
-private:
+ private:
   SDLPainter(const SDLPainter&);
   SDLPainter& operator=(const SDLPainter&);
 };

@@ -25,11 +25,14 @@
 class DisplayManager;
 
 /**
- * This is an alternative class for particle systems. It is responsible for storing a
+ * This is an alternative class for particle systems. It is responsible for
+ * storing a
  * set of particles with each having an x- and y-coordinate the number of the
  * layer where it should be drawn and a texture.
- * This version of the particle system class doesn't use virtual screen coordinates,
- * but Interactive ones. Particle systems which need Interactive levels coordinates, such
+ * This version of the particle system class doesn't use virtual screen
+ * coordinates,
+ * but Interactive ones. Particle systems which need Interactive levels
+ * coordinates, such
  * as rain, should be implemented here.
  * Classes that implement a particle system should subclass from this class,
  * initialize particles in the constructor and move them in the simulate
@@ -37,28 +40,24 @@ class DisplayManager;
  */
 class ParticleSystem_Interactive : public GameObject
 {
-public:
+ public:
   ParticleSystem_Interactive();
   virtual ~ParticleSystem_Interactive();
 
   virtual void draw(DrawingContext& context);
 
-protected:
+ protected:
   class Particle
   {
-  public:
-    Particle() :
-      pos(),
-      texture()
-    {}
+   public:
+    Particle() : pos(), texture() {}
 
-    virtual ~Particle()
-    {}
+    virtual ~Particle() {}
 
     Vector pos;
     SurfacePtr texture;
 
-  private:
+   private:
     Particle(const Particle&);
     Particle& operator=(const Particle&);
   };

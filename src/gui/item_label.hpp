@@ -29,26 +29,29 @@ class Color;
 
 class ItemLabel : public MenuItem
 {
-  public:
-    ItemLabel(const std::string& text_);
+ public:
+  ItemLabel(const std::string& text_);
 
-    /** Draws the menu item. */
-    virtual void draw(DrawingContext&, Vector pos, int menu_width, bool active);
+  /** Draws the menu item. */
+  virtual void draw(DrawingContext&, Vector pos, int menu_width, bool active);
 
-    /** Returns true when the menu item has no action and therefore can be skipped.
-        Useful for labels and horizontal lines.*/
-    virtual bool skippable()  const{
-      return true;
-    }
+  /** Returns true when the menu item has no action and therefore can be
+     skipped.
+      Useful for labels and horizontal lines.*/
+  virtual bool
+  skippable() const
+  {
+    return true;
+  }
 
-    /** Returns the minimum width of the menu item. */
-    virtual int get_width() const;
+  /** Returns the minimum width of the menu item. */
+  virtual int get_width() const;
 
-    virtual Color get_color() const;
+  virtual Color get_color() const;
 
-  private:
-    ItemLabel(const ItemLabel&);
-    ItemLabel& operator=(const ItemLabel&);
+ private:
+  ItemLabel(const ItemLabel&);
+  ItemLabel& operator=(const ItemLabel&);
 };
 
 #endif

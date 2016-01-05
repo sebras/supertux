@@ -32,53 +32,60 @@
 #include "util/reader_mapping.hpp"
 #include "video/drawing_request.hpp"
 
-int reader_get_layer(const ReaderMapping& reader, int def)
+int
+reader_get_layer(const ReaderMapping& reader, int def)
 {
   int tmp = 0;
   bool status;
 
   status = reader.get("z-pos", tmp);
 
-  if (!status)
-    status = reader.get("layer", tmp);
+  if (!status) status = reader.get("layer", tmp);
 
-  if (!status)
-    tmp = def;
+  if (!status) tmp = def;
 
-  if (tmp > (LAYER_GUI - 100))
-    tmp = LAYER_GUI - 100;
+  if (tmp > (LAYER_GUI - 100)) tmp = LAYER_GUI - 100;
 
   return (tmp);
 }
 
-namespace {
-
-std::string dirname(const std::string& filename)
+namespace
+{
+std::string
+dirname(const std::string& filename)
 {
   std::string::size_type p = filename.find_last_of('/');
-  if(p == std::string::npos) {
+  if (p == std::string::npos)
+  {
     return {};
-  } else {
+  }
+  else
+  {
     return filename.substr(0, p);
   }
 }
 
-} // namespace
+}  // namespace
 
-void register_translation_directory(const std::string& filename)
+void
+register_translation_directory(const std::string& filename)
 {
-  if (g_dictionary_manager) {
+  if (g_dictionary_manager)
+  {
     std::string rel_dir = dirname(filename);
-    if (rel_dir.empty()) {
+    if (rel_dir.empty())
+    {
       // Relative dir inside PhysFS search path?
       // Get full path from search path, instead.
       const char* rel_dir_c = PHYSFS_getRealDir(filename.c_str());
-      if (rel_dir_c) {
+      if (rel_dir_c)
+      {
         rel_dir = rel_dir_c;
       }
     }
 
-    if (!rel_dir.empty()) {
+    if (!rel_dir.empty())
+    {
       g_dictionary_manager->add_directory(rel_dir);
     }
   }

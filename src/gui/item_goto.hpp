@@ -27,17 +27,17 @@
 
 class ItemGoTo : public MenuItem
 {
-  public:
-    ItemGoTo(const std::string& text_, int target_menu_, int id = -1);
+ public:
+  ItemGoTo(const std::string& text_, int target_menu_, int id = -1);
 
-    /** Processes the menu action. */
-    virtual void process_action(MenuAction action);
+  /** Processes the menu action. */
+  virtual void process_action(MenuAction action);
 
-    int target_menu;
+  int target_menu;
 
-  private:
-    ItemGoTo(const ItemGoTo&);
-    ItemGoTo& operator=(const ItemGoTo&);
+ private:
+  ItemGoTo(const ItemGoTo&);
+  ItemGoTo& operator=(const ItemGoTo&);
 };
 
 #endif

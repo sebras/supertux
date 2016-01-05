@@ -18,14 +18,16 @@
 
 #include "math/vector.hpp"
 
-Vector Vector::unit() const
+Vector
+Vector::unit() const
 {
   return *this / norm();
 }
 
-float Vector::norm() const
+float
+Vector::norm() const
 {
-  return sqrt(x*x + y*y);
+  return sqrt(x * x + y * y);
 }
 
 /* EOF */

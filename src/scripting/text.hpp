@@ -17,14 +17,13 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_TEXT_HPP
 #define HEADER_SUPERTUX_SCRIPTING_TEXT_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 class Text
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~Text()
-  { }
+  virtual ~Text() {}
 #endif
 
   virtual void set_text(const std::string& text) = 0;
@@ -37,9 +36,8 @@ public:
   virtual float get_pos_x() = 0;
   virtual float get_pos_y() = 0;
   virtual void set_anchor_point(int anchor) = 0;
-  virtual int  get_anchor_point() = 0;
+  virtual int get_anchor_point() = 0;
 };
-
 }
 
 #endif

@@ -17,17 +17,12 @@
 #include "supertux/game_object.hpp"
 #include "supertux/object_remove_listener.hpp"
 
-GameObject::GameObject() :
-  wants_to_die(false),
-  remove_listeners(NULL),
-  name()
+GameObject::GameObject() : wants_to_die(false), remove_listeners(NULL), name()
 {
 }
 
-GameObject::GameObject(const GameObject& rhs) :
-  wants_to_die(rhs.wants_to_die),
-  remove_listeners(NULL),
-  name(rhs.name)
+GameObject::GameObject(const GameObject& rhs)
+    : wants_to_die(rhs.wants_to_die), remove_listeners(NULL), name(rhs.name)
 {
 }
 
@@ -35,7 +30,8 @@ GameObject::~GameObject()
 {
   // call remove listeners (and remove them from the list)
   RemoveListenerListEntry* entry = remove_listeners;
-  while(entry != NULL) {
+  while (entry != NULL)
+  {
     RemoveListenerListEntry* next = entry->next;
     entry->listener->object_removed(this);
     delete entry;
@@ -56,14 +52,17 @@ void
 GameObject::del_remove_listener(ObjectRemoveListener* listener)
 {
   RemoveListenerListEntry* entry = remove_listeners;
-  if (entry->listener == listener) {
+  if (entry->listener == listener)
+  {
     remove_listeners = entry->next;
     delete entry;
     return;
   }
   RemoveListenerListEntry* next = entry->next;
-  while(next != NULL) {
-    if (next->listener == listener) {
+  while (next != NULL)
+  {
+    if (next->listener == listener)
+    {
       entry->next = next->next;
       delete next;
       break;

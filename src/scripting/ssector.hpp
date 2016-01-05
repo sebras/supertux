@@ -17,14 +17,13 @@
 #ifndef HEADER_SUPERTUX_SCRIPTING_SSECTOR_HPP
 #define HEADER_SUPERTUX_SCRIPTING_SSECTOR_HPP
 
-namespace scripting {
-
+namespace scripting
+{
 class SSector
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~SSector()
-  {}
+  virtual ~SSector() {}
 #endif
   virtual void set_ambient_light(float red, float green, float blue) = 0;
   virtual float get_ambient_red() = 0;
@@ -32,7 +31,6 @@ public:
   virtual float get_ambient_blue() = 0;
   virtual void set_gravity(float gravity) = 0;
 };
-
 }
 
 #endif

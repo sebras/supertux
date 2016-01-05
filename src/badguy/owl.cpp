@@ -30,21 +30,21 @@
 #define FLYING_SPEED 120.0
 #define ACTIVATION_DISTANCE 128.0
 
-Owl::Owl(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/owl/owl.sprite", LAYER_OBJECTS + 1),
-  carried_obj_name(),
-  carried_object(NULL)
+Owl::Owl(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/owl/owl.sprite", LAYER_OBJECTS + 1),
+      carried_obj_name(),
+      carried_object(NULL)
 {
-  if ( !reader.get("carry", carried_obj_name)) carried_obj_name = "skydive";
-  set_action (dir == LEFT ? "left" : "right", /* loops = */ -1);
+  if (!reader.get("carry", carried_obj_name)) carried_obj_name = "skydive";
+  set_action(dir == LEFT ? "left" : "right", /* loops = */ -1);
 }
 
-Owl::Owl(const Vector& pos, Direction d) :
-  BadGuy(pos, d, "images/creatures/owl/owl.sprite", LAYER_OBJECTS + 1),
-  carried_obj_name("skydive"),
-  carried_object(NULL)
+Owl::Owl(const Vector& pos, Direction d)
+    : BadGuy(pos, d, "images/creatures/owl/owl.sprite", LAYER_OBJECTS + 1),
+      carried_obj_name("skydive"),
+      carried_object(NULL)
 {
-  set_action (dir == LEFT ? "left" : "right", /* loops = */ -1);
+  set_action(dir == LEFT ? "left" : "right", /* loops = */ -1);
 }
 
 void
@@ -54,17 +54,20 @@ Owl::initialize()
   physic.enable_gravity(false);
   sprite->set_action(dir == LEFT ? "left" : "right");
 
-  auto game_object = ObjectFactory::instance().create(carried_obj_name, get_pos(), dir);
+  auto game_object =
+      ObjectFactory::instance().create(carried_obj_name, get_pos(), dir);
   if (game_object == NULL)
   {
-    log_fatal << "Creating \"" << carried_obj_name << "\" object failed." << std::endl;
+    log_fatal << "Creating \"" << carried_obj_name << "\" object failed."
+              << std::endl;
   }
   else
   {
     carried_object = dynamic_cast<Portable*>(game_object.get());
     if (carried_object == NULL)
     {
-      log_warning << "Object is not portable: " << carried_obj_name << std::endl;
+      log_warning << "Object is not portable: " << carried_obj_name
+                  << std::endl;
     }
     else
     {
@@ -76,9 +79,8 @@ Owl::initialize()
 bool
 Owl::is_above_player() const
 {
-  Player* player = Sector::current()->get_nearest_player (bbox);
-  if (!player)
-    return false;
+  Player* player = Sector::current()->get_nearest_player(bbox);
+  if (!player) return false;
 
   /* Let go of carried objects a short while *before* Tux is below us. This
    * makes it more likely that we'll hit him. */
@@ -87,35 +89,41 @@ Owl::is_above_player() const
   const Rectf& player_bbox = player->get_bbox();
 
   return ((player_bbox.p1.y >= bbox.p2.y) /* player is below us */
-          && ((player_bbox.p2.x + x_offset) > bbox.p1.x)
-          && ((player_bbox.p1.x + x_offset) < bbox.p2.x));
+          && ((player_bbox.p2.x + x_offset) > bbox.p1.x) &&
+          ((player_bbox.p1.x + x_offset) < bbox.p2.x));
 }
 
 void
-Owl::active_update (float elapsed_time)
+Owl::active_update(float elapsed_time)
 {
-  BadGuy::active_update (elapsed_time);
+  BadGuy::active_update(elapsed_time);
 
-  if(frozen)
-    return;
+  if (frozen) return;
 
-  if (carried_object != NULL) {
-    if (!is_above_player ()) {
-      Vector obj_pos = get_anchor_pos (bbox, ANCHOR_BOTTOM);
-      obj_pos.x -= 16.0; /* FIXME: Actually do use the half width of the carried object here. */
-      obj_pos.y += 3.0; /* Move a little away from the hitbox (the body). Looks nicer. */
+  if (carried_object != NULL)
+  {
+    if (!is_above_player())
+    {
+      Vector obj_pos = get_anchor_pos(bbox, ANCHOR_BOTTOM);
+      obj_pos.x -=
+          16.0; /* FIXME: Actually do use the half width of the carried object
+                   here. */
+      obj_pos.y +=
+          3.0; /* Move a little away from the hitbox (the body). Looks nicer. */
 
-      //To drop enemie before leave the screen
-      if (obj_pos.x<=16 || obj_pos.x+16>=Sector::current()->get_width()){
-        carried_object->ungrab (*this, dir);
+      // To drop enemie before leave the screen
+      if (obj_pos.x <= 16 || obj_pos.x + 16 >= Sector::current()->get_width())
+      {
+        carried_object->ungrab(*this, dir);
         carried_object = NULL;
       }
 
-     else
-        carried_object->grab (*this, obj_pos, dir);
+      else
+        carried_object->grab(*this, obj_pos, dir);
     }
-    else { /* if (is_above_player) */
-      carried_object->ungrab (*this, dir);
+    else
+    { /* if (is_above_player) */
+      carried_object->ungrab(*this, dir);
       carried_object = NULL;
     }
   }
@@ -124,16 +132,16 @@ Owl::active_update (float elapsed_time)
 bool
 Owl::collision_squished(GameObject&)
 {
-  Player* player = Sector::current()->get_nearest_player (bbox);
-  if (player)
-    player->bounce (*this);
+  Player* player = Sector::current()->get_nearest_player(bbox);
+  if (player) player->bounce(*this);
 
-  if (carried_object != NULL) {
-    carried_object->ungrab (*this, dir);
+  if (carried_object != NULL)
+  {
+    carried_object->ungrab(*this, dir);
     carried_object = NULL;
   }
 
-  kill_fall ();
+  kill_fall();
   return true;
 }
 
@@ -146,8 +154,9 @@ Owl::kill_fall()
   physic.enable_gravity(true);
   set_state(STATE_FALLING);
 
-  if (carried_object != NULL) {
-    carried_object->ungrab (*this, dir);
+  if (carried_object != NULL)
+  {
+    carried_object->ungrab(*this, dir);
     carried_object = NULL;
   }
 
@@ -158,8 +167,9 @@ Owl::kill_fall()
 void
 Owl::freeze()
 {
-  if (carried_object != NULL) {
-    carried_object->ungrab (*this, dir);
+  if (carried_object != NULL)
+  {
+    carried_object->ungrab(*this, dir);
     carried_object = NULL;
   }
   physic.enable_gravity(true);
@@ -184,31 +194,38 @@ Owl::is_freezable() const
 void
 Owl::collision_solid(const CollisionHit& hit)
 {
-  if(frozen)
+  if (frozen)
   {
     BadGuy::collision_solid(hit);
     return;
   }
-  if(hit.top || hit.bottom) {
+  if (hit.top || hit.bottom)
+  {
     physic.set_velocity_y(0);
-  } else if(hit.left || hit.right) {
-    if (dir == LEFT) {
-      set_action ("right", /* loops = */ -1);
+  }
+  else if (hit.left || hit.right)
+  {
+    if (dir == LEFT)
+    {
+      set_action("right", /* loops = */ -1);
       dir = RIGHT;
-      physic.set_velocity_x (FLYING_SPEED);
+      physic.set_velocity_x(FLYING_SPEED);
     }
-    else {
-      set_action ("left", /* loops = */ -1);
+    else
+    {
+      set_action("left", /* loops = */ -1);
       dir = LEFT;
-      physic.set_velocity_x (-FLYING_SPEED);
+      physic.set_velocity_x(-FLYING_SPEED);
     }
   }
 } /* void Owl::collision_solid */
 
 void
-Owl::ignite() {
-  if (carried_object != NULL) {
-    carried_object->ungrab (*this, dir);
+Owl::ignite()
+{
+  if (carried_object != NULL)
+  {
+    carried_object->ungrab(*this, dir);
     carried_object = NULL;
   }
   BadGuy::ignite();

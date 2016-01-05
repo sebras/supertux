@@ -19,14 +19,14 @@
 
 class Fireworks : public GameObject
 {
-public:
+ public:
   Fireworks();
   ~Fireworks();
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   Timer timer;
 };
 

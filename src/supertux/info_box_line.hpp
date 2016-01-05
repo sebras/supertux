@@ -33,8 +33,16 @@ class Rectf;
  */
 class InfoBoxLine
 {
-public:
-  enum LineType { NORMAL, NORMAL_LEFT, SMALL, HEADING, REFERENCE, IMAGE};
+ public:
+  enum LineType
+  {
+    NORMAL,
+    NORMAL_LEFT,
+    SMALL,
+    HEADING,
+    REFERENCE,
+    IMAGE
+  };
 
   InfoBoxLine(char format_char, const std::string& text);
   ~InfoBoxLine();
@@ -42,16 +50,17 @@ public:
   void draw(DrawingContext& context, const Rectf& bbox, int layer);
   float get_height() const;
 
-  static std::vector<std::unique_ptr<InfoBoxLine> > split(const std::string& text, float width);
+  static std::vector<std::unique_ptr<InfoBoxLine> > split(
+      const std::string& text, float width);
 
-private:
+ private:
   InfoBoxLine::LineType lineType;
   FontPtr font;
   Color color;
   std::string text;
   SurfacePtr image;
 
-private:
+ private:
   InfoBoxLine(const InfoBoxLine&);
   InfoBoxLine& operator=(const InfoBoxLine&);
 };

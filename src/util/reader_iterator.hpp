@@ -20,9 +20,10 @@
 #include <string>
 #include <vector>
 
-namespace sexp {
+namespace sexp
+{
 class Value;
-} // namespace sexp
+}  // namespace sexp
 
 class ReaderMapping;
 class ReaderDocument;
@@ -32,7 +33,7 @@ class ReaderDocument;
     and ReaderMapping instead */
 class ReaderIterator final
 {
-public:
+ public:
   // sx should point to (section (name value)...)
   ReaderIterator(const ReaderDocument* doc, const sexp::Value* sx);
 
@@ -53,7 +54,7 @@ public:
 
   ReaderMapping as_mapping() const;
 
-private:
+ private:
   const ReaderDocument* m_doc;
   const std::vector<sexp::Value>& m_arr;
   size_t m_idx;

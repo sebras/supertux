@@ -23,42 +23,40 @@
 #include "supertux/sector.hpp"
 #include "video/drawing_context.hpp"
 
-Fireworks::Fireworks() :
-  timer()
+Fireworks::Fireworks() : timer()
 {
   timer.start(.2f);
   SoundManager::current()->preload("sounds/fireworks.wav");
 }
 
-Fireworks::~Fireworks()
-{
-}
+Fireworks::~Fireworks() {}
 
 void
-Fireworks::update(float )
+Fireworks::update(float)
 {
-  if(timer.check()) {
+  if (timer.check())
+  {
     Sector* sector = Sector::current();
     Vector pos = sector->camera->get_translation();
     pos += Vector(graphicsRandom.randf(SCREEN_WIDTH),
-                  graphicsRandom.randf(SCREEN_HEIGHT/2));
+                  graphicsRandom.randf(SCREEN_HEIGHT / 2));
 
     float red = graphicsRandom.randf(1.0);
     float green = graphicsRandom.randf(1.0);
-    //float red = 0.7;
-    //float green = 0.9;
-    (void) red;
-    (void) green;
-    sector->add_object(std::make_shared<Particles>(pos, 0, 360, 140, 140,
-                                                   Vector(0, 0), 45, Color(red, green, 0), 3, 1.3f,
-                                                   LAYER_FOREGROUND1+1));
+    // float red = 0.7;
+    // float green = 0.9;
+    (void)red;
+    (void)green;
+    sector->add_object(std::make_shared<Particles>(
+        pos, 0, 360, 140, 140, Vector(0, 0), 45, Color(red, green, 0), 3, 1.3f,
+        LAYER_FOREGROUND1 + 1));
     SoundManager::current()->play("sounds/fireworks.wav");
     timer.start(graphicsRandom.randf(1.0, 1.5));
   }
 }
 
 void
-Fireworks::draw(DrawingContext& )
+Fireworks::draw(DrawingContext&)
 {
 }
 

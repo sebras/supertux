@@ -21,7 +21,7 @@
 
 class Stumpy : public WalkingBadguy
 {
-public:
+ public:
   Stumpy(const ReaderMapping& reader);
   Stumpy(const Vector& pos, Direction d);
 
@@ -32,17 +32,19 @@ public:
 
   bool is_freezable() const;
 
-protected:
-  enum MyState {
-    STATE_INVINCIBLE, STATE_NORMAL
+ protected:
+  enum MyState
+  {
+    STATE_INVINCIBLE,
+    STATE_NORMAL
   };
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   MyState mystate;
-  Timer   invincible_timer;
+  Timer invincible_timer;
 };
 
 #endif

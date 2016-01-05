@@ -30,8 +30,9 @@ class SurfaceData;
 
 class VideoSystem : public Currenton<VideoSystem>
 {
-public:
-  enum Enum {
+ public:
+  enum Enum
+  {
     AUTO_VIDEO,
     OPENGL,
     PURE_SDL,
@@ -40,23 +41,23 @@ public:
 
   static std::unique_ptr<VideoSystem> create(VideoSystem::Enum video_system);
 
-  static Enum get_video_system(const std::string &video);
+  static Enum get_video_system(const std::string& video);
   static std::string get_video_string(Enum video);
 
-public:
+ public:
   VideoSystem() {}
   virtual ~VideoSystem() {}
 
   virtual Renderer& get_renderer() const = 0;
   virtual Lightmap& get_lightmap() const = 0;
-  virtual TexturePtr new_texture(SDL_Surface *image) = 0;
-  virtual SurfaceData* new_surface_data(const Surface &surface) = 0;
+  virtual TexturePtr new_texture(SDL_Surface* image) = 0;
+  virtual SurfaceData* new_surface_data(const Surface& surface) = 0;
   virtual void free_surface_data(SurfaceData* surface_data) = 0;
 
   virtual void apply_config() = 0;
   virtual void resize(int w, int h) = 0;
 
-private:
+ private:
   VideoSystem(const VideoSystem&) = delete;
   VideoSystem& operator=(const VideoSystem&) = delete;
 };

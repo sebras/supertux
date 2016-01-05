@@ -23,15 +23,18 @@
 #include "util/reader_mapping.hpp"
 
 MrCandle::MrCandle(const ReaderMapping& reader)
-  : WalkingBadguy(reader, "images/creatures/mr_candle/mr-candle.sprite", "left", "right"),
-    lightcolor(1, 1, 1),
-    candle_light(SpriteManager::current()->create("images/objects/lightmap_light/lightmap_light-medium.sprite"))
+    : WalkingBadguy(reader, "images/creatures/mr_candle/mr-candle.sprite",
+                    "left", "right"),
+      lightcolor(1, 1, 1),
+      candle_light(SpriteManager::current()->create(
+          "images/objects/lightmap_light/lightmap_light-medium.sprite"))
 {
   walk_speed = 80;
   max_drop_height = 64;
 
   std::vector<float> vColor;
-  if (reader.get("color", vColor)) {
+  if (reader.get("color", vColor))
+  {
     lightcolor = Color(vColor);
   }
   sprite->set_color(lightcolor);
@@ -39,7 +42,6 @@ MrCandle::MrCandle(const ReaderMapping& reader)
   candle_light->set_color(lightcolor);
 
   countMe = false;
-
 }
 
 bool
@@ -55,10 +57,12 @@ MrCandle::is_flammable() const
 }
 
 void
-MrCandle::draw(DrawingContext& context) {
+MrCandle::draw(DrawingContext& context)
+{
   BadGuy::draw(context);
 
-  if (!frozen) {
+  if (!frozen)
+  {
     context.push_target();
     context.set_target(DrawingContext::LIGHTMAP);
     candle_light->draw(context, bbox.get_middle(), 0);
@@ -67,14 +71,17 @@ MrCandle::draw(DrawingContext& context) {
 }
 
 HitResponse
-MrCandle::collision(GameObject& other, const CollisionHit& hit) {
+MrCandle::collision(GameObject& other, const CollisionHit& hit)
+{
   Lantern* l = dynamic_cast<Lantern*>(&other);
-  if (l && !frozen) if (l->get_bbox().p2.y < bbox.p1.y) {
-    l->add_color(lightcolor);
-    run_dead_script();
-    remove_me();
-    return FORCE_MOVE;
-  }
+  if (l && !frozen)
+    if (l->get_bbox().p2.y < bbox.p1.y)
+    {
+      l->add_color(lightcolor);
+      run_dead_script();
+      remove_me();
+      return FORCE_MOVE;
+    }
   return WalkingBadguy::collision(other, hit);
 }
 

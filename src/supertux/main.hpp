@@ -19,13 +19,13 @@
 
 class Main
 {
-private:
+ private:
   void init_tinygettext();
   void init_video();
 
   void launch_game();
 
-public:
+ public:
   /** We call it run() instead of main() as main collides with
       #define main SDL_main from SDL.h */
   int run(int argc, char** argv);

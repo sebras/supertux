@@ -51,50 +51,52 @@
 #include "worldmap/worldmap.hpp"
 
 #ifdef WIN32
-#  define snprintf _snprintf
+#define snprintf _snprintf
 #endif
 
-GameSession::GameSession(const std::string& levelfile_, Savegame& savegame, Statistics* statistics) :
-  reset_button(false),
-  level(),
-  statistics_backdrop(Surface::create("images/engine/menu/score-backdrop.png")),
-  scripts(),
-  currentsector(nullptr),
-  levelnb(),
-  pause_menu_frame(),
-  end_sequence(0),
-  game_pause(false),
-  speed_before_pause(ScreenManager::current()->get_speed()),
-  levelfile(levelfile_),
-  reset_sector(),
-  reset_pos(),
-  newsector(),
-  newspawnpoint(),
-  best_level_statistics(statistics),
-  m_savegame(savegame),
-  capture_demo_stream(0),
-  capture_file(),
-  playback_demo_stream(0),
-  demo_controller(0),
-  play_time(0),
-  edit_mode(false),
-  levelintro_shown(false),
-  coins_at_start(),
-  bonus_at_start(),
-  max_fire_bullets_at_start(),
-  max_ice_bullets_at_start(),
-  active(false),
-  end_seq_started(false)
+GameSession::GameSession(const std::string& levelfile_, Savegame& savegame,
+                         Statistics* statistics)
+    : reset_button(false),
+      level(),
+      statistics_backdrop(
+          Surface::create("images/engine/menu/score-backdrop.png")),
+      scripts(),
+      currentsector(nullptr),
+      levelnb(),
+      pause_menu_frame(),
+      end_sequence(0),
+      game_pause(false),
+      speed_before_pause(ScreenManager::current()->get_speed()),
+      levelfile(levelfile_),
+      reset_sector(),
+      reset_pos(),
+      newsector(),
+      newspawnpoint(),
+      best_level_statistics(statistics),
+      m_savegame(savegame),
+      capture_demo_stream(0),
+      capture_file(),
+      playback_demo_stream(0),
+      demo_controller(0),
+      play_time(0),
+      edit_mode(false),
+      levelintro_shown(false),
+      coins_at_start(),
+      bonus_at_start(),
+      max_fire_bullets_at_start(),
+      max_ice_bullets_at_start(),
+      active(false),
+      end_seq_started(false)
 {
   if (restart_level() != 0)
-    throw std::runtime_error ("Initializing the level failed.");
+    throw std::runtime_error("Initializing the level failed.");
 }
 
 void
 GameSession::reset_level()
 {
   currentsector->player->set_bonus(bonus_at_start);
-  PlayerStatus *currentStatus = m_savegame.get_player_status();
+  PlayerStatus* currentStatus = m_savegame.get_player_status();
   currentStatus->coins = coins_at_start;
   currentStatus->max_fire_bullets = max_fire_bullets_at_start;
   currentStatus->max_ice_bullets = max_ice_bullets_at_start;
@@ -104,65 +106,77 @@ GameSession::reset_level()
 int
 GameSession::restart_level(bool after_death)
 {
-    PlayerStatus* currentStatus = m_savegame.get_player_status();
-    coins_at_start = currentStatus->coins;
-    bonus_at_start = currentStatus->bonus;
-    max_fire_bullets_at_start = currentStatus->max_fire_bullets;
-    max_ice_bullets_at_start = currentStatus->max_ice_bullets;
+  PlayerStatus* currentStatus = m_savegame.get_player_status();
+  coins_at_start = currentStatus->coins;
+  bonus_at_start = currentStatus->bonus;
+  max_fire_bullets_at_start = currentStatus->max_fire_bullets;
+  max_ice_bullets_at_start = currentStatus->max_ice_bullets;
 
-  if (edit_mode) {
+  if (edit_mode)
+  {
     force_ghost_mode();
     return (-1);
   }
 
-  game_pause   = false;
+  game_pause = false;
   end_sequence = 0;
 
   InputManager::current()->reset();
 
   currentsector = 0;
 
-  try {
+  try
+  {
     level = LevelParser::from_file(levelfile);
     level->stats.total_coins = level->get_total_coins();
     level->stats.total_badguys = level->get_total_badguys();
     level->stats.total_secrets = level->get_total_secrets();
     level->stats.reset();
 
-    if(reset_sector != "") {
+    if (reset_sector != "")
+    {
       currentsector = level->get_sector(reset_sector);
-      if(!currentsector) {
+      if (!currentsector)
+      {
         std::stringstream msg;
-        msg << "Couldn't find sector '" << reset_sector << "' for resetting tux.";
+        msg << "Couldn't find sector '" << reset_sector
+            << "' for resetting tux.";
         throw std::runtime_error(msg.str());
       }
       currentsector->activate(reset_pos);
-    } else {
+    }
+    else
+    {
       currentsector = level->get_sector("main");
-      if(!currentsector)
-        throw std::runtime_error("Couldn't find main sector");
+      if (!currentsector) throw std::runtime_error("Couldn't find main sector");
       play_time = 0;
       currentsector->activate("main");
     }
-  } catch(std::exception& e) {
+  }
+  catch (std::exception& e)
+  {
     log_fatal << "Couldn't start level: " << e.what() << std::endl;
     ScreenManager::current()->pop_screen();
     return (-1);
   }
-  if(after_death == true) {
+  if (after_death == true)
+  {
     currentsector->resume_music();
   }
-  else {
+  else
+  {
     SoundManager::current()->stop_music();
     currentsector->play_music(LEVEL_MUSIC);
   }
 
-  if(capture_file != "") {
-    int newSeed=0;               // next run uses a new seed
-    while (newSeed == 0)            // which is the next non-zero random num.
+  if (capture_file != "")
+  {
+    int newSeed = 0;      // next run uses a new seed
+    while (newSeed == 0)  // which is the next non-zero random num.
       newSeed = gameRandom.rand();
     g_config->random_seed = gameRandom.srand(newSeed);
-    log_info << "Next run uses random seed " << g_config->random_seed <<std::endl;
+    log_info << "Next run uses random seed " << g_config->random_seed
+             << std::endl;
     record_demo(capture_file);
   }
 
@@ -182,29 +196,31 @@ GameSession::record_demo(const std::string& filename)
   delete capture_demo_stream;
 
   capture_demo_stream = new std::ofstream(filename.c_str());
-  if(!capture_demo_stream->good()) {
+  if (!capture_demo_stream->good())
+  {
     std::stringstream msg;
     msg << "Couldn't open demo file '" << filename << "' for writing.";
     throw std::runtime_error(msg.str());
   }
   capture_file = filename;
 
-  char buf[30];                            // save the seed in the demo file
+  char buf[30];  // save the seed in the demo file
   snprintf(buf, sizeof(buf), "random_seed=%10d", g_config->random_seed);
-  for (int i=0; i==0 || buf[i-1]; i++)
-    capture_demo_stream->put(buf[i]);
+  for (int i = 0; i == 0 || buf[i - 1]; i++) capture_demo_stream->put(buf[i]);
 }
 
 int
 GameSession::get_demo_random_seed(const std::string& filename) const
 {
   std::istream* test_stream = new std::ifstream(filename.c_str());
-  if(test_stream->good()) {
-    char buf[30];                     // recall the seed from the demo file
+  if (test_stream->good())
+  {
+    char buf[30];  // recall the seed from the demo file
     int seed;
-    for (int i=0; i<30 && (i==0 || buf[i-1]); i++)
+    for (int i = 0; i < 30 && (i == 0 || buf[i - 1]); i++)
       test_stream->get(buf[i]);
-    if (sscanf(buf, "random_seed=%10d", &seed) == 1) {
+    if (sscanf(buf, "random_seed=%10d", &seed) == 1)
+    {
       log_info << "Random seed " << seed << " from demo file" << std::endl;
       return seed;
     }
@@ -223,7 +239,8 @@ GameSession::play_demo(const std::string& filename)
   delete demo_controller;
 
   playback_demo_stream = new std::ifstream(filename.c_str());
-  if(!playback_demo_stream->good()) {
+  if (!playback_demo_stream->good())
+  {
     std::stringstream msg;
     msg << "Couldn't open demo file '" << filename << "' for reading.";
     throw std::runtime_error(msg.str());
@@ -234,31 +251,33 @@ GameSession::play_demo(const std::string& filename)
   tux.set_controller(demo_controller);
 
   // skip over random seed, if it exists in the file
-  char buf[30];                            // ascii decimal seed
+  char buf[30];  // ascii decimal seed
   int seed;
-  for (int i=0; i<30 && (i==0 || buf[i-1]); i++)
+  for (int i = 0; i < 30 && (i == 0 || buf[i - 1]); i++)
     playback_demo_stream->get(buf[i]);
   if (sscanf(buf, "random_seed=%010d", &seed) != 1)
-    playback_demo_stream->seekg(0);     // old style w/o seed, restart at beg
+    playback_demo_stream->seekg(0);  // old style w/o seed, restart at beg
 }
 
 void
 GameSession::on_escape_press()
 {
-  if(currentsector->player->is_dying() || end_sequence)
+  if (currentsector->player->is_dying() || end_sequence)
   {
     // Let the timers run out, we fast-forward them to force past a sequence
-    if (end_sequence)
-      end_sequence->stop();
+    if (end_sequence) end_sequence->stop();
 
     currentsector->player->dying_timer.start(FLT_EPSILON);
-    return;   // don't let the player open the menu, when he is dying
+    return;  // don't let the player open the menu, when he is dying
   }
 
-  if(level->on_menukey_script != "") {
+  if (level->on_menukey_script != "")
+  {
     std::istringstream in(level->on_menukey_script);
     run_script(in, "OnMenuKeyScript");
-  } else {
+  }
+  else
+  {
     toggle_pause();
   }
 }
@@ -286,7 +305,7 @@ GameSession::abort_level()
   MenuManager::instance().clear_menu_stack();
   ScreenManager::current()->pop_screen();
   currentsector->player->set_bonus(bonus_at_start);
-  PlayerStatus *currentStatus = m_savegame.get_player_status();
+  PlayerStatus* currentStatus = m_savegame.get_player_status();
   currentStatus->coins = coins_at_start;
   currentStatus->max_fire_bullets = max_fire_bullets_at_start;
   currentStatus->max_ice_bullets = max_ice_bullets_at_start;
@@ -307,15 +326,14 @@ GameSession::set_editmode(bool edit_mode_)
 
   currentsector->get_players()[0]->set_edit_mode(edit_mode_);
 
-  if (edit_mode_) {
-
+  if (edit_mode_)
+  {
     // entering edit mode
-
-  } else {
-
+  }
+  else
+  {
     // leaving edit mode
     restart_level();
-
   }
 }
 
@@ -331,12 +349,13 @@ GameSession::run_script(std::istream& in, const std::string& sourcename)
   using namespace scripting;
 
   // garbage collect thread list
-  for(ScriptList::iterator i = scripts.begin();
-      i != scripts.end(); ) {
+  for (ScriptList::iterator i = scripts.begin(); i != scripts.end();)
+  {
     HSQOBJECT& object = *i;
     HSQUIRRELVM vm = object_to_vm(object);
 
-    if(sq_getvmstate(vm) != SQ_VMSTATE_SUSPENDED) {
+    if (sq_getvmstate(vm) != SQ_VMSTATE_SUSPENDED)
+    {
       sq_release(global_vm, &object);
       i = scripts.erase(i);
       continue;
@@ -359,7 +378,8 @@ void
 GameSession::process_events()
 {
   // playback a demo?
-  if(playback_demo_stream != 0) {
+  if (playback_demo_stream != 0)
+  {
     demo_controller->update();
     char left = false;
     char right = false;
@@ -382,14 +402,15 @@ GameSession::process_events()
   }
 
   // save input for demo?
-  if(capture_demo_stream != 0) {
-    Controller *controller = InputManager::current()->get_controller();
-    capture_demo_stream ->put(controller->hold(Controller::LEFT));
-    capture_demo_stream ->put(controller->hold(Controller::RIGHT));
-    capture_demo_stream ->put(controller->hold(Controller::UP));
-    capture_demo_stream ->put(controller->hold(Controller::DOWN));
-    capture_demo_stream ->put(controller->hold(Controller::JUMP));
-    capture_demo_stream ->put(controller->hold(Controller::ACTION));
+  if (capture_demo_stream != 0)
+  {
+    Controller* controller = InputManager::current()->get_controller();
+    capture_demo_stream->put(controller->hold(Controller::LEFT));
+    capture_demo_stream->put(controller->hold(Controller::RIGHT));
+    capture_demo_stream->put(controller->hold(Controller::UP));
+    capture_demo_stream->put(controller->hold(Controller::DOWN));
+    capture_demo_stream->put(controller->hold(Controller::JUMP));
+    capture_demo_stream->put(controller->hold(Controller::ACTION));
   }
 }
 
@@ -399,9 +420,12 @@ GameSession::check_end_conditions()
   Player* tux = currentsector->player;
 
   /* End of level? */
-  if(end_sequence && end_sequence->is_done()) {
+  if (end_sequence && end_sequence->is_done())
+  {
     finish(true);
-  } else if (!end_sequence && tux->is_dead()) {
+  }
+  else if (!end_sequence && tux->is_dead())
+  {
     restart_level(true);
   }
 }
@@ -412,38 +436,42 @@ GameSession::draw(DrawingContext& context)
   currentsector->draw(context);
   drawstatus(context);
 
-  if(game_pause)
-    draw_pause(context);
+  if (game_pause) draw_pause(context);
 }
 
 void
 GameSession::draw_pause(DrawingContext& context)
 {
-  context.draw_filled_rect(
-    Vector(0,0), Vector(SCREEN_WIDTH, SCREEN_HEIGHT),
-    Color(0.0f, 0.0f, 0.0f, .25f), LAYER_FOREGROUND1);
+  context.draw_filled_rect(Vector(0, 0), Vector(SCREEN_WIDTH, SCREEN_HEIGHT),
+                           Color(0.0f, 0.0f, 0.0f, .25f), LAYER_FOREGROUND1);
 }
 
 void
 GameSession::setup()
 {
-  if (currentsector == NULL)
-    return;
+  if (currentsector == NULL) return;
 
-  if(currentsector != Sector::current()) {
+  if (currentsector != Sector::current())
+  {
     currentsector->activate(currentsector->player->get_pos());
   }
   currentsector->play_music(LEVEL_MUSIC);
 
-  int total_stats_to_be_collected = level->stats.total_coins + level->stats.total_badguys + level->stats.total_secrets;
-  if ((!levelintro_shown) && (total_stats_to_be_collected > 0)) {
+  int total_stats_to_be_collected = level->stats.total_coins +
+                                    level->stats.total_badguys +
+                                    level->stats.total_secrets;
+  if ((!levelintro_shown) && (total_stats_to_be_collected > 0))
+  {
     levelintro_shown = true;
     active = false;
-    ScreenManager::current()->push_screen(std::unique_ptr<Screen>(new LevelIntro(level.get(), best_level_statistics, m_savegame.get_player_status())));
+    ScreenManager::current()->push_screen(std::unique_ptr<Screen>(
+        new LevelIntro(level.get(), best_level_statistics,
+                       m_savegame.get_player_status())));
   }
-  if(g_config->transitions_enabled)
+  if (g_config->transitions_enabled)
   {
-    ScreenManager::current()->set_screen_fade(std::unique_ptr<ScreenFade>(new FadeIn(1)));
+    ScreenManager::current()->set_screen_fade(
+        std::unique_ptr<ScreenFade>(new FadeIn(1)));
   }
   end_seq_started = false;
 }
@@ -457,19 +485,20 @@ void
 GameSession::update(float elapsed_time)
 {
   // Set active flag
-  if(!active)
+  if (!active)
   {
     active = true;
   }
   // handle controller
-  if(InputManager::current()->get_controller()->pressed(Controller::ESCAPE) ||
-     InputManager::current()->get_controller()->pressed(Controller::START))
+  if (InputManager::current()->get_controller()->pressed(Controller::ESCAPE) ||
+      InputManager::current()->get_controller()->pressed(Controller::START))
   {
     on_escape_press();
   }
 
-  if(InputManager::current()->get_controller()->pressed(Controller::CHEAT_MENU) &&
-     g_config->developer_mode)
+  if (InputManager::current()->get_controller()->pressed(
+          Controller::CHEAT_MENU) &&
+      g_config->developer_mode)
   {
     if (!MenuManager::instance().is_active())
     {
@@ -481,7 +510,8 @@ GameSession::update(float elapsed_time)
   process_events();
 
   // Unpause the game if the menu has been closed
-  if (game_pause && !MenuManager::instance().is_active()) {
+  if (game_pause && !MenuManager::instance().is_active())
+  {
     ScreenManager::current()->set_speed(speed_before_pause);
     SoundManager::current()->resume_music();
     SoundManager::current()->resume_sounds();
@@ -491,59 +521,75 @@ GameSession::update(float elapsed_time)
   check_end_conditions();
 
   // respawning in new sector?
-  if(newsector != "" && newspawnpoint != "") {
+  if (newsector != "" && newspawnpoint != "")
+  {
     Sector* sector = level->get_sector(newsector);
-    if(sector == 0) {
+    if (sector == 0)
+    {
       log_warning << "Sector '" << newsector << "' not found" << std::endl;
       sector = level->get_sector("main");
     }
     sector->activate(newspawnpoint);
     sector->play_music(LEVEL_MUSIC);
     currentsector = sector;
-    //Keep persistent across sectors
-    if(edit_mode)
-      currentsector->get_players()[0]->set_edit_mode(edit_mode);
+    // Keep persistent across sectors
+    if (edit_mode) currentsector->get_players()[0]->set_edit_mode(edit_mode);
     newsector = "";
     newspawnpoint = "";
   }
 
   // Update the world state and all objects in the world
-  if(!game_pause) {
+  if (!game_pause)
+  {
     // Update the world
-    if (!end_sequence) {
-      play_time += elapsed_time; //TODO: make sure we don't count cutscene time
+    if (!end_sequence)
+    {
+      play_time += elapsed_time;  // TODO: make sure we don't count cutscene
+                                  // time
       level->stats.time = play_time;
       currentsector->update(elapsed_time);
-    } else {
-      if (!end_sequence->is_tux_stopped()) {
+    }
+    else
+    {
+      if (!end_sequence->is_tux_stopped())
+      {
         currentsector->update(elapsed_time);
-      } else {
+      }
+      else
+      {
         end_sequence->update(elapsed_time);
       }
     }
   }
 
-  if(currentsector == NULL)
-    return;
+  if (currentsector == NULL) return;
 
   // update sounds
-  if (currentsector->camera) SoundManager::current()->set_listener_position(currentsector->camera->get_center());
+  if (currentsector->camera)
+    SoundManager::current()->set_listener_position(
+        currentsector->camera->get_center());
 
   /* Handle music: */
-  if (end_sequence)
-    return;
+  if (end_sequence) return;
 
-  if(currentsector->player->invincible_timer.started()) {
-    if(currentsector->player->invincible_timer.get_timeleft() <=
-       TUX_INVINCIBLE_TIME_WARNING) {
+  if (currentsector->player->invincible_timer.started())
+  {
+    if (currentsector->player->invincible_timer.get_timeleft() <=
+        TUX_INVINCIBLE_TIME_WARNING)
+    {
       currentsector->play_music(HERRING_WARNING_MUSIC);
-    } else {
+    }
+    else
+    {
       currentsector->play_music(HERRING_MUSIC);
     }
-  } else if(currentsector->get_music_type() != LEVEL_MUSIC) {
+  }
+  else if (currentsector->get_music_type() != LEVEL_MUSIC)
+  {
     currentsector->play_music(LEVEL_MUSIC);
   }
-  if (reset_button) {
+  if (reset_button)
+  {
     reset_button = false;
     reset_level();
     restart_level();
@@ -553,19 +599,20 @@ GameSession::update(float elapsed_time)
 void
 GameSession::finish(bool win)
 {
-  if(end_seq_started)
-    return;
+  if (end_seq_started) return;
   end_seq_started = true;
 
   using namespace worldmap;
 
-  if (edit_mode) {
+  if (edit_mode)
+  {
     force_ghost_mode();
     return;
   }
 
-  if(win) {
-    if(WorldMap::current())
+  if (win)
+  {
+    if (WorldMap::current())
     {
       WorldMap::current()->finished_level(level.get());
     }
@@ -603,15 +650,19 @@ void
 GameSession::start_sequence(Sequence seq)
 {
   // do not play sequences when in edit mode
-  if (edit_mode) {
+  if (edit_mode)
+  {
     force_ghost_mode();
     return;
   }
 
   // handle special "stoptux" sequence
-  if (seq == SEQ_STOPTUX) {
-    if (!end_sequence) {
-      log_warning << "Final target reached without an active end sequence" << std::endl;
+  if (seq == SEQ_STOPTUX)
+  {
+    if (!end_sequence)
+    {
+      log_warning << "Final target reached without an active end sequence"
+                  << std::endl;
       this->start_sequence(SEQ_ENDSEQUENCE);
     }
     if (end_sequence) end_sequence->stop_tux();
@@ -619,19 +670,27 @@ GameSession::start_sequence(Sequence seq)
   }
 
   // abort if a sequence is already playing
-  if (end_sequence)
-    return;
+  if (end_sequence) return;
 
-  if (seq == SEQ_ENDSEQUENCE) {
-    if (currentsector->get_players()[0]->get_physic().get_velocity_x() < 0) {
+  if (seq == SEQ_ENDSEQUENCE)
+  {
+    if (currentsector->get_players()[0]->get_physic().get_velocity_x() < 0)
+    {
       end_sequence = std::make_shared<EndSequenceWalkLeft>();
-    } else {
+    }
+    else
+    {
       end_sequence = std::make_shared<EndSequenceWalkRight>();
     }
-  } else if (seq == SEQ_FIREWORKS) {
+  }
+  else if (seq == SEQ_FIREWORKS)
+  {
     end_sequence = std::make_shared<EndSequenceFireworks>();
-  } else {
-    log_warning << "Unknown sequence '" << (int)seq << "'. Ignoring." << std::endl;
+  }
+  else
+  {
+    log_warning << "Unknown sequence '" << (int)seq << "'. Ignoring."
+                << std::endl;
     return;
   }
 
@@ -645,14 +704,13 @@ GameSession::start_sequence(Sequence seq)
   currentsector->player->set_winning();
 
   // Stop all clocks.
-  for(auto i = currentsector->gameobjects.begin();
-      i != currentsector->gameobjects.end(); ++i)
+  for (auto i = currentsector->gameobjects.begin();
+       i != currentsector->gameobjects.end(); ++i)
   {
     GameObjectPtr obj = *i;
 
     auto lt = std::dynamic_pointer_cast<LevelTime>(obj);
-    if(lt)
-      lt->stop();
+    if (lt) lt->stop();
   }
 }
 
@@ -663,8 +721,10 @@ GameSession::drawstatus(DrawingContext& context)
   m_savegame.get_player_status()->draw(context);
 
   // draw level stats while end_sequence is running
-  if (end_sequence) {
-    level->stats.draw_endseq_panel(context, best_level_statistics, statistics_backdrop);
+  if (end_sequence)
+  {
+    level->stats.draw_endseq_panel(context, best_level_statistics,
+                                   statistics_backdrop);
   }
 }
 

@@ -26,9 +26,8 @@ class DrawingContext;
  */
 class ScreenFade
 {
-public:
-  virtual ~ScreenFade()
-  {}
+ public:
+  virtual ~ScreenFade() {}
 
   /** returns true if the effect is completed */
   virtual bool done() const = 0;

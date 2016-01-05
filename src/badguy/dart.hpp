@@ -1,5 +1,6 @@
 //  Dart - Your average poison dart
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,7 +27,7 @@ class SoundSource;
  */
 class Dart : public BadGuy
 {
-public:
+ public:
   Dart(const ReaderMapping& reader);
   Dart(const Vector& pos, Direction d, const BadGuy* parent);
   ~Dart();
@@ -41,15 +42,17 @@ public:
   HitResponse collision_badguy(BadGuy& badguy, const CollisionHit& hit);
   HitResponse collision_player(Player& player, const CollisionHit& hit);
 
-  virtual bool updatePointers(const GameObject* from_object, GameObject* to_object);
+  virtual bool updatePointers(const GameObject* from_object,
+                              GameObject* to_object);
 
   bool is_flammable() const;
 
-protected:
+ protected:
   const BadGuy* parent; /**< collisions with this BadGuy will be ignored */
-  std::unique_ptr<SoundSource> sound_source; /**< SoundSource for ambient sound */
+  std::unique_ptr<SoundSource>
+      sound_source; /**< SoundSource for ambient sound */
 
-private:
+ private:
   Dart(const Dart&);
   Dart& operator=(const Dart&);
 };

@@ -42,31 +42,26 @@ class DisplayManager;
  */
 class ParticleSystem : public GameObject
 {
-public:
+ public:
   ParticleSystem(float max_particle_size = 60);
   virtual ~ParticleSystem();
 
   virtual void draw(DrawingContext& context);
 
-protected:
+ protected:
   class Particle
   {
-  public:
-    Particle() :
-      pos(),
-      angle(),
-      texture()
-    {}
+   public:
+    Particle() : pos(), angle(), texture() {}
 
-    virtual ~Particle()
-    {}
+    virtual ~Particle() {}
 
     Vector pos;
     // angle at which to draw particle
     float angle;
     SurfacePtr texture;
 
-  private:
+   private:
     Particle(const Particle&);
     Particle& operator=(const Particle&);
   };

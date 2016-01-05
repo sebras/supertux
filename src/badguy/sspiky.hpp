@@ -21,7 +21,7 @@
 
 class SSpiky : public WalkingBadguy
 {
-public:
+ public:
   SSpiky(const ReaderMapping& reader);
 
   void initialize();
@@ -33,8 +33,9 @@ public:
   bool is_freezable() const;
   bool is_flammable() const;
 
-protected:
-  enum SSpikyState {
+ protected:
+  enum SSpikyState
+  {
     SSPIKY_SLEEPING,
     SSPIKY_WAKING,
     SSPIKY_WALKING

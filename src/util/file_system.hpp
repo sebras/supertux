@@ -17,8 +17,8 @@
 #ifndef HEADER_SUPERTUX_UTIL_FILE_SYSTEM_HPP
 #define HEADER_SUPERTUX_UTIL_FILE_SYSTEM_HPP
 
-namespace FileSystem {
-
+namespace FileSystem
+{
 /** Returns true if the given path is a directory */
 bool is_directory(const std::string& path);
 
@@ -56,7 +56,7 @@ std::string normalize(const std::string& filename);
  */
 std::string join(const std::string& lhs, const std::string& rhs);
 
-} // namespace FileSystem
+}  // namespace FileSystem
 
 #endif
 

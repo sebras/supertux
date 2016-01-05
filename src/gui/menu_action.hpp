@@ -18,7 +18,8 @@
 #define HEADER_SUPERTUX_GUI_MENU_ACTION_HPP
 
 /* Kinds of menu items */
-enum MenuItemKind {
+enum MenuItemKind
+{
   MN_ACTION,
   MN_GOTO,
   MN_TOGGLE,
@@ -33,7 +34,8 @@ enum MenuItemKind {
 };
 
 /* Action done on the menu */
-enum MenuAction {
+enum MenuAction
+{
   MENU_ACTION_NONE = -1,
   MENU_ACTION_UP,
   MENU_ACTION_DOWN,
@@ -45,6 +47,6 @@ enum MenuAction {
   MENU_ACTION_BACK
 };
 
-#endif // HEADER_SUPERTUX_GUI_MENU_ACTION_HPP
+#endif  // HEADER_SUPERTUX_GUI_MENU_ACTION_HPP
 
 /* EOF */

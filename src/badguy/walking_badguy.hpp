@@ -1,5 +1,6 @@
 //  SuperTux - WalkingBadguy
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,9 +27,8 @@ class Timer;
  */
 class WalkingBadguy : public BadGuy
 {
-public:
-  WalkingBadguy(const Vector& pos,
-                const std::string& sprite_name,
+ public:
+  WalkingBadguy(const Vector& pos, const std::string& sprite_name,
                 const std::string& walk_left_action,
                 const std::string& walk_right_action,
                 int layer = LAYER_OBJECTS);
@@ -37,8 +37,7 @@ public:
                 const std::string& walk_left_action,
                 const std::string& walk_right_action,
                 int layer = LAYER_OBJECTS);
-  WalkingBadguy(const ReaderMapping& reader,
-                const std::string& sprite_name,
+  WalkingBadguy(const ReaderMapping& reader, const std::string& sprite_name,
                 const std::string& walk_left_action,
                 const std::string& walk_right_action,
                 int layer = LAYER_OBJECTS);
@@ -59,26 +58,30 @@ public:
    */
   void add_velocity(const Vector& velocity);
 
-  float get_walk_speed() const
+  float
+  get_walk_speed() const
   {
     return (walk_speed);
   }
-  void  set_walk_speed (float);
-  bool is_active() const
+  void set_walk_speed(float);
+  bool
+  is_active() const
   {
     return BadGuy::is_active();
   }
 
-protected:
+ protected:
   void turn_around();
 
-protected:
+ protected:
   std::string walk_left_action;
   std::string walk_right_action;
   float walk_speed;
-  int max_drop_height; /**< Maximum height of drop before we will turn around, or -1 to just drop from any ledge */
+  int max_drop_height; /**< Maximum height of drop before we will turn around,
+                          or -1 to just drop from any ledge */
   Timer turn_around_timer;
-  int turn_around_counter; /**< counts number of turns since turn_around_timer was started */
+  int turn_around_counter; /**< counts number of turns since turn_around_timer
+                              was started */
 };
 
 #endif

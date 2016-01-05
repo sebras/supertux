@@ -25,7 +25,7 @@
  */
 class FadeIn : public ScreenFade
 {
-public:
+ public:
   FadeIn(float fade_time, Color dest_color = Color(0, 0, 0));
   ~FadeIn();
 
@@ -35,7 +35,7 @@ public:
   /// returns true if the effect is completed
   bool done() const;
 
-private:
+ private:
   Color color;
   float fade_time;
   float accum_time;

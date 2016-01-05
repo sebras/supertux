@@ -30,23 +30,25 @@
 #include "util/reader_mapping.hpp"
 
 Brick::Brick(const Vector& pos, int data, const std::string& spriteName)
-  : Block(SpriteManager::current()->create(spriteName)), breakable(false),
-    coin_counter(0)
+    : Block(SpriteManager::current()->create(spriteName)),
+      breakable(false),
+      coin_counter(0)
 {
   bbox.set_pos(pos);
-  if(data == 1)
+  if (data == 1)
     coin_counter = 5;
   else
     breakable = true;
 }
 
-Brick::Brick(const ReaderMapping& lisp) :
-  Block(lisp, "images/objects/bonus_block/brick.sprite"),
-  breakable(),
-  coin_counter(0)
+Brick::Brick(const ReaderMapping& lisp)
+    : Block(lisp, "images/objects/bonus_block/brick.sprite"),
+      breakable(),
+      coin_counter(0)
 {
-  lisp.get("breakable",breakable);
-  if (!breakable) {
+  lisp.get("breakable", breakable);
+  if (!breakable)
+  {
     coin_counter = 5;
   }
 }
@@ -54,69 +56,80 @@ Brick::Brick(const ReaderMapping& lisp) :
 void
 Brick::hit(Player& player)
 {
-  if(sprite->get_action() == "empty")
-    return;
+  if (sprite->get_action() == "empty") return;
 
   try_break(&player);
 }
 
 HitResponse
-Brick::collision(GameObject& other, const CollisionHit& hit_){
-
-  Player* player = dynamic_cast<Player*> (&other);
-  if (player) {
+Brick::collision(GameObject& other, const CollisionHit& hit_)
+{
+  Player* player = dynamic_cast<Player*>(&other);
+  if (player)
+  {
     if (player->does_buttjump) try_break(player);
-    if (player->is_stone() && player->get_velocity().y >= 280) try_break(player); // stoneform breaks through bricks
+    if (player->is_stone() && player->get_velocity().y >= 280)
+      try_break(player);  // stoneform breaks through bricks
   }
 
-  BadGuy* badguy = dynamic_cast<BadGuy*> (&other);
-  if(badguy) {
+  BadGuy* badguy = dynamic_cast<BadGuy*>(&other);
+  if (badguy)
+  {
     // hit contains no information for collisions with blocks.
     // Badguy's bottom has to be below the top of the brick
     // SHIFT_DELTA is required to slide over one tile gaps.
-    if( badguy->can_break() && ( badguy->get_bbox().get_bottom() > bbox.get_top() + SHIFT_DELTA ) ){
+    if (badguy->can_break() &&
+        (badguy->get_bbox().get_bottom() > bbox.get_top() + SHIFT_DELTA))
+    {
       try_break(player);
     }
   }
-  Portable* portable = dynamic_cast<Portable*> (&other);
-  if(portable) {
-    MovingObject* moving = dynamic_cast<MovingObject*> (&other);
-    if(moving->get_bbox().get_top() > bbox.get_bottom() - SHIFT_DELTA) {
+  Portable* portable = dynamic_cast<Portable*>(&other);
+  if (portable)
+  {
+    MovingObject* moving = dynamic_cast<MovingObject*>(&other);
+    if (moving->get_bbox().get_top() > bbox.get_bottom() - SHIFT_DELTA)
+    {
       try_break(player);
     }
   }
-  Explosion* explosion = dynamic_cast<Explosion*> (&other);
-  if(explosion && explosion->hurts()) {
+  Explosion* explosion = dynamic_cast<Explosion*>(&other);
+  if (explosion && explosion->hurts())
+  {
     try_break(player);
   }
-  IceCrusher* icecrusher = dynamic_cast<IceCrusher*> (&other);
-  if(icecrusher && coin_counter == 0)
-    try_break(player);
+  IceCrusher* icecrusher = dynamic_cast<IceCrusher*>(&other);
+  if (icecrusher && coin_counter == 0) try_break(player);
   return Block::collision(other, hit_);
 }
 
 void
 Brick::try_break(Player* player)
 {
-  if(sprite->get_action() == "empty")
-    return;
+  if (sprite->get_action() == "empty") return;
 
   SoundManager::current()->play("sounds/brick.wav");
   Sector* sector = Sector::current();
   Player& player_one = *(sector->player);
-  if(coin_counter > 0 ){
+  if (coin_counter > 0)
+  {
     sector->add_object(std::make_shared<BouncyCoin>(get_pos(), true));
     coin_counter--;
     player_one.get_status()->add_coins(1);
-    if(coin_counter == 0)
-      sprite->set_action("empty");
+    if (coin_counter == 0) sprite->set_action("empty");
     start_bounce(player);
-  } else if(breakable) {
-    if(player){
-      if(player->is_big()){
+  }
+  else if (breakable)
+  {
+    if (player)
+    {
+      if (player->is_big())
+      {
         start_break(player);
         return;
-      } else {
+      }
+      else
+      {
         start_bounce(player);
         return;
       }
@@ -125,6 +138,6 @@ Brick::try_break(Player* player)
   }
 }
 
-//IMPLEMENT_FACTORY(Brick, "brick");
+// IMPLEMENT_FACTORY(Brick, "brick");
 
 /* EOF */

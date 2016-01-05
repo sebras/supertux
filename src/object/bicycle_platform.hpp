@@ -1,5 +1,6 @@
 //  SuperTux - BicyclePlatform
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,11 +21,12 @@
 #include "object/moving_sprite.hpp"
 
 /**
- * Used to construct a pair of bicycle platforms: If one is pushed down, the other one rises
+ * Used to construct a pair of bicycle platforms: If one is pushed down, the
+ * other one rises
  */
 class BicyclePlatform : public MovingSprite
 {
-public:
+ public:
   BicyclePlatform(const ReaderMapping& reader);
   BicyclePlatform(BicyclePlatform* master);
   virtual ~BicyclePlatform();
@@ -32,17 +34,21 @@ public:
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
   virtual void update(float elapsed_time);
 
-protected:
-  BicyclePlatform* master; /**< pointer to BicyclePlatform that does movement calculation */
-  BicyclePlatform* slave; /**< pointer to BicyclePlatform that reacts to master platform's movement calculation */
-  Vector center; /**< pivot point */
-  float radius; /**< radius of circle */
-  float angle; /**< current angle */
+ protected:
+  BicyclePlatform*
+      master; /**< pointer to BicyclePlatform that does movement calculation */
+  BicyclePlatform*
+      slave; /**< pointer to BicyclePlatform that reacts to master platform's
+                movement calculation */
+  Vector center;       /**< pivot point */
+  float radius;        /**< radius of circle */
+  float angle;         /**< current angle */
   float angular_speed; /**< angular speed in rad per second */
-  std::set<GameObject*> contacts; /**< objects that are currently pushing on the platform */
+  std::set<GameObject*>
+      contacts;   /**< objects that are currently pushing on the platform */
   float momentum; /** angular momentum in rad per second per second*/
 
-private:
+ private:
   BicyclePlatform(const BicyclePlatform&);
   BicyclePlatform& operator=(const BicyclePlatform&);
 };

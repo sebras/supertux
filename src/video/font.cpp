@@ -38,15 +38,18 @@
 #include "video/font.hpp"
 #include "video/renderer.hpp"
 
-namespace {
-
-bool vline_empty(SDL_Surface* surface, int x, int start_y, int end_y, Uint8 threshold)
+namespace
+{
+bool
+vline_empty(SDL_Surface* surface, int x, int start_y, int end_y,
+            Uint8 threshold)
 {
   Uint8* pixels = (Uint8*)surface->pixels;
 
-  for(int y = start_y; y < end_y; ++y)
+  for (int y = start_y; y < end_y; ++y)
   {
-    const Uint8& p = pixels[surface->pitch*y + x*surface->format->BytesPerPixel + 3];
+    const Uint8& p =
+        pixels[surface->pitch * y + x * surface->format->BytesPerPixel + 3];
     if (p > threshold)
     {
       return false;
@@ -55,30 +58,31 @@ bool vline_empty(SDL_Surface* surface, int x, int start_y, int end_y, Uint8 thre
   return true;
 }
 
-} // namespace
+}  // namespace
 
-Font::Font(GlyphWidth glyph_width_,
-           const std::string& filename,
-           int shadowsize_) :
-  glyph_width(glyph_width_),
-  glyph_surfaces(),
-  shadow_surfaces(),
-  char_height(),
-  shadowsize(shadowsize_),
-  border(0),
-  rtl(false),
-  glyphs(65536)
+Font::Font(GlyphWidth glyph_width_, const std::string& filename,
+           int shadowsize_)
+    : glyph_width(glyph_width_),
+      glyph_surfaces(),
+      shadow_surfaces(),
+      char_height(),
+      shadowsize(shadowsize_),
+      border(0),
+      rtl(false),
+      glyphs(65536)
 {
-  for(unsigned int i=0; i<65536;i++) glyphs[i].surface_idx = -1;
+  for (unsigned int i = 0; i < 65536; i++) glyphs[i].surface_idx = -1;
 
   const std::string fontdir = FileSystem::dirname(filename);
   const std::string fontname = FileSystem::basename(filename);
 
   // scan for prefix-filename in addons search path
-  char **rc = PHYSFS_enumerateFiles(fontdir.c_str());
-  for (char **i = rc; *i != NULL; i++) {
+  char** rc = PHYSFS_enumerateFiles(fontdir.c_str());
+  for (char** i = rc; *i != NULL; i++)
+  {
     std::string filename_(*i);
-    if( filename_.rfind(fontname) != std::string::npos ) {
+    if (filename_.rfind(fontname) != std::string::npos)
+    {
       loadFontFile(fontdir + filename_);
     }
   }
@@ -86,13 +90,14 @@ Font::Font(GlyphWidth glyph_width_,
 }
 
 void
-Font::loadFontFile(const std::string &filename)
+Font::loadFontFile(const std::string& filename)
 {
   // FIXME: Workaround for a crash on MSYS2 when starting with --debug
   log_debug_ << "Loading font: " << filename << std::endl;
   auto doc = ReaderDocument::parse(filename);
   auto root = doc.get_root();
-  if (root.get_name() != "supertux-font") {
+  if (root.get_name() != "supertux-font")
+  {
     std::ostringstream msg;
     msg << "Font file:" << filename << ": is not a supertux-font file";
     throw std::runtime_error(msg.str());
@@ -100,13 +105,16 @@ Font::loadFontFile(const std::string &filename)
 
   auto config_l = root.get_mapping();
 
-  int def_char_width=0;
+  int def_char_width = 0;
 
-  if( !config_l.get("glyph-width",def_char_width) ) {
-    log_warning << "Font:"<< filename << ": misses default glyph-width" << std::endl;
+  if (!config_l.get("glyph-width", def_char_width))
+  {
+    log_warning << "Font:" << filename << ": misses default glyph-width"
+                << std::endl;
   }
 
-  if( !config_l.get("glyph-height",char_height) ) {
+  if (!config_l.get("glyph-height", char_height))
+  {
     std::ostringstream msg;
     msg << "Font:" << filename << ": misses glyph-height";
     throw std::runtime_error(msg.str());
@@ -116,9 +124,11 @@ Font::loadFontFile(const std::string &filename)
   config_l.get("rtl", rtl);
 
   auto iter = config_l.get_iter();
-  while(iter.next()) {
+  while (iter.next())
+  {
     const std::string& token = iter.get_key();
-    if( token == "surface" ) {
+    if (token == "surface")
+    {
       auto glyphs_val = iter.as_mapping();
       int local_char_width;
       bool monospaced;
@@ -126,70 +136,81 @@ Font::loadFontFile(const std::string &filename)
       std::string glyph_image;
       std::string shadow_image;
       std::vector<std::string> chars;
-      if( ! glyphs_val.get("glyph-width", local_char_width) ) {
+      if (!glyphs_val.get("glyph-width", local_char_width))
+      {
         local_char_width = def_char_width;
       }
-      if( ! glyphs_val.get("monospace", monospaced ) ) {
+      if (!glyphs_val.get("monospace", monospaced))
+      {
         local_glyph_width = glyph_width;
       }
-      else {
-        if( monospaced ) local_glyph_width = FIXED;
-        else local_glyph_width = VARIABLE;
+      else
+      {
+        if (monospaced)
+          local_glyph_width = FIXED;
+        else
+          local_glyph_width = VARIABLE;
       }
-      if( ! glyphs_val.get("glyphs", glyph_image) ) {
+      if (!glyphs_val.get("glyphs", glyph_image))
+      {
         std::ostringstream msg;
         msg << "Font:" << filename << ": missing glyphs image";
         throw std::runtime_error(msg.str());
       }
-      if( ! glyphs_val.get("shadows", shadow_image) ) {
+      if (!glyphs_val.get("shadows", shadow_image))
+      {
         std::ostringstream msg;
         msg << "Font:" << filename << ": missing shadows image";
         throw std::runtime_error(msg.str());
       }
-      if( ! glyphs_val.get("chars", chars) || chars.size() == 0) {
+      if (!glyphs_val.get("chars", chars) || chars.size() == 0)
+      {
         std::ostringstream msg;
         msg << "Font:" << filename << ": missing chars definition";
         throw std::runtime_error(msg.str());
       }
 
-      if( local_char_width==0 ) {
+      if (local_char_width == 0)
+      {
         std::ostringstream msg;
         msg << "Font:" << filename << ": misses glyph-width for some surface";
         throw std::runtime_error(msg.str());
       }
 
-      loadFontSurface(glyph_image, shadow_image, chars,
-                      local_glyph_width, local_char_width);
+      loadFontSurface(glyph_image, shadow_image, chars, local_glyph_width,
+                      local_char_width);
     }
   }
 }
 
 void
-Font::loadFontSurface(
-  const std::string &glyphimage,
-  const std::string &shadowimage,
-  const std::vector<std::string> &chars,
-  GlyphWidth glyph_width_,
-  int char_width
-  )
+Font::loadFontSurface(const std::string& glyphimage,
+                      const std::string& shadowimage,
+                      const std::vector<std::string>& chars,
+                      GlyphWidth glyph_width_, int char_width)
 {
-  SurfacePtr glyph_surface  = Surface::create("images/engine/fonts/" + glyphimage);
-  SurfacePtr shadow_surface = Surface::create("images/engine/fonts/" + shadowimage);
+  SurfacePtr glyph_surface =
+      Surface::create("images/engine/fonts/" + glyphimage);
+  SurfacePtr shadow_surface =
+      Surface::create("images/engine/fonts/" + shadowimage);
 
   int surface_idx = glyph_surfaces.size();
   glyph_surfaces.push_back(glyph_surface);
   shadow_surfaces.push_back(shadow_surface);
 
-  int row=0, col=0;
+  int row = 0, col = 0;
   int wrap = glyph_surface->get_width() / char_width;
 
-  SDL_Surface *surface = NULL;
+  SDL_Surface* surface = NULL;
 
-  if( glyph_width_ == VARIABLE ) {
-    //this does not work:
+  if (glyph_width_ == VARIABLE)
+  {
+    // this does not work:
     // surface = ((SDL::Texture *)glyph_surface.get_texture())->get_texture();
-    surface = IMG_Load_RW(get_physfs_SDLRWops("images/engine/fonts/"+glyphimage), 1);
-    if(surface == NULL) {
+    surface = IMG_Load_RW(
+        get_physfs_SDLRWops("images/engine/fonts/" + glyphimage), 1);
+    if (surface == NULL)
+    {
       std::ostringstream msg;
       msg << "Couldn't load image '" << glyphimage << "' :" << SDL_GetError();
       throw std::runtime_error(msg.str());
@@ -197,69 +218,83 @@ Font::loadFontSurface(
     SDL_LockSurface(surface);
   }
 
-  for( unsigned int i = 0; i < chars.size(); i++) {
-    for(UTF8Iterator chr(chars[i]); !chr.done(); ++chr) {
-      int y = row * (char_height + 2*border) + border;
-      int x = col * (char_width + 2*border) + border;
-      if( ++col == wrap ) { col=0; row++; }
-      if( *chr == 0x0020 && glyphs[0x20].surface_idx != -1) continue;
+  for (unsigned int i = 0; i < chars.size(); i++)
+  {
+    for (UTF8Iterator chr(chars[i]); !chr.done(); ++chr)
+    {
+      int y = row * (char_height + 2 * border) + border;
+      int x = col * (char_width + 2 * border) + border;
+      if (++col == wrap)
+      {
+        col = 0;
+        row++;
+      }
+      if (*chr == 0x0020 && glyphs[0x20].surface_idx != -1) continue;
 
       Glyph glyph;
-      glyph.surface_idx   = surface_idx;
+      glyph.surface_idx = surface_idx;
 
-      if( glyph_width_ == FIXED || (*chr <= 255 && isdigit(*chr)) )
+      if (glyph_width_ == FIXED || (*chr <= 255 && isdigit(*chr)))
       {
-        glyph.rect    = Rectf(x, y, x + char_width, y + char_height);
-        glyph.offset  = Vector(0, 0);
+        glyph.rect = Rectf(x, y, x + char_width, y + char_height);
+        glyph.offset = Vector(0, 0);
         glyph.advance = char_width;
       }
       else
       {
         if (y + char_height > surface->h)
         {
-          log_warning << "error: font definition contains more letter then the images: " << glyphimage << std::endl;
+          log_warning
+              << "error: font definition contains more letter then the images: "
+              << glyphimage << std::endl;
           goto abort;
         }
 
         int left = x;
-        while (left < x + char_width && vline_empty(surface, left, y, y + char_height, 64))
+        while (left < x + char_width &&
+               vline_empty(surface, left, y, y + char_height, 64))
           left += 1;
         int right = x + char_width - 1;
-        while (right > left && vline_empty(surface, right, y, y + char_height, 64))
+        while (right > left &&
+               vline_empty(surface, right, y, y + char_height, 64))
           right -= 1;
 
         if (left <= right)
         {
-          glyph.offset  = Vector(x-left, 0);
-          glyph.advance = right - left + 1 + 1; // FIXME: might be useful to make spacing configurable
+          glyph.offset = Vector(x - left, 0);
+          glyph.advance =
+              right - left + 1 +
+              1;  // FIXME: might be useful to make spacing configurable
         }
         else
-        { // glyph is completly transparent
-          glyph.offset  = Vector(0, 0);
-          glyph.advance = char_width + 1; // FIXME: might be useful to make spacing configurable
+        {  // glyph is completly transparent
+          glyph.offset = Vector(0, 0);
+          glyph.advance =
+              char_width +
+              1;  // FIXME: might be useful to make spacing configurable
         }
 
-        glyph.rect = Rectf(x,  y, x + char_width, y + char_height);
+        glyph.rect = Rectf(x, y, x + char_width, y + char_height);
       }
 
       glyphs[*chr] = glyph;
     }
-    if( col>0 && col <= wrap ) {
+    if (col > 0 && col <= wrap)
+    {
       col = 0;
       row++;
     }
   }
 abort:
 
-  if( surface != NULL ) {
+  if (surface != NULL)
+  {
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(surface);
   }
 }
 
-Font::~Font()
-{
-}
+Font::~Font() {}
 
 float
 Font::get_text_width(const std::string& text) const
@@ -267,7 +302,7 @@ Font::get_text_width(const std::string& text) const
   float curr_width = 0;
   float last_width = 0;
 
-  for(UTF8Iterator it(text); !it.done(); ++it)
+  for (UTF8Iterator it(text); !it.done(); ++it)
   {
     if (*it == '\n')
     {
@@ -276,7 +311,7 @@ Font::get_text_width(const std::string& text) const
     }
     else
     {
-      if( glyphs.at(*it).surface_idx != -1 )
+      if (glyphs.at(*it).surface_idx != -1)
         curr_width += glyphs[*it].advance;
       else
         curr_width += glyphs[0x20].advance;
@@ -291,12 +326,11 @@ Font::get_text_height(const std::string& text) const
 {
   std::string::size_type text_height = char_height;
 
-  for(std::string::const_iterator it = text.begin(); it != text.end(); ++it)
-  { // since UTF8 multibyte characters are decoded with values
+  for (std::string::const_iterator it = text.begin(); it != text.end(); ++it)
+  {  // since UTF8 multibyte characters are decoded with values
     // outside the ASCII range there is no risk of overlapping and
     // thus we don't need to decode the utf-8 string
-    if (*it == '\n')
-      text_height += char_height + 2;
+    if (*it == '\n') text_height += char_height + 2;
   }
 
   return text_height;
@@ -309,19 +343,23 @@ Font::get_height() const
 }
 
 std::string
-Font::wrap_to_chars(const std::string& s, int line_length, std::string* overflow)
+Font::wrap_to_chars(const std::string& s, int line_length,
+                    std::string* overflow)
 {
   // if text is already smaller, return full text
-  if ((int)s.length() <= line_length) {
+  if ((int)s.length() <= line_length)
+  {
     if (overflow) *overflow = "";
     return s;
   }
 
-  // if we can find a whitespace character to break at, return text up to this character
+  // if we can find a whitespace character to break at, return text up to this
+  // character
   int i = line_length;
   while ((i > 0) && (s[i] != ' ')) i--;
-  if (i > 0) {
-    if (overflow) *overflow = s.substr(i+1);
+  if (i > 0)
+  {
+    if (overflow) *overflow = s.substr(i + 1);
     return s.substr(0, i);
   }
 
@@ -336,17 +374,21 @@ Font::wrap_to_width(const std::string& s_, float width, std::string* overflow)
   std::string s = s_;
 
   // if text is already smaller, return full text
-  if (get_text_width(s) <= width) {
+  if (get_text_width(s) <= width)
+  {
     if (overflow) *overflow = "";
     return s;
   }
 
-  // if we can find a whitespace character to break at, return text up to this character
-  for (int i = s.length()-1; i >= 0; i--) {
-    std::string s2 = s.substr(0,i);
+  // if we can find a whitespace character to break at, return text up to this
+  // character
+  for (int i = s.length() - 1; i >= 0; i--)
+  {
+    std::string s2 = s.substr(0, i);
     if (s[i] != ' ') continue;
-    if (get_text_width(s2) <= width) {
-      if (overflow) *overflow = s.substr(i+1);
+    if (get_text_width(s2) <= width)
+    {
+      if (overflow) *overflow = s.substr(i + 1);
       return s.substr(0, i);
     }
   }
@@ -357,7 +399,7 @@ Font::wrap_to_width(const std::string& s_, float width, std::string* overflow)
 }
 
 void
-Font::draw(Renderer *renderer, const std::string& text, const Vector& pos_,
+Font::draw(Renderer* renderer, const std::string& text, const Vector& pos_,
            FontAlignment alignment, DrawingEffect drawing_effect, Color color,
            float alpha) const
 {
@@ -365,7 +407,7 @@ Font::draw(Renderer *renderer, const std::string& text, const Vector& pos_,
   float y = pos_.y;
 
   std::string::size_type last = 0;
-  for(std::string::size_type i = 0;; ++i)
+  for (std::string::size_type i = 0;; ++i)
   {
     if (text[i] == '\n' || i == text.size())
     {
@@ -374,9 +416,9 @@ Font::draw(Renderer *renderer, const std::string& text, const Vector& pos_,
       // calculate X positions based on the alignment type
       Vector pos = Vector(x, y);
 
-      if(alignment == ALIGN_CENTER)
+      if (alignment == ALIGN_CENTER)
         pos.x -= get_text_width(temp) / 2;
-      else if(alignment == ALIGN_RIGHT)
+      else if (alignment == ALIGN_RIGHT)
         pos.x -= get_text_width(temp);
 
       // Cast font position to integer to get a clean drawing result and
@@ -385,8 +427,7 @@ Font::draw(Renderer *renderer, const std::string& text, const Vector& pos_,
 
       draw_text(renderer, temp, pos, drawing_effect, color, alpha);
 
-      if (i == text.size())
-        break;
+      if (i == text.size()) break;
 
       y += char_height + 2;
       last = i + 1;
@@ -395,38 +436,42 @@ Font::draw(Renderer *renderer, const std::string& text, const Vector& pos_,
 }
 
 void
-Font::draw_text(Renderer *renderer, const std::string& text, const Vector& pos,
+Font::draw_text(Renderer* renderer, const std::string& text, const Vector& pos,
                 DrawingEffect drawing_effect, Color color, float alpha) const
 {
-  if(shadowsize > 0)
-    draw_chars(renderer, false, rtl ? std::string(text.rbegin(), text.rend()) : text,
-               pos + Vector(shadowsize, shadowsize), drawing_effect, Color(1,1,1), alpha);
+  if (shadowsize > 0)
+    draw_chars(renderer, false,
+               rtl ? std::string(text.rbegin(), text.rend()) : text,
+               pos + Vector(shadowsize, shadowsize), drawing_effect,
+               Color(1, 1, 1), alpha);
 
-  draw_chars(renderer, true, rtl ? std::string(text.rbegin(), text.rend()) : text, pos, drawing_effect, color, alpha);
+  draw_chars(renderer, true,
+             rtl ? std::string(text.rbegin(), text.rend()) : text, pos,
+             drawing_effect, color, alpha);
 }
 
 void
-Font::draw_chars(Renderer *renderer, bool notshadow, const std::string& text,
+Font::draw_chars(Renderer* renderer, bool notshadow, const std::string& text,
                  const Vector& pos, DrawingEffect drawing_effect, Color color,
                  float alpha) const
 {
   Vector p = pos;
 
-  for(UTF8Iterator it(text); !it.done(); ++it)
+  for (UTF8Iterator it(text); !it.done(); ++it)
   {
-    if(*it == '\n')
+    if (*it == '\n')
     {
       p.x = pos.x;
       p.y += char_height + 2;
     }
-    else if(*it == ' ')
+    else if (*it == ' ')
     {
       p.x += glyphs[0x20].advance;
     }
     else
     {
       Glyph glyph;
-      if( glyphs.at(*it).surface_idx != -1 )
+      if (glyphs.at(*it).surface_idx != -1)
         glyph = glyphs[*it];
       else
         glyph = glyphs[0x20];
@@ -441,7 +486,9 @@ Font::draw_chars(Renderer *renderer, bool notshadow, const std::string& text,
       SurfacePartRequest surfacepartrequest;
       surfacepartrequest.srcrect = glyph.rect;
       surfacepartrequest.dstsize = glyph.rect.get_size();
-      surfacepartrequest.surface = notshadow ? glyph_surfaces[glyph.surface_idx].get() : shadow_surfaces[glyph.surface_idx].get();
+      surfacepartrequest.surface =
+          notshadow ? glyph_surfaces[glyph.surface_idx].get()
+                    : shadow_surfaces[glyph.surface_idx].get();
 
       request.request_data = &surfacepartrequest;
       renderer->draw_surface_part(request);

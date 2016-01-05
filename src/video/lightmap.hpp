@@ -37,10 +37,10 @@ struct DrawingRequest;
 
 class Lightmap
 {
-public:
+ public:
   virtual ~Lightmap() {}
 
-  virtual void start_draw(const Color &ambient_color) = 0;
+  virtual void start_draw(const Color& ambient_color) = 0;
   virtual void end_draw() = 0;
   virtual void do_draw() = 0;
   virtual void draw_surface(const DrawingRequest& request) = 0;

@@ -1,5 +1,6 @@
 //  SuperTux - Add-on
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //                2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -26,13 +27,19 @@
 
 class Addon
 {
-public:
+ public:
   static std::unique_ptr<Addon> parse(const ReaderMapping& lisp);
   static std::unique_ptr<Addon> parse(const std::string& fname);
 
-  enum Type { WORLD, WORLDMAP, LEVELSET, LANGUAGEPACK };
+  enum Type
+  {
+    WORLD,
+    WORLDMAP,
+    LEVELSET,
+    LANGUAGEPACK
+  };
 
-private:
+ private:
   // fields provided by the addon.zip itself
   std::string m_id;
   int m_version;
@@ -49,20 +56,52 @@ private:
   std::string m_install_filename;
   bool m_enabled;
 
-private:
+ private:
   Addon();
 
-public:
-  std::string get_id() const { return m_id; }
-  int get_version() const { return m_version; }
+ public:
+  std::string
+  get_id() const
+  {
+    return m_id;
+  }
+  int
+  get_version() const
+  {
+    return m_version;
+  }
 
-  Type get_type() const { return m_type; }
-  std::string get_title() const { return m_title; }
-  std::string get_author() const { return m_author; }
-  std::string get_license() const { return m_license; }
+  Type
+  get_type() const
+  {
+    return m_type;
+  }
+  std::string
+  get_title() const
+  {
+    return m_title;
+  }
+  std::string
+  get_author() const
+  {
+    return m_author;
+  }
+  std::string
+  get_license() const
+  {
+    return m_license;
+  }
 
-  std::string get_url() const { return m_url; }
-  std::string get_md5() const { return m_md5; }
+  std::string
+  get_url() const
+  {
+    return m_url;
+  }
+  std::string
+  get_md5() const
+  {
+    return m_md5;
+  }
 
   std::string get_filename() const;
   std::string get_install_filename() const;
@@ -70,10 +109,11 @@ public:
   bool is_installed() const;
   bool is_enabled() const;
 
-  void set_install_filename(const std::string& absolute_filename, const std::string& md5);
+  void set_install_filename(const std::string& absolute_filename,
+                            const std::string& md5);
   void set_enabled(bool v);
 
-private:
+ private:
   Addon(const Addon&) = delete;
   Addon& operator=(const Addon&) = delete;
 };

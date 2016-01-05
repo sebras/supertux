@@ -25,11 +25,11 @@
 #include "video/color.hpp"
 #include "video/surface_ptr.hpp"
 
-class LevelTime : public GameObject,
-                  public ScriptInterface
+class LevelTime : public GameObject, public ScriptInterface
 {
   static Color text_color;
-public:
+
+ public:
   LevelTime(const ReaderMapping& reader);
 
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
@@ -67,7 +67,7 @@ public:
    * @}
    */
 
-private:
+ private:
   SurfacePtr time_surface;
   bool running;
   float time_left;

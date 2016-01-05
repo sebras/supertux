@@ -1,5 +1,6 @@
 //  SuperTux - "Will-O-Wisp" Badguy
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -30,16 +31,28 @@ class WillOWisp : public BadGuy,
                   public scripting::WillOWisp,
                   public ScriptInterface
 {
-public:
+ public:
   WillOWisp(const ReaderMapping& reader);
 
   void activate();
   void deactivate();
 
   void active_update(float elapsed_time);
-  virtual bool is_flammable() const { return false; }
-  virtual bool is_freezable() const { return false; }
-  virtual void kill_fall() { vanish(); }
+  virtual bool
+  is_flammable() const
+  {
+    return false;
+  }
+  virtual bool
+  is_freezable() const
+  {
+    return false;
+  }
+  virtual void
+  kill_fall()
+  {
+    vanish();
+  }
 
   /**
    * make WillOWisp vanish
@@ -56,17 +69,23 @@ public:
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
   virtual void unexpose(HSQUIRRELVM vm, SQInteger table_idx);
 
-protected:
+ protected:
   virtual bool collides(GameObject& other, const CollisionHit& hit) const;
   HitResponse collision_player(Player& player, const CollisionHit& hit);
 
-private:
-  enum MyState {
-    STATE_STOPPED, STATE_IDLE, STATE_TRACKING, STATE_VANISHING, STATE_WARPING,
-    STATE_PATHMOVING, STATE_PATHMOVING_TRACK
+ private:
+  enum MyState
+  {
+    STATE_STOPPED,
+    STATE_IDLE,
+    STATE_TRACKING,
+    STATE_VANISHING,
+    STATE_WARPING,
+    STATE_PATHMOVING,
+    STATE_PATHMOVING_TRACK
   };
 
-private:
+ private:
   MyState mystate;
 
   std::string target_sector;
@@ -75,8 +94,8 @@ private:
 
   std::unique_ptr<SoundSource> sound_source;
 
-  std::unique_ptr<Path>        path;
-  std::unique_ptr<PathWalker>  walker;
+  std::unique_ptr<Path> path;
+  std::unique_ptr<PathWalker> walker;
 
   float flyspeed;
   float track_range;

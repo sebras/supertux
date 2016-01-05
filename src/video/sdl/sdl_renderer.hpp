@@ -22,7 +22,7 @@
 
 class SDLRenderer : public Renderer
 {
-public:
+ public:
   SDLRenderer();
   ~SDLRenderer();
 
@@ -40,21 +40,29 @@ public:
   Vector to_logical(int physical_x, int physical_y) override;
   void set_gamma(float gamma) override;
 
-  SDL_Window* get_window() const override { return m_window; }
-  SDL_Renderer* get_sdl_renderer() const { return m_renderer; };
+  SDL_Window*
+  get_window() const override
+  {
+    return m_window;
+  }
+  SDL_Renderer*
+  get_sdl_renderer() const
+  {
+    return m_renderer;
+  };
 
-private:
+ private:
   void apply_video_mode();
   void apply_viewport();
 
-private:
+ private:
   SDL_Window* m_window;
   SDL_Renderer* m_renderer;
   SDL_Rect m_viewport;
   Size m_desktop_size;
   Vector m_scale;
 
-private:
+ private:
   SDLRenderer(const SDLRenderer&);
   SDLRenderer& operator=(const SDLRenderer&);
 };

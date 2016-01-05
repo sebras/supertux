@@ -23,19 +23,19 @@
 
 class WavSoundFile : public SoundFile
 {
-public:
+ public:
   WavSoundFile(PHYSFS_file* file);
   ~WavSoundFile();
 
   size_t read(void* buffer, size_t buffer_size);
   void reset();
 
-private:
+ private:
   PHYSFS_file* file;
 
   PHYSFS_sint64 datastart;
 
-private:
+ private:
   WavSoundFile(const WavSoundFile&);
   WavSoundFile& operator=(const WavSoundFile&);
 };

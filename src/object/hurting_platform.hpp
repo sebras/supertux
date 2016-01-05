@@ -1,5 +1,6 @@
 //  SuperTux - Hurting Platform
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,13 +25,12 @@
  */
 class HurtingPlatform : public Platform
 {
-public:
+ public:
   HurtingPlatform(const ReaderMapping& reader);
 
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
-
+ private:
 };
 
 #endif

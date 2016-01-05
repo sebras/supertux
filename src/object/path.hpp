@@ -1,6 +1,7 @@
 //  SuperTux Path
 //  Copyright (C) 2005 Philipp <balinor@pnxs.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -26,7 +27,7 @@
 
 class Path
 {
-public:
+ public:
   Path();
   ~Path();
 
@@ -39,14 +40,11 @@ public:
    */
   class Node
   {
-  public:
+   public:
     Vector position; /**< the position of this node */
     float time; /**< time (in seconds) to get from this node to next node */
 
-    Node() :
-      position(),
-      time()
-    {}
+    Node() : position(), time() {}
   };
 
   std::vector<Node> nodes;
@@ -61,10 +59,11 @@ public:
    */
   int get_farthest_node_no(Vector reference_point) const;
 
-private:
+ private:
   friend class PathWalker;
 
-  enum WalkMode {
+  enum WalkMode
+  {
     // moves from first to last path node and stops
     ONE_SHOT,
     // moves from first to last node then in reverse order back to first

@@ -30,10 +30,9 @@ class Path;
 class PathWalker;
 class CameraConfig;
 
-class Camera : public GameObject,
-               public ScriptInterface
+class Camera : public GameObject, public ScriptInterface
 {
-public:
+ public:
   Camera(Sector* sector, std::string name = "");
   virtual ~Camera();
 
@@ -48,7 +47,7 @@ public:
 
   virtual void update(float elapsed_time);
 
-  virtual void draw(DrawingContext& );
+  virtual void draw(DrawingContext&);
 
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
   virtual void unexpose(HSQUIRRELVM vm, SQInteger table_idx);
@@ -56,7 +55,8 @@ public:
   // shake camera in a direction 1 time
   void shake(float speed, float x, float y);
 
-  void set_scrolling(int scroll_x, int scroll_y)
+  void
+  set_scrolling(int scroll_x, int scroll_y)
   {
     translation.x = scroll_x;
     translation.y = scroll_y;
@@ -72,7 +72,10 @@ public:
 
   enum CameraMode
   {
-    NORMAL, AUTOSCROLL, SCROLLTO, MANUAL
+    NORMAL,
+    AUTOSCROLL,
+    SCROLLTO,
+    MANUAL
   };
   CameraMode mode;
 
@@ -81,23 +84,26 @@ public:
    */
   Vector get_center() const;
 
-private:
+ private:
   void update_scroll_normal(float elapsed_time);
   void update_scroll_autoscroll(float elapsed_time);
   void update_scroll_to(float elapsed_time);
   void keep_in_bounds(Vector& vector);
   void shake();
 
-private:
+ private:
   /**
    * The camera basically provides lookahead on the left or right side
    * or is undecided.
    */
-  enum LookaheadMode {
-    LOOKAHEAD_NONE, LOOKAHEAD_LEFT, LOOKAHEAD_RIGHT
+  enum LookaheadMode
+  {
+    LOOKAHEAD_NONE,
+    LOOKAHEAD_LEFT,
+    LOOKAHEAD_RIGHT
   };
 
-private:
+ private:
   Vector translation;
 
   Sector* sector;
@@ -127,7 +133,7 @@ private:
 
   std::unique_ptr<CameraConfig> config;
 
-private:
+ private:
   Camera(const Camera&);
   Camera& operator=(const Camera&);
 };

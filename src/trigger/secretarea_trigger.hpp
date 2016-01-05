@@ -29,7 +29,8 @@ class Color;
 class SecretAreaTrigger : public TriggerBase
 {
   static Color text_color;
-public:
+
+ public:
   SecretAreaTrigger(const ReaderMapping& reader);
   SecretAreaTrigger(const Rectf& area, std::string fade_tilemap = "");
   ~SecretAreaTrigger();
@@ -38,11 +39,14 @@ public:
   void draw(DrawingContext& context);
   std::string get_fade_tilemap_name();
 
-private:
+ private:
   Timer message_timer;
   bool message_displayed;
-  std::string message; /**< message to display, default "You found a secret area!" */
-  std::string fade_tilemap; /**< tilemap to fade away when trigger is activated, or empty if you don't care */
+  std::string
+      message; /**< message to display, default "You found a secret area!" */
+  std::string
+      fade_tilemap;   /**< tilemap to fade away when trigger is activated, or
+                         empty if you don't care */
   std::string script; /**< optional script to run when trigger is activated */
 };
 

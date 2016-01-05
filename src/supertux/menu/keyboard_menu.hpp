@@ -23,10 +23,10 @@
 
 class KeyboardMenu : public Menu
 {
-private:
+ private:
   InputManager& m_input_manager;
 
-public:
+ public:
   KeyboardMenu(InputManager& input_manager);
   ~KeyboardMenu();
 
@@ -34,7 +34,7 @@ public:
   std::string get_key_name(SDL_Keycode key) const;
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   KeyboardMenu(const KeyboardMenu&);
   KeyboardMenu& operator=(const KeyboardMenu&);
 };

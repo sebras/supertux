@@ -27,19 +27,19 @@ class Sprite;
 
 class SmokeCloud : public GameObject
 {
-public:
+ public:
   SmokeCloud(const Vector& pos);
   ~SmokeCloud();
 
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   Timer timer;
   Vector position;
 
-private:
+ private:
   SmokeCloud(const SmokeCloud&);
   SmokeCloud& operator=(const SmokeCloud&);
 };

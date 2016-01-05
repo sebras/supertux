@@ -29,20 +29,23 @@ class Color;
 
 class ItemInactive : public MenuItem
 {
-  public:
-    ItemInactive(const std::string& text_);
+ public:
+  ItemInactive(const std::string& text_);
 
-    /** Returns true when the menu item has no action and therefore can be skipped.
-        Useful for labels and horizontal lines.*/
-    virtual bool skippable() const {
-      return true;
-    }
+  /** Returns true when the menu item has no action and therefore can be
+     skipped.
+      Useful for labels and horizontal lines.*/
+  virtual bool
+  skippable() const
+  {
+    return true;
+  }
 
-    virtual Color get_color() const;
+  virtual Color get_color() const;
 
-  private:
-    ItemInactive(const ItemInactive&);
-    ItemInactive& operator=(const ItemInactive&);
+ private:
+  ItemInactive(const ItemInactive&);
+  ItemInactive& operator=(const ItemInactive&);
 };
 
 #endif

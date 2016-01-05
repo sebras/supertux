@@ -19,15 +19,15 @@
 
 #include <vector>
 
-namespace scripting {
-
+namespace scripting
+{
 /**
  * This class keeps a list of squirrel threads that are scheduled for a certain
  * time. (the typical result of a wait() command in a squirrel script)
  */
 class TimeScheduler
 {
-public:
+ public:
   TimeScheduler();
   virtual ~TimeScheduler();
 
@@ -36,8 +36,9 @@ public:
 
   static TimeScheduler* instance;
 
-private:
-  struct ScheduleEntry {
+ private:
+  struct ScheduleEntry
+  {
     /// weak reference to the squirrel vm object
     HSQOBJECT thread_ref;
     /// time when the thread should be woken up
@@ -53,7 +54,6 @@ private:
   typedef std::vector<ScheduleEntry> ScheduleHeap;
   ScheduleHeap schedule;
 };
-
 }
 
 #endif

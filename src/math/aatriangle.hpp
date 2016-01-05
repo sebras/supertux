@@ -25,7 +25,7 @@
  */
 class AATriangle
 {
-public:
+ public:
   /** Directions:
    *
    *    SOUTHEWEST    NORTHEAST   SOUTHEAST    NORTHWEST
@@ -36,7 +36,8 @@ public:
    *
    * Deform flags: (see docs/aatriangletypes.png for details)
    */
-  enum Direction {
+  enum Direction
+  {
     SOUTHWEST = 0,
     NORTHEAST,
     SOUTHEAST,
@@ -51,19 +52,11 @@ public:
 
   static int vertical_flip(int dir);
 
-public:
-  AATriangle() :
-    bbox(),
-    dir(SOUTHWEST)
-  {
-  }
-  AATriangle(const Rectf& newbbox, int newdir) :
-    bbox(newbbox),
-    dir(newdir)
-  {
-  }
+ public:
+  AATriangle() : bbox(), dir(SOUTHWEST) {}
+  AATriangle(const Rectf& newbbox, int newdir) : bbox(newbbox), dir(newdir) {}
 
-public:
+ public:
   Rectf bbox;
   int dir;
 };

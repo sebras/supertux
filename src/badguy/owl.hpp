@@ -23,7 +23,7 @@
 
 class Owl : public BadGuy
 {
-public:
+ public:
   Owl(const ReaderMapping& reader);
   Owl(const Vector& pos, Direction d);
 
@@ -36,15 +36,15 @@ public:
   bool is_freezable() const;
   void ignite();
 
-protected:
+ protected:
   bool is_above_player() const;
-  void active_update (float elapsed_time);
+  void active_update(float elapsed_time);
   bool collision_squished(GameObject& object);
 
   std::string carried_obj_name;
-  Portable *carried_object;
+  Portable* carried_object;
 
-private:
+ private:
   Owl(const Owl&);
   Owl& operator=(const Owl&);
 };

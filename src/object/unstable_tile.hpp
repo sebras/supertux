@@ -1,6 +1,7 @@
 //  SuperTux - Unstable Tile
 //  Copyright (C) 2006 Matthias Braun <matze@braunis.de>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //  Copyright (C) 2010 Florian Forster <supertux at octo.it>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -28,24 +29,26 @@
  */
 class UnstableTile : public MovingSprite
 {
-public:
+ public:
   UnstableTile(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
   void update(float elapsed_time);
 
-private:
-  enum State {
+ private:
+  enum State
+  {
     STATE_NORMAL,   /**< default state */
     STATE_SHAKE,    /**< shaking, still solid */
     STATE_DISSOLVE, /**< dissolving, will turn non-solid after this */
-    STATE_SLOWFALL, /**< slow fall phase (used when neither shaking nor dissolving exist */
+    STATE_SLOWFALL, /**< slow fall phase (used when neither shaking nor
+                       dissolving exist */
     STATE_FALL      /**< falling down */
   };
 
   void startCrumbling();
 
-private:
+ private:
   void shake();
   void dissolve();
   void fall_down();

@@ -18,9 +18,8 @@
 
 #include "math/sizef.hpp"
 
-Rectf::Rectf(const Vector& p1_, const Sizef& size) :
-  p1(p1_),
-  p2(p1_.x + size.width, p1_.y + size.height)
+Rectf::Rectf(const Vector& p1_, const Sizef& size)
+    : p1(p1_), p2(p1_.x + size.width, p1_.y + size.height)
 {
 }
 

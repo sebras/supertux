@@ -25,12 +25,12 @@ class Player;
 /** A tile that starts falling down if tux stands to long on it */
 class InvisibleWall : public MovingSprite
 {
-public:
+ public:
   InvisibleWall(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   Physic physic;
   float width, height;
 };

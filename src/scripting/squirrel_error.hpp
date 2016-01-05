@@ -21,23 +21,23 @@
 #include <stdexcept>
 #include <string>
 
-namespace scripting {
-
+namespace scripting
+{
 /** Exception class for squirrel errors, it takes a squirrelvm and uses
  * sq_geterror() to retrieve additional information about the last error that
  * occurred and creates a readable message from that.
  */
 class SquirrelError : public std::exception
 {
-public:
+ public:
   SquirrelError(HSQUIRRELVM v, const std::string& message) throw();
   virtual ~SquirrelError() throw();
 
   const char* what() const throw();
-private:
+
+ private:
   std::string message;
 };
-
 }
 
 #endif

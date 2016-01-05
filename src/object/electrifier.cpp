@@ -17,31 +17,29 @@
 #include "object/electrifier.hpp"
 #include "supertux/sector.hpp"
 
-Electrifier::Electrifier(uint32_t oldtile, uint32_t newtile, float seconds) :
-  change_from(),
-  change_to(),
-  duration()
+Electrifier::Electrifier(uint32_t oldtile, uint32_t newtile, float seconds)
+    : change_from(), change_to(), duration()
 {
   duration.start(seconds);
   change_from = oldtile;
   change_to = newtile;
-  Sector::current()->change_solid_tiles(change_from,change_to);
+  Sector::current()->change_solid_tiles(change_from, change_to);
 }
 
-Electrifier::~Electrifier() {
-}
+Electrifier::~Electrifier() {}
 
 void
-Electrifier::update(float )
+Electrifier::update(float)
 {
-  if (duration.check()) {
-    Sector::current()->change_solid_tiles(change_to,change_from);
+  if (duration.check())
+  {
+    Sector::current()->change_solid_tiles(change_to, change_from);
     remove_me();
   }
 }
 
 void
-Electrifier::draw(DrawingContext& )
+Electrifier::draw(DrawingContext&)
 {
 }
 

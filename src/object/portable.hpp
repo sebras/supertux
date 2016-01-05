@@ -28,19 +28,21 @@
  */
 class Portable
 {
-public:
-  virtual ~Portable()
-  { }
+ public:
+  virtual ~Portable() {}
 
   /**
    * called each frame when the object has been grabbed.
    */
   virtual void grab(MovingObject& object, const Vector& pos, Direction dir) = 0;
 
-  virtual void ungrab(MovingObject& , Direction )
-  {}
+  virtual void
+  ungrab(MovingObject&, Direction)
+  {
+  }
 
-  virtual bool is_portable() const
+  virtual bool
+  is_portable() const
   {
     return true;
   }
@@ -49,7 +51,8 @@ public:
    * Is the object so heavy/bulky/fragile that Tux can't run while
    * carrying it?
    */
-  virtual bool is_hampering()
+  virtual bool
+  is_hampering()
   {
     return false;
   }

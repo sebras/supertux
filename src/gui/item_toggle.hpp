@@ -29,23 +29,23 @@ class Color;
 
 class ItemToggle : public MenuItem
 {
-  public:
-    ItemToggle(const std::string& text_, bool* toggled_, int id = -1);
+ public:
+  ItemToggle(const std::string& text_, bool* toggled_, int id = -1);
 
-    /** Draws the menu item. */
-    virtual void draw(DrawingContext&, Vector pos, int menu_width, bool active);
+  /** Draws the menu item. */
+  virtual void draw(DrawingContext&, Vector pos, int menu_width, bool active);
 
-    /** Returns the minimum width of the menu item. */
-    virtual int get_width() const;
+  /** Returns the minimum width of the menu item. */
+  virtual int get_width() const;
 
-    /** Processes the menu action. */
-    virtual void process_action(MenuAction action);
+  /** Processes the menu action. */
+  virtual void process_action(MenuAction action);
 
-    bool* toggled;
+  bool* toggled;
 
-  private:
-    ItemToggle(const ItemToggle&);
-    ItemToggle& operator=(const ItemToggle&);
+ private:
+  ItemToggle(const ItemToggle&);
+  ItemToggle& operator=(const ItemToggle&);
 };
 
 #endif

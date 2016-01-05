@@ -1,5 +1,6 @@
 //  SuperTux - Add-on Manager
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2007.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2007.expires.deltadevelopment.de>
 //                2014 Ingo Ruhnke <grumbel@gmail.com>
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -40,15 +41,17 @@
 #include "util/reader_mapping.hpp"
 #include "util/writer.hpp"
 
-namespace {
-
+namespace
+{
 static const char* ADDON_INFO_PATH = "/addons/repository.nfo";
 
-MD5 md5_from_file(const std::string& filename)
+MD5
+md5_from_file(const std::string& filename)
 {
-  // TODO: this does not work as expected for some files -- IFileStream seems to not always behave like an ifstream.
-  //IFileStream ifs(installed_physfs_filename);
-  //std::string md5 = MD5(ifs).hex_digest();
+  // TODO: this does not work as expected for some files -- IFileStream seems to
+  // not always behave like an ifstream.
+  // IFileStream ifs(installed_physfs_filename);
+  // std::string md5 = MD5(ifs).hex_digest();
 
   MD5 md5;
 
@@ -74,51 +77,58 @@ MD5 md5_from_file(const std::string& filename)
   }
 }
 
-bool has_suffix(const std::string& str, const std::string& suffix)
+bool
+has_suffix(const std::string& str, const std::string& suffix)
 {
   if (str.length() >= suffix.length())
-    return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+    return str.compare(str.length() - suffix.length(), suffix.length(),
+                       suffix) == 0;
   else
     return false;
 }
 
-static void add_to_dictionary_path(void *data, const char *origdir, const char *fname)
+static void
+add_to_dictionary_path(void* data, const char* origdir, const char* fname)
 {
-    std::string full_path = std::string(origdir) + "/" + std::string(fname);
-    if(PHYSFS_isDirectory(full_path.c_str()))
-    {
-        log_debug << "Adding \"" << full_path << "\" to dictionary search path" << std::endl;
-        g_dictionary_manager->add_directory(full_path);
-    }
+  std::string full_path = std::string(origdir) + "/" + std::string(fname);
+  if (PHYSFS_isDirectory(full_path.c_str()))
+  {
+    log_debug << "Adding \"" << full_path << "\" to dictionary search path"
+              << std::endl;
+    g_dictionary_manager->add_directory(full_path);
+  }
 }
 
-static void remove_from_dictionary_path(void *data, const char *origdir, const char *fname)
+static void
+remove_from_dictionary_path(void* data, const char* origdir, const char* fname)
 {
-    std::string full_path = std::string(origdir) + "/" + std::string(fname);
-    if(PHYSFS_isDirectory(full_path.c_str()))
-    {
-        g_dictionary_manager->remove_directory(full_path);
-    }
+  std::string full_path = std::string(origdir) + "/" + std::string(fname);
+  if (PHYSFS_isDirectory(full_path.c_str()))
+  {
+    g_dictionary_manager->remove_directory(full_path);
+  }
 }
-} // namespace
+}  // namespace
 
 AddonManager::AddonManager(const std::string& addon_directory,
-                           std::vector<Config::Addon>& addon_config) :
-  m_downloader(),
-  m_addon_directory(addon_directory),
-  m_repository_url("https://raw.githubusercontent.com/SuperTux/addons/master/index-0_4_0.nfo"),
-  m_addon_config(addon_config),
-  m_installed_addons(),
-  m_repository_addons(),
-  m_has_been_updated(false),
-  m_transfer_status()
+                           std::vector<Config::Addon>& addon_config)
+    : m_downloader(),
+      m_addon_directory(addon_directory),
+      m_repository_url(
+          "https://raw.githubusercontent.com/SuperTux/addons/master/"
+          "index-0_4_0.nfo"),
+      m_addon_config(addon_config),
+      m_installed_addons(),
+      m_repository_addons(),
+      m_has_been_updated(false),
+      m_transfer_status()
 {
   PHYSFS_mkdir(m_addon_directory.c_str());
 
   add_installed_addons();
 
   // FIXME: We should also restore the order here
-  for(auto& addon : m_addon_config)
+  for (auto& addon : m_addon_config)
   {
     if (addon.enabled)
     {
@@ -126,22 +136,24 @@ AddonManager::AddonManager(const std::string& addon_directory,
       {
         enable_addon(addon.id);
       }
-      catch(const std::exception& err)
+      catch (const std::exception& err)
       {
-        log_warning << "failed to enable addon from config: " << err.what() << std::endl;
+        log_warning << "failed to enable addon from config: " << err.what()
+                    << std::endl;
       }
     }
   }
 
-  if(PHYSFS_exists(ADDON_INFO_PATH))
+  if (PHYSFS_exists(ADDON_INFO_PATH))
   {
     try
     {
-        m_repository_addons = parse_addon_infos(ADDON_INFO_PATH);
+      m_repository_addons = parse_addon_infos(ADDON_INFO_PATH);
     }
-    catch(const std::exception& err)
+    catch (const std::exception& err)
     {
-        log_warning << "parsing repository.nfo failed: " << err.what() << std::endl;
+      log_warning << "parsing repository.nfo failed: " << err.what()
+                  << std::endl;
     }
   }
   else
@@ -154,7 +166,7 @@ AddonManager::~AddonManager()
 {
   // sync enabled/disabled addons into the config for saving
   m_addon_config.clear();
-  for(auto& addon : m_installed_addons)
+  for (auto& addon : m_installed_addons)
   {
     m_addon_config.push_back({addon->get_id(), addon->is_enabled()});
   }
@@ -212,7 +224,6 @@ AddonManager::get_repository_addons() const
   return results;
 }
 
-
 std::vector<AddonId>
 AddonManager::get_installed_addons() const
 {
@@ -244,23 +255,25 @@ AddonManager::request_check_online()
 {
   if (m_transfer_status)
   {
-    throw std::runtime_error("only async request can be made to AddonManager at a time");
+    throw std::runtime_error(
+        "only async request can be made to AddonManager at a time");
   }
   else
   {
-    m_transfer_status = m_downloader.request_download(m_repository_url, ADDON_INFO_PATH);
+    m_transfer_status =
+        m_downloader.request_download(m_repository_url, ADDON_INFO_PATH);
 
-    m_transfer_status->then(
-      [this](bool success)
-      {
-        m_transfer_status = {};
+    m_transfer_status->then([this](bool success)
+                            {
+                              m_transfer_status = {};
 
-        if (success)
-        {
-          m_repository_addons = parse_addon_infos(ADDON_INFO_PATH);
-          m_has_been_updated = true;
-        }
-      });
+                              if (success)
+                              {
+                                m_repository_addons =
+                                    parse_addon_infos(ADDON_INFO_PATH);
+                                m_has_been_updated = true;
+                              }
+                            });
 
     return m_transfer_status;
   }
@@ -279,16 +292,18 @@ AddonManager::request_install_addon(const AddonId& addon_id)
 {
   if (m_transfer_status)
   {
-    throw std::runtime_error("only one addon install request allowed at a time");
+    throw std::runtime_error(
+        "only one addon install request allowed at a time");
   }
   else
   {
-    { // remove addon if it already exists
-      auto it = std::find_if(m_installed_addons.begin(), m_installed_addons.end(),
-                             [&addon_id](const std::unique_ptr<Addon>& addon)
-                             {
-                               return addon->get_id() == addon_id;
-                             });
+    {  // remove addon if it already exists
+      auto it =
+          std::find_if(m_installed_addons.begin(), m_installed_addons.end(),
+                       [&addon_id](const std::unique_ptr<Addon>& addon)
+                       {
+                         return addon->get_id() == addon_id;
+                       });
       if (it != m_installed_addons.end())
       {
         log_debug << "reinstalling addon " << addon_id << std::endl;
@@ -306,44 +321,49 @@ AddonManager::request_install_addon(const AddonId& addon_id)
 
     Addon& addon = get_repository_addon(addon_id);
 
-    std::string install_filename = FileSystem::join(m_addon_directory, addon.get_filename());
+    std::string install_filename =
+        FileSystem::join(m_addon_directory, addon.get_filename());
 
-    m_transfer_status = m_downloader.request_download(addon.get_url(), install_filename);
+    m_transfer_status =
+        m_downloader.request_download(addon.get_url(), install_filename);
 
     m_transfer_status->then(
-      [this, install_filename, addon_id](bool success)
-      {
-        m_transfer_status = {};
-
-        if (success)
+        [this, install_filename, addon_id](bool success)
         {
-          // complete the addon install
-          Addon& repository_addon = get_repository_addon(addon_id);
+          m_transfer_status = {};
 
-          MD5 md5 = md5_from_file(install_filename);
-          if (repository_addon.get_md5() != md5.hex_digest())
+          if (success)
           {
-            if (PHYSFS_delete(install_filename.c_str()) == 0)
-            {
-              log_warning << "PHYSFS_delete failed: " << PHYSFS_getLastError() << std::endl;
-            }
+            // complete the addon install
+            Addon& repository_addon = get_repository_addon(addon_id);
 
-            throw std::runtime_error("Downloading Add-on failed: MD5 checksums differ");
-          }
-          else
-          {
-            const char* realdir = PHYSFS_getRealDir(install_filename.c_str());
-            if (!realdir)
+            MD5 md5 = md5_from_file(install_filename);
+            if (repository_addon.get_md5() != md5.hex_digest())
             {
-              throw std::runtime_error("PHYSFS_getRealDir failed: " + install_filename);
+              if (PHYSFS_delete(install_filename.c_str()) == 0)
+              {
+                log_warning << "PHYSFS_delete failed: " << PHYSFS_getLastError()
+                            << std::endl;
+              }
+
+              throw std::runtime_error(
+                  "Downloading Add-on failed: MD5 checksums differ");
             }
             else
             {
-              add_installed_archive(install_filename, md5.hex_digest());
+              const char* realdir = PHYSFS_getRealDir(install_filename.c_str());
+              if (!realdir)
+              {
+                throw std::runtime_error("PHYSFS_getRealDir failed: " +
+                                         install_filename);
+              }
+              else
+              {
+                add_installed_archive(install_filename, md5.hex_digest());
+              }
             }
           }
-        }
-      });
+        });
 
     return m_transfer_status;
   }
@@ -352,7 +372,7 @@ AddonManager::request_install_addon(const AddonId& addon_id)
 void
 AddonManager::install_addon(const AddonId& addon_id)
 {
-  { // remove addon if it already exists
+  {  // remove addon if it already exists
     auto it = std::find_if(m_installed_addons.begin(), m_installed_addons.end(),
                            [&addon_id](const std::unique_ptr<Addon>& addon)
                            {
@@ -375,7 +395,8 @@ AddonManager::install_addon(const AddonId& addon_id)
 
   Addon& repository_addon = get_repository_addon(addon_id);
 
-  std::string install_filename = FileSystem::join(m_addon_directory, repository_addon.get_filename());
+  std::string install_filename =
+      FileSystem::join(m_addon_directory, repository_addon.get_filename());
 
   m_downloader.download(repository_addon.get_url(), install_filename);
 
@@ -384,7 +405,8 @@ AddonManager::install_addon(const AddonId& addon_id)
   {
     if (PHYSFS_delete(install_filename.c_str()) == 0)
     {
-      log_warning << "PHYSFS_delete failed: " << PHYSFS_getLastError() << std::endl;
+      log_warning << "PHYSFS_delete failed: " << PHYSFS_getLastError()
+                  << std::endl;
     }
 
     throw std::runtime_error("Downloading Add-on failed: MD5 checksums differ");
@@ -412,14 +434,16 @@ AddonManager::uninstall_addon(const AddonId& addon_id)
   {
     disable_addon(addon_id);
   }
-  log_debug << "deleting file \"" << addon.get_install_filename() << "\"" << std::endl;
+  log_debug << "deleting file \"" << addon.get_install_filename() << "\""
+            << std::endl;
   PHYSFS_delete(addon.get_install_filename().c_str());
-  m_installed_addons.erase(std::remove_if(m_installed_addons.begin(), m_installed_addons.end(),
-                                          [&addon](const std::unique_ptr<Addon>& rhs)
-                                          {
-                                            return addon.get_id() == rhs->get_id();
-                                          }),
-                           m_installed_addons.end());
+  m_installed_addons.erase(
+      std::remove_if(m_installed_addons.begin(), m_installed_addons.end(),
+                     [&addon](const std::unique_ptr<Addon>& rhs)
+                     {
+                       return addon.get_id() == rhs->get_id();
+                     }),
+      m_installed_addons.end());
 }
 
 void
@@ -433,18 +457,20 @@ AddonManager::enable_addon(const AddonId& addon_id)
   }
   else
   {
-    log_debug << "Adding archive \"" << addon.get_install_filename() << "\" to search path" << std::endl;
-    //int PHYSFS_mount(addon.installed_install_filename.c_str(), "addons/", 0)
+    log_debug << "Adding archive \"" << addon.get_install_filename()
+              << "\" to search path" << std::endl;
+    // int PHYSFS_mount(addon.installed_install_filename.c_str(), "addons/", 0)
     if (PHYSFS_addToSearchPath(addon.get_install_filename().c_str(), 0) == 0)
     {
-      log_warning << "Could not add " << addon.get_install_filename() << " to search path: "
-                  << PHYSFS_getLastError() << std::endl;
+      log_warning << "Could not add " << addon.get_install_filename()
+                  << " to search path: " << PHYSFS_getLastError() << std::endl;
     }
     else
     {
-      if(addon.get_type() == Addon::LANGUAGEPACK)
+      if (addon.get_type() == Addon::LANGUAGEPACK)
       {
-        PHYSFS_enumerateFilesCallback(addon.get_id().c_str(), add_to_dictionary_path, NULL);
+        PHYSFS_enumerateFilesCallback(addon.get_id().c_str(),
+                                      add_to_dictionary_path, NULL);
       }
       addon.set_enabled(true);
     }
@@ -462,17 +488,20 @@ AddonManager::disable_addon(const AddonId& addon_id)
   }
   else
   {
-    log_debug << "Removing archive \"" << addon.get_install_filename() << "\" from search path" << std::endl;
+    log_debug << "Removing archive \"" << addon.get_install_filename()
+              << "\" from search path" << std::endl;
     if (PHYSFS_removeFromSearchPath(addon.get_install_filename().c_str()) == 0)
     {
-      log_warning << "Could not remove " << addon.get_install_filename() << " from search path: "
-                  << PHYSFS_getLastError() << std::endl;
+      log_warning << "Could not remove " << addon.get_install_filename()
+                  << " from search path: " << PHYSFS_getLastError()
+                  << std::endl;
     }
     else
     {
-      if(addon.get_type() == Addon::LANGUAGEPACK)
+      if (addon.get_type() == Addon::LANGUAGEPACK)
       {
-        PHYSFS_enumerateFilesCallback(addon.get_id().c_str(), remove_from_dictionary_path, NULL);
+        PHYSFS_enumerateFilesCallback(addon.get_id().c_str(),
+                                      remove_from_dictionary_path, NULL);
       }
       addon.set_enabled(false);
     }
@@ -485,10 +514,9 @@ AddonManager::scan_for_archives() const
   std::vector<std::string> archives;
 
   // Search for archives and add them to the search path
-  std::unique_ptr<char*, decltype(&PHYSFS_freeList)>
-    rc(PHYSFS_enumerateFiles(m_addon_directory.c_str()),
-       PHYSFS_freeList);
-  for(char** i = rc.get(); *i != 0; ++i)
+  std::unique_ptr<char*, decltype(&PHYSFS_freeList)> rc(
+      PHYSFS_enumerateFiles(m_addon_directory.c_str()), PHYSFS_freeList);
+  for (char** i = rc.get(); *i != 0; ++i)
   {
     if (has_suffix(*i, ".zip"))
     {
@@ -506,10 +534,9 @@ AddonManager::scan_for_archives() const
 std::string
 AddonManager::scan_for_info(const std::string& archive_os_path) const
 {
-  std::unique_ptr<char*, decltype(&PHYSFS_freeList)>
-    rc2(PHYSFS_enumerateFiles("/"),
-        PHYSFS_freeList);
-  for(char** j = rc2.get(); *j != 0; ++j)
+  std::unique_ptr<char*, decltype(&PHYSFS_freeList)> rc2(
+      PHYSFS_enumerateFiles("/"), PHYSFS_freeList);
+  for (char** j = rc2.get(); *j != 0; ++j)
   {
     if (has_suffix(*j, ".nfo"))
     {
@@ -519,7 +546,8 @@ AddonManager::scan_for_info(const std::string& archive_os_path) const
       const char* realdir = PHYSFS_getRealDir(nfo_filename.c_str());
       if (!realdir)
       {
-        log_warning << "PHYSFS_getRealDir() failed for " << nfo_filename << ": " << PHYSFS_getLastError() << std::endl;
+        log_warning << "PHYSFS_getRealDir() failed for " << nfo_filename << ": "
+                    << PHYSFS_getLastError() << std::endl;
       }
       else
       {
@@ -535,7 +563,8 @@ AddonManager::scan_for_info(const std::string& archive_os_path) const
 }
 
 void
-AddonManager::add_installed_archive(const std::string& archive, const std::string& md5)
+AddonManager::add_installed_archive(const std::string& archive,
+                                    const std::string& md5)
 {
   const char* realdir = PHYSFS_getRealDir(archive.c_str());
   if (!realdir)
@@ -565,7 +594,8 @@ AddonManager::add_installed_archive(const std::string& archive, const std::strin
       }
       catch (const std::runtime_error& e)
       {
-        log_warning << "Could not load add-on info for " << archive << ": " << e.what() << std::endl;
+        log_warning << "Could not load add-on info for " << archive << ": "
+                    << e.what() << std::endl;
       }
     }
 
@@ -578,7 +608,7 @@ AddonManager::add_installed_addons()
 {
   auto archives = scan_for_archives();
 
-  for(auto archive : archives)
+  for (auto archive : archives)
   {
     MD5 md5 = md5_from_file(archive);
     add_installed_archive(archive, md5.hex_digest());
@@ -595,18 +625,19 @@ AddonManager::parse_addon_infos(const std::string& filename) const
     register_translation_directory(filename);
     auto doc = ReaderDocument::parse(filename);
     auto root = doc.get_root();
-    if(root.get_name() != "supertux-addons")
+    if (root.get_name() != "supertux-addons")
     {
       throw std::runtime_error("Downloaded file is not an Add-on list");
     }
     else
     {
       auto addon_collection = root.get_collection();
-      for(auto const& addon_node : addon_collection.get_objects())
+      for (auto const& addon_node : addon_collection.get_objects())
       {
-        if(addon_node.get_name() != "supertux-addoninfo")
+        if (addon_node.get_name() != "supertux-addoninfo")
         {
-          log_warning << "Unknown token '" << addon_node.get_name() << "' in Add-on list" << std::endl;
+          log_warning << "Unknown token '" << addon_node.get_name()
+                      << "' in Add-on list" << std::endl;
         }
         else
         {
@@ -618,7 +649,7 @@ AddonManager::parse_addon_infos(const std::string& filename) const
       return m_addons;
     }
   }
-  catch(const std::exception& e)
+  catch (const std::exception& e)
   {
     std::stringstream msg;
     msg << "Problem when reading Add-on list: " << e.what();
@@ -637,9 +668,9 @@ AddonManager::update()
 void
 AddonManager::check_for_langpack_updates()
 {
-  const std::string& language = g_dictionary_manager->get_language().get_language();
-  if(language == "en")
-    return;
+  const std::string& language =
+      g_dictionary_manager->get_language().get_language();
+  if (language == "en") return;
 
   try
   {
@@ -647,7 +678,8 @@ AddonManager::check_for_langpack_updates()
     try
     {
       const std::string& addon_id = "langpack-" + language;
-      log_debug << "Looking for language addon with ID " << addon_id << "..." << std::endl;
+      log_debug << "Looking for language addon with ID " << addon_id << "..."
+                << std::endl;
       Addon& langpack = get_repository_addon(addon_id);
 
       try
@@ -656,7 +688,8 @@ AddonManager::check_for_langpack_updates()
         if (installed_langpack.get_md5() == langpack.get_md5() ||
             installed_langpack.get_version() > langpack.get_version())
         {
-          log_debug << "Language addon " << addon_id << " is already the latest version." << std::endl;
+          log_debug << "Language addon " << addon_id
+                    << " is already the latest version." << std::endl;
           return;
         }
 
@@ -664,19 +697,20 @@ AddonManager::check_for_langpack_updates()
         install_addon(addon_id);
         enable_addon(addon_id);
       }
-      catch(const std::exception& err)
+      catch (const std::exception& err)
       {
-        log_debug << "Language addon " << addon_id << " is not installed. Installing..." << std::endl;
+        log_debug << "Language addon " << addon_id
+                  << " is not installed. Installing..." << std::endl;
         install_addon(addon_id);
         enable_addon(addon_id);
       }
     }
-    catch(std::exception& err)
+    catch (std::exception& err)
     {
       log_debug << "Language addon for current locale not found." << std::endl;
     }
   }
-  catch(...)
+  catch (...)
   {
     // If anything fails here, just silently ignore.
   }

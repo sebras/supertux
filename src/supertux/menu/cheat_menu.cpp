@@ -49,7 +49,7 @@ CheatMenu::menu_action(MenuItem* item)
     std::vector<Player*> players = Sector::current()->get_players();
     Player* player = players.empty() ? nullptr : players[0];
 
-    switch(item->id)
+    switch (item->id)
     {
       case MNID_GROW:
         if (player)

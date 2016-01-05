@@ -22,7 +22,8 @@
 class AddonMenu;
 class WorldSetMenu;
 
-enum MainMenuIDs {
+enum MainMenuIDs
+{
   MNID_STARTGAME,
   MNID_ADDONS,
   MNID_OPTIONMENU,
@@ -33,13 +34,13 @@ enum MainMenuIDs {
 
 class MainMenu : public Menu
 {
-public:
+ public:
   MainMenu();
 
   void on_window_resize() override;
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   MainMenu(const MainMenu&);
   MainMenu& operator=(const MainMenu&);
 };

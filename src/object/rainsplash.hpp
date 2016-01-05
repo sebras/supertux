@@ -25,15 +25,16 @@ class Player;
 
 class RainSplash : public GameObject
 {
-public:
+ public:
   RainSplash(Vector pos, bool vertical);
   ~RainSplash();
-protected:
-  virtual void hit(Player& );
+
+ protected:
+  virtual void hit(Player&);
   virtual void update(float time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   Vector position;
   int frame;

@@ -23,7 +23,7 @@
 
 class Haywire : public WalkingBadguy
 {
-public:
+ public:
   Haywire(const ReaderMapping& reader);
   Haywire(const Vector& pos, Direction d);
 
@@ -35,10 +35,10 @@ public:
   bool is_freezable() const;
   void freeze();
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   bool is_exploding;
   float time_until_explosion;
   bool is_stunned;

@@ -41,7 +41,7 @@ class DrawingContext;
     (MC_NORMAL, MC_CLICK, MC_LINK or MC_HIDE) */
 class MouseCursor
 {
-public:
+ public:
   MouseCursor(const std::string& cursor_file,
               const std::string& cursor_click_file,
               const std::string& cursor_link_file);
@@ -59,22 +59,28 @@ public:
   void draw(DrawingContext& context);
 
   /// Return the current cursor.
-  static MouseCursor* current()
-  {        return current_;      };
+  static MouseCursor*
+  current()
+  {
+    return current_;
+  };
   /// Set current cursor.
-  static void set_current(MouseCursor* pcursor)
-  {        current_ = pcursor;      };
+  static void
+  set_current(MouseCursor* pcursor)
+  {
+    current_ = pcursor;
+  };
 
-private:
+ private:
   int m_mid_x;
   int m_mid_y;
   MouseCursorState m_state;
   std::vector<SurfacePtr> m_cursor;
 
-private:
+ private:
   static MouseCursor* current_;
 
-private:
+ private:
   MouseCursor(const MouseCursor&);
   MouseCursor& operator=(const MouseCursor&);
 };

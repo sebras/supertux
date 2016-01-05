@@ -27,11 +27,11 @@
 
 class Sprite;
 
-namespace worldmap {
-
+namespace worldmap
+{
 class SpriteChange : public GameObject
 {
-public:
+ public:
   SpriteChange(const ReaderMapping& lisp);
   virtual ~SpriteChange();
 
@@ -48,7 +48,7 @@ public:
    */
   void clear_stay_action();
 
-public:
+ public:
   Vector pos;
 
   /** should tuxs sprite change when the tile has been completely entered,
@@ -67,15 +67,15 @@ public:
       its stay_action displayed.  Leave empty if you don't care. */
   std::string stay_group;
 
-private:
+ private:
   /** should the stayaction be displayed */
   bool in_stay_action;
 
-private:
+ private:
   static std::list<SpriteChange*> all_sprite_changes;
 };
 
-} // namespace worldmap
+}  // namespace worldmap
 
 #endif
 

@@ -1,5 +1,6 @@
 //  SuperTux - Mole Badguy
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -24,16 +25,18 @@
 
 #include <math.h>
 
-static const float MOLE_WAIT_TIME = 0.2f; /**< time to wait before and after throwing */
-static const float THROW_TIME = 4.6f; /**< time to spend throwing */
+static const float MOLE_WAIT_TIME =
+    0.2f; /**< time to wait before and after throwing */
+static const float THROW_TIME = 4.6f;  /**< time to spend throwing */
 static const float THROW_INTERVAL = 1; /**< time between two thrown rocks */
-static const float THROW_VELOCITY = 400; /**< initial velocity of thrown rocks */
+static const float THROW_VELOCITY =
+    400; /**< initial velocity of thrown rocks */
 
-Mole::Mole(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/mole/mole.sprite", LAYER_TILES-1),
-  state(PRE_THROWING),
-  timer(),
-  throw_timer()
+Mole::Mole(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/mole/mole.sprite", LAYER_TILES - 1),
+      state(PRE_THROWING),
+      timer(),
+      throw_timer()
 {
   physic.enable_gravity(false);
   SoundManager::current()->preload("sounds/fall.wav");
@@ -41,11 +44,11 @@ Mole::Mole(const ReaderMapping& reader) :
   SoundManager::current()->preload("sounds/dartfire.wav");
 }
 
-Mole::Mole(const Vector& pos) :
-  BadGuy(pos, "images/creatures/mole/mole.sprite", LAYER_TILES-1),
-  state(PRE_THROWING),
-  timer(),
-  throw_timer()
+Mole::Mole(const Vector& pos)
+    : BadGuy(pos, "images/creatures/mole/mole.sprite", LAYER_TILES - 1),
+      state(PRE_THROWING),
+      timer(),
+      throw_timer()
 {
   physic.enable_gravity(false);
   SoundManager::current()->preload("sounds/fall.wav");
@@ -68,16 +71,15 @@ Mole::kill_fall()
 }
 
 HitResponse
-Mole::collision_badguy(BadGuy& , const CollisionHit& )
+Mole::collision_badguy(BadGuy&, const CollisionHit&)
 {
   return FORCE_MOVE;
 }
 
 bool
-Mole::collision_squished(GameObject& )
+Mole::collision_squished(GameObject&)
 {
-  if (frozen)
-    return true;
+  if (frozen) return true;
 
   set_state(DEAD);
   SoundManager::current()->play("sounds/squish.wav", get_pos());
@@ -93,7 +95,8 @@ Mole::throw_rock()
   float vy = -sin(angle) * THROW_VELOCITY;
 
   SoundManager::current()->play("sounds/dartfire.wav", get_pos());
-  Sector::current()->add_object(std::make_shared<MoleRock>(bbox.get_middle(), Vector(vx, vy), this));
+  Sector::current()->add_object(
+      std::make_shared<MoleRock>(bbox.get_middle(), Vector(vx, vy), this));
 }
 
 void
@@ -101,43 +104,48 @@ Mole::active_update(float elapsed_time)
 {
   BadGuy::active_update(elapsed_time);
 
-  if (frozen)
-    return;
+  if (frozen) return;
 
-  switch (state) {
+  switch (state)
+  {
     case PRE_THROWING:
-      if (timer.check()) {
+      if (timer.check())
+      {
         set_state(THROWING);
       }
       break;
     case THROWING:
-      if (throw_timer.check()) {
+      if (throw_timer.check())
+      {
         throw_rock();
         throw_timer.start(THROW_INTERVAL);
       }
-      if (timer.check()) {
+      if (timer.check())
+      {
         set_state(POST_THROWING);
       }
       break;
     case POST_THROWING:
-      if (timer.check()) {
+      if (timer.check())
+      {
         set_state(PEEKING);
       }
       break;
     case PEEKING:
-      if (sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         set_state(PRE_THROWING);
       }
       break;
     case BURNING:
-      if (sprite->animation_done()) {
+      if (sprite->animation_done())
+      {
         set_state(DEAD);
       }
       break;
     case DEAD:
       break;
   }
-
 }
 
 bool
@@ -149,10 +157,10 @@ Mole::is_freezable() const
 void
 Mole::set_state(MoleState new_state)
 {
-  if (frozen)
-    return;
+  if (frozen) return;
 
-  switch (new_state) {
+  switch (new_state)
+  {
     case PRE_THROWING:
       sprite->set_action("idle");
       set_colgroup_active(COLGROUP_DISABLED);
@@ -187,7 +195,8 @@ Mole::set_state(MoleState new_state)
 }
 
 void
-Mole::ignite() {
+Mole::ignite()
+{
   set_state(BURNING);
 }
 

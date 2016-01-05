@@ -28,18 +28,18 @@ class SpriteData;
 
 class SpriteManager : public Currenton<SpriteManager>
 {
-private:
+ private:
   typedef std::map<std::string, std::unique_ptr<SpriteData> > Sprites;
   Sprites sprites;
 
-public:
+ public:
   SpriteManager();
   ~SpriteManager();
 
   /** loads a sprite. */
   SpritePtr create(const std::string& filename);
 
-private:
+ private:
   SpriteData* load(const std::string& filename);
 };
 

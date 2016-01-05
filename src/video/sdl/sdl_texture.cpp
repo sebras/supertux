@@ -28,13 +28,12 @@
 
 #include <SDL.h>
 
-SDLTexture::SDLTexture(SDL_Surface* image) :
-  m_texture(),
-  m_width(),
-  m_height()
+SDLTexture::SDLTexture(SDL_Surface* image) : m_texture(), m_width(), m_height()
 {
-  m_texture = SDL_CreateTextureFromSurface(static_cast<SDLRenderer&>(VideoSystem::current()->get_renderer()).get_sdl_renderer(),
-                                           image);
+  m_texture = SDL_CreateTextureFromSurface(
+      static_cast<SDLRenderer&>(VideoSystem::current()->get_renderer())
+          .get_sdl_renderer(),
+      image);
   if (!m_texture)
   {
     std::ostringstream msg;
@@ -46,9 +45,6 @@ SDLTexture::SDLTexture(SDL_Surface* image) :
   m_height = image->h;
 }
 
-SDLTexture::~SDLTexture()
-{
-  SDL_DestroyTexture(m_texture);
-}
+SDLTexture::~SDLTexture() { SDL_DestroyTexture(m_texture); }
 
 /* EOF */

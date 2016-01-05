@@ -21,7 +21,7 @@
 
 class Star : public MovingSprite
 {
-public:
+ public:
   Star(const Vector& pos, Direction direction = RIGHT);
 
   virtual void update(float elapsed_time);
@@ -29,7 +29,7 @@ public:
   virtual void collision_solid(const CollisionHit& hit);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-private:
+ private:
   Physic physic;
   Color light;
   SpritePtr lightsprite;

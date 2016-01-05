@@ -31,7 +31,7 @@ class JoystickConfig;
 
 class JoystickManager final
 {
-private:
+ private:
   InputManager* parent;
   JoystickConfig& m_joystick_config;
 
@@ -52,7 +52,7 @@ private:
 
   friend class KeyboardManager;
 
-public:
+ public:
   JoystickManager(InputManager* parent, JoystickConfig& joystick_config);
   ~JoystickManager();
 
@@ -67,9 +67,13 @@ public:
   void on_joystick_added(int joystick_index);
   void on_joystick_removed(int instance_id);
 
-  int get_num_joysticks() const { return static_cast<int>(joysticks.size()); }
+  int
+  get_num_joysticks() const
+  {
+    return static_cast<int>(joysticks.size());
+  }
 
-private:
+ private:
   JoystickManager(const JoystickManager&) = delete;
   JoystickManager& operator=(const JoystickManager&) = delete;
 };

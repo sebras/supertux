@@ -25,7 +25,7 @@
 
 class CloudParticleSystem : public ParticleSystem
 {
-public:
+ public:
   CloudParticleSystem();
   virtual ~CloudParticleSystem();
 
@@ -33,23 +33,24 @@ public:
 
   virtual void update(float elapsed_time);
 
-  std::string type() const
-  { return "CloudParticleSystem"; }
+  std::string
+  type() const
+  {
+    return "CloudParticleSystem";
+  }
 
-private:
+ private:
   class CloudParticle : public Particle
   {
-  public:
+   public:
     float speed;
 
-    CloudParticle() :
-      speed()
-    {}
+    CloudParticle() : speed() {}
   };
 
   SurfacePtr cloudimage;
 
-private:
+ private:
   CloudParticleSystem(const CloudParticleSystem&);
   CloudParticleSystem& operator=(const CloudParticleSystem&);
 };

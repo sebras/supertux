@@ -37,7 +37,7 @@ class ScreenFade;
  */
 class ScreenManager : public Currenton<ScreenManager>
 {
-public:
+ public:
   ScreenManager();
   ~ScreenManager();
 
@@ -53,56 +53,55 @@ public:
   void take_screenshot();
 
   // push new screen on screen_stack
-  void push_screen(std::unique_ptr<Screen> screen, std::unique_ptr<ScreenFade> fade = {});
+  void push_screen(std::unique_ptr<Screen> screen,
+                   std::unique_ptr<ScreenFade> fade = {});
   void pop_screen(std::unique_ptr<ScreenFade> fade = {});
   void set_screen_fade(std::unique_ptr<ScreenFade> fade);
 
   /// threads that wait for a screenswitch
   scripting::ThreadQueue m_waiting_threads;
 
-private:
-  void draw_fps(DrawingContext& context, float fps);
-  void draw(DrawingContext& context);
+ private:
+  void draw_fps(DrawingContext &context, float fps);
+  void draw(DrawingContext &context);
   void update_gamelogic(float elapsed_time);
   void process_events();
   void handle_screen_switch();
 
-private:
+ private:
   std::unique_ptr<MenuStorage> m_menu_storage;
   std::unique_ptr<MenuManager> m_menu_manager;
 
   float m_speed;
   struct Action
   {
-    enum Type { PUSH_ACTION, POP_ACTION, QUIT_ACTION };
+    enum Type
+    {
+      PUSH_ACTION,
+      POP_ACTION,
+      QUIT_ACTION
+    };
     Type type;
     std::unique_ptr<Screen> screen;
 
-    Action(Type type_,
-           std::unique_ptr<Screen> screen_ = {}) :
-      type(type_),
-      screen(std::move(screen_))
-    {}
+    Action(Type type_, std::unique_ptr<Screen> screen_ = {})
+        : type(type_), screen(std::move(screen_))
+    {
+    }
 #ifdef WIN32
-    Action(Action &a) :
-      type(a.type),
-      screen(std::move(a.screen))
-    {}
+    Action(Action &a) : type(a.type), screen(std::move(a.screen)) {}
 #endif
-    Action(Action &&a) :
-      type(a.type),
-      screen(std::move(a.screen))
-    {}
+    Action(Action &&a) : type(a.type), screen(std::move(a.screen)) {}
 
 #ifdef WIN32
-    Action& operator=(Action &a)
+    Action &operator=(Action &a)
     {
       type = a.type;
       screen = std::move(a.screen);
       return *this;
     }
 #endif
-    Action& operator=(Action &&a)
+    Action &operator=(Action &&a)
     {
       type = a.type;
       screen = std::move(a.screen);
@@ -116,7 +115,8 @@ private:
   float m_fps;
   std::unique_ptr<ScreenFade> m_screen_fade;
   std::vector<std::unique_ptr<Screen> > m_screen_stack;
-  bool m_screenshot_requested; /**< true if a screenshot should be taken after the next frame has been rendered */
+  bool m_screenshot_requested; /**< true if a screenshot should be taken after
+                                  the next frame has been rendered */
 };
 
 #endif

@@ -23,8 +23,8 @@
 
 class UTF8Iterator
 {
-public:
-  const std::string&     text;
+ public:
+  const std::string& text;
   std::string::size_type pos;
   uint32_t chr;
 

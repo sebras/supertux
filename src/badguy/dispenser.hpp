@@ -21,7 +21,7 @@
 
 class Dispenser : public BadGuy
 {
-public:
+ public:
   Dispenser(const ReaderMapping& reader);
 
   void activate();
@@ -33,13 +33,12 @@ public:
   bool is_freezable() const;
   bool is_flammable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
   HitResponse collision(GameObject& other, const CollisionHit& hit);
   void launch_badguy();
 
-private:
-
+ private:
   /** CollisionGroup the badguy should be in while active */
   CollisionGroup colgroup_active;
 
@@ -52,9 +51,12 @@ private:
   bool broken;
   bool random;
 
-  typedef enum {
-    DT_DROPPER, DT_ROCKETLAUNCHER, DT_CANNON
-  }DispenserType;
+  typedef enum
+  {
+    DT_DROPPER,
+    DT_ROCKETLAUNCHER,
+    DT_CANNON
+  } DispenserType;
 
   DispenserType type;
 };

@@ -25,25 +25,32 @@ class DisplayManager;
 
 class Background : public GameObject
 {
-public:
+ public:
   Background();
   Background(const ReaderMapping& reader);
   virtual ~Background();
 
   void set_image(const std::string& name, float bkgd_speed);
 
-  std::string get_image() const
-  { return imagefile; }
-  float get_speed() const
-  { return speed; }
+  std::string
+  get_image() const
+  {
+    return imagefile;
+  }
+  float
+  get_speed() const
+  {
+    return speed;
+  }
 
   virtual void update(float elapsed_time);
 
   virtual void draw(DrawingContext& context);
   void draw_image(DrawingContext& context, const Vector& pos);
 
-private:
-  enum Alignment {
+ private:
+  enum Alignment
+  {
     NO_ALIGNMENT,
     LEFT_ALIGNMENT,
     RIGHT_ALIGNMENT,
@@ -60,13 +67,13 @@ private:
   std::string imagefile_top;
   std::string imagefile;
   std::string imagefile_bottom;
-  Vector pos; /**< coordinates of upper-left corner of image */
-  float speed; /**< scroll-speed in horizontal direction */
+  Vector pos;    /**< coordinates of upper-left corner of image */
+  float speed;   /**< scroll-speed in horizontal direction */
   float speed_y; /**< scroll-speed in vertical direction */
   Vector scroll_speed;
   Vector scroll_offset;
-  SurfacePtr image_top; /**< image to draw above pos */
-  SurfacePtr image; /**< image to draw, anchored at pos */
+  SurfacePtr image_top;    /**< image to draw above pos */
+  SurfacePtr image;        /**< image to draw, anchored at pos */
   SurfacePtr image_bottom; /**< image to draw below pos+screenheight */
 
   bool has_pos_x, has_pos_y;

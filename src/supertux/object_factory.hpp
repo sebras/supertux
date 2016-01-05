@@ -32,34 +32,42 @@ class GameObject;
 
 class ObjectFactory
 {
-public:
+ public:
   static ObjectFactory& instance();
 
-private:
-  typedef std::map<std::string, std::function<GameObjectPtr (const ReaderMapping&)> > Factories;
+ private:
+  typedef std::map<std::string,
+                   std::function<GameObjectPtr(const ReaderMapping&)> >
+      Factories;
   Factories factories;
 
-public:
+ public:
   ObjectFactory();
   ~ObjectFactory();
 
-  GameObjectPtr create(const std::string& name, const ReaderMapping& reader) const;
-  GameObjectPtr create(const std::string& name, const Vector& pos, const Direction& dir = AUTO, const std::string& data = {}) const;
+  GameObjectPtr create(const std::string& name,
+                       const ReaderMapping& reader) const;
+  GameObjectPtr create(const std::string& name, const Vector& pos,
+                       const Direction& dir = AUTO,
+                       const std::string& data = {}) const;
 
-private:
-  void add_factory(const char* name,
-                   std::function<GameObjectPtr (const ReaderMapping&)> func)
+ private:
+  void
+  add_factory(const char* name,
+              std::function<GameObjectPtr(const ReaderMapping&)> func)
   {
     assert(factories.find(name) == factories.end());
     factories[name] = func;
   }
 
-  template<class C>
-  void add_factory(const char* name)
+  template <class C>
+  void
+  add_factory(const char* name)
   {
-    add_factory(name, [](const ReaderMapping& reader) {
-        return std::make_shared<C>(reader);
-      });
+    add_factory(name, [](const ReaderMapping& reader)
+                {
+                  return std::make_shared<C>(reader);
+                });
   }
   void init_factories();
 };

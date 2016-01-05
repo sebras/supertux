@@ -29,20 +29,21 @@ class Sprite;
 
 class BouncyCoin : public GameObject
 {
-public:
-  BouncyCoin(const Vector& pos, bool emerge = false,
-             const std::string& sprite_path = "images/objects/coin/coin.sprite");
+ public:
+  BouncyCoin(
+      const Vector& pos, bool emerge = false,
+      const std::string& sprite_path = "images/objects/coin/coin.sprite");
   ~BouncyCoin();
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   Vector position;
   Timer timer;
   float emerge_distance;
 
-private:
+ private:
   BouncyCoin(const BouncyCoin&);
   BouncyCoin& operator=(const BouncyCoin&);
 };

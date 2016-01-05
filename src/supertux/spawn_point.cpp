@@ -20,19 +20,14 @@
 #include "util/log.hpp"
 #include "util/reader_mapping.hpp"
 
-SpawnPoint::SpawnPoint() :
-  name(),
-  pos()
-{}
+SpawnPoint::SpawnPoint() : name(), pos() {}
 
-SpawnPoint::SpawnPoint(const SpawnPoint& other) :
-  name(other.name),
-  pos(other.pos)
-{}
+SpawnPoint::SpawnPoint(const SpawnPoint& other)
+    : name(other.name), pos(other.pos)
+{
+}
 
-SpawnPoint::SpawnPoint(const ReaderMapping& slisp) :
-  name(),
-  pos()
+SpawnPoint::SpawnPoint(const ReaderMapping& slisp) : name(), pos()
 {
   pos.x = -1;
   pos.y = -1;
@@ -41,10 +36,11 @@ SpawnPoint::SpawnPoint(const ReaderMapping& slisp) :
   slisp.get("x", pos.x);
   slisp.get("y", pos.y);
 
-  if(name.empty())
+  if (name.empty())
     log_warning << "No name specified for spawnpoint. Ignoring." << std::endl;
-  if(pos.x < 0 || pos.y < 0)
-    log_warning << "Invalid coordinates specified for spawnpoint. Ignoring." << std::endl;
+  if (pos.x < 0 || pos.y < 0)
+    log_warning << "Invalid coordinates specified for spawnpoint. Ignoring."
+                << std::endl;
 }
 
 /* EOF */

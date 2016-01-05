@@ -21,13 +21,12 @@
 
 class SnowBall : public WalkingBadguy
 {
-public:
+ public:
   SnowBall(const ReaderMapping& reader);
   SnowBall(const Vector& pos, Direction d, std::string script);
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-
 };
 
 #endif

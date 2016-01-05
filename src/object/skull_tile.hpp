@@ -24,14 +24,14 @@ class Player;
 /** A tile that starts falling down if tux stands to long on it */
 class SkullTile : public MovingSprite
 {
-public:
+ public:
   SkullTile(const ReaderMapping& lisp);
 
   HitResponse collision(GameObject& other, const CollisionHit& hit);
   void update(float elapsed_time);
   void draw(DrawingContext& context);
 
-private:
+ private:
   Physic physic;
   Timer timer;
   bool hit;

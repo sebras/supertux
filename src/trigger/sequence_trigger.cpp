@@ -23,9 +23,8 @@
 #include "supertux/object_factory.hpp"
 #include "util/reader_mapping.hpp"
 
-SequenceTrigger::SequenceTrigger(const ReaderMapping& reader) :
-  triggerevent(),
-  sequence(SEQ_ENDSEQUENCE)
+SequenceTrigger::SequenceTrigger(const ReaderMapping& reader)
+    : triggerevent(), sequence(SEQ_ENDSEQUENCE)
 {
   if (!reader.get("x", bbox.p1.x)) bbox.p1.x = 0;
   if (!reader.get("y", bbox.p1.y)) bbox.p1.y = 0;
@@ -34,15 +33,16 @@ SequenceTrigger::SequenceTrigger(const ReaderMapping& reader) :
   if (!reader.get("height", h)) h = 0;
   bbox.set_size(w, h);
   std::string sequence_name;
-  if (reader.get("sequence", sequence_name)) {
+  if (reader.get("sequence", sequence_name))
+  {
     sequence = string_to_sequence(sequence_name);
   }
   triggerevent = EVENT_TOUCH;
 }
 
-SequenceTrigger::SequenceTrigger(const Vector& pos, const std::string& sequence_name) :
-  triggerevent(),
-  sequence(SEQ_ENDSEQUENCE)
+SequenceTrigger::SequenceTrigger(const Vector& pos,
+                                 const std::string& sequence_name)
+    : triggerevent(), sequence(SEQ_ENDSEQUENCE)
 {
   bbox.set_pos(pos);
   bbox.set_size(32, 32);
@@ -50,20 +50,20 @@ SequenceTrigger::SequenceTrigger(const Vector& pos, const std::string& sequence_
   triggerevent = EVENT_TOUCH;
 }
 
-SequenceTrigger::~SequenceTrigger()
-{
-}
+SequenceTrigger::~SequenceTrigger() {}
 
 void
 SequenceTrigger::event(Player& player, EventType type)
 {
-  if(type == triggerevent) {
+  if (type == triggerevent)
+  {
     player.trigger_sequence(sequence);
   }
 }
 
 std::string
-SequenceTrigger::get_sequence_name() const {
+SequenceTrigger::get_sequence_name() const
+{
   return sequence_to_string(sequence);
 }
 

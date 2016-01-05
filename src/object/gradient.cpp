@@ -24,54 +24,57 @@
 
 #include <stdexcept>
 
-Gradient::Gradient() :
-  layer(LAYER_BACKGROUND0),
-  gradient_top(),
-  gradient_bottom(),
-  gradient_direction(),
-  gradient_region(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+Gradient::Gradient()
+    : layer(LAYER_BACKGROUND0),
+      gradient_top(),
+      gradient_bottom(),
+      gradient_direction(),
+      gradient_region(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 {
 }
 
-Gradient::Gradient(const ReaderMapping& reader) :
-  layer(LAYER_BACKGROUND0),
-  gradient_top(),
-  gradient_bottom(),
-  gradient_direction(),
-  gradient_region(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+Gradient::Gradient(const ReaderMapping& reader)
+    : layer(LAYER_BACKGROUND0),
+      gradient_top(),
+      gradient_bottom(),
+      gradient_direction(),
+      gradient_region(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 {
-  layer = reader_get_layer (reader, /* default = */ LAYER_BACKGROUND0);
+  layer = reader_get_layer(reader, /* default = */ LAYER_BACKGROUND0);
   std::vector<float> bkgd_top_color, bkgd_bottom_color;
   std::string direction;
-  if(reader.get("direction", direction))
+  if (reader.get("direction", direction))
   {
-    if(direction == "horizontal")
+    if (direction == "horizontal")
     {
       gradient_direction = HORIZONTAL;
     }
-    else if(direction == "horizontal_sector")
+    else if (direction == "horizontal_sector")
     {
-        gradient_direction = HORIZONTAL_SECTOR;
+      gradient_direction = HORIZONTAL_SECTOR;
     }
-    else if(direction == "vertical_sector")
+    else if (direction == "vertical_sector")
     {
-        gradient_direction = VERTICAL_SECTOR;
+      gradient_direction = VERTICAL_SECTOR;
     }
     else
     {
-        gradient_direction = VERTICAL;
+      gradient_direction = VERTICAL;
     }
   }
   else
   {
     gradient_direction = VERTICAL;
   }
-  if(gradient_direction == HORIZONTAL || gradient_direction == HORIZONTAL_SECTOR)
+  if (gradient_direction == HORIZONTAL ||
+      gradient_direction == HORIZONTAL_SECTOR)
   {
-    if(!reader.get("left_color", bkgd_top_color) ||
-       !reader.get("right_color", bkgd_bottom_color))
+    if (!reader.get("left_color", bkgd_top_color) ||
+        !reader.get("right_color", bkgd_bottom_color))
     {
-      log_warning << "Horizontal gradients should use left_color and right_color, respectively. Trying to parse top and bottom color instead" << std::endl;
+      log_warning << "Horizontal gradients should use left_color and "
+                     "right_color, respectively. Trying to parse top and "
+                     "bottom color instead" << std::endl;
     }
     else
     {
@@ -81,17 +84,16 @@ Gradient::Gradient(const ReaderMapping& reader) :
     }
   }
 
-  if(!reader.get("top_color", bkgd_top_color) ||
-     !reader.get("bottom_color", bkgd_bottom_color))
-    throw std::runtime_error("Must specify top_color and bottom_color in gradient");
+  if (!reader.get("top_color", bkgd_top_color) ||
+      !reader.get("bottom_color", bkgd_bottom_color))
+    throw std::runtime_error(
+        "Must specify top_color and bottom_color in gradient");
 
   gradient_top = Color(bkgd_top_color);
   gradient_bottom = Color(bkgd_bottom_color);
 }
 
-Gradient::~Gradient()
-{
-}
+Gradient::~Gradient() {}
 
 void
 Gradient::update(float)
@@ -111,7 +113,7 @@ Gradient::set_gradient(Color top, Color bottom)
   }
 
   if (gradient_bottom.red > 1.0 || gradient_bottom.green > 1.0 ||
-       gradient_bottom.blue > 1.0 || gradient_bottom.alpha > 1.0)
+      gradient_bottom.blue > 1.0 || gradient_bottom.alpha > 1.0)
   {
     log_warning << "bottom gradient color has values above 1.0" << std::endl;
   }
@@ -120,18 +122,20 @@ Gradient::set_gradient(Color top, Color bottom)
 void
 Gradient::draw(DrawingContext& context)
 {
-  if(gradient_direction != HORIZONTAL && gradient_direction != VERTICAL)
+  if (gradient_direction != HORIZONTAL && gradient_direction != VERTICAL)
   {
-      auto current_sector = Sector::current();
-      auto camera_translation = current_sector->camera->get_translation();
-      auto sector_width = current_sector->get_width();
-      auto sector_height = current_sector->get_height();
-      gradient_region = Rectf(-camera_translation.x, -camera_translation.y, sector_width, sector_height);
+    auto current_sector = Sector::current();
+    auto camera_translation = current_sector->camera->get_translation();
+    auto sector_width = current_sector->get_width();
+    auto sector_height = current_sector->get_height();
+    gradient_region = Rectf(-camera_translation.x, -camera_translation.y,
+                            sector_width, sector_height);
   }
 
   context.push_transform();
   context.set_translation(Vector(0, 0));
-  context.draw_gradient(gradient_top, gradient_bottom, layer, gradient_direction, gradient_region);
+  context.draw_gradient(gradient_top, gradient_bottom, layer,
+                        gradient_direction, gradient_region);
   context.pop_transform();
 }
 

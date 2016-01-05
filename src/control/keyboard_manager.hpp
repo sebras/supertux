@@ -30,12 +30,12 @@ class KeyboardConfig;
 
 class KeyboardManager final
 {
-private:
+ private:
   InputManager* m_parent;
   KeyboardConfig& m_keyboard_config;
   int wait_for_key;
 
-public:
+ public:
   KeyboardManager(InputManager* parent, KeyboardConfig& keyboard_config);
   ~KeyboardManager();
 
@@ -46,7 +46,7 @@ public:
 
   void bind_next_event_to(Controller::Control id);
 
-private:
+ private:
   KeyboardManager(const KeyboardManager&) = delete;
   KeyboardManager& operator=(const KeyboardManager&) = delete;
 };

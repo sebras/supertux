@@ -29,11 +29,11 @@ class DrawingContext;
 
 class Dialog
 {
-private:
+ private:
   struct Button
   {
     std::string text;
-    std::function<void ()> callback;
+    std::function<void()> callback;
   };
 
   std::string m_text;
@@ -44,37 +44,44 @@ private:
 
   Sizef m_text_size;
 
-public:
+ public:
   Dialog(bool passive = false);
   virtual ~Dialog();
 
   void set_text(const std::string& text);
 
-  void add_button(const std::string& text, const std::function<void ()>& callback = {});
+  void add_button(const std::string& text,
+                  const std::function<void()>& callback = {});
 
   /** The default gets focused when the dialog is first shown */
-  void add_default_button(const std::string& text, const std::function<void ()>& callback = {});
+  void add_default_button(const std::string& text,
+                          const std::function<void()>& callback = {});
 
   /** The cancel button can not only be activated by selecting it, but
       via the MENU_BACK button */
-  void add_cancel_button(const std::string& text, const std::function<void ()>& callback = {});
+  void add_cancel_button(const std::string& text,
+                         const std::function<void()>& callback = {});
 
   void clear_buttons();
 
   void event(const SDL_Event& event);
   void process_input(const Controller& controller);
   void draw(DrawingContext& context);
-  virtual void update() {}
-  bool is_passive() const
+  virtual void
+  update()
+  {
+  }
+  bool
+  is_passive() const
   {
     return m_passive;
   }
 
-private:
+ private:
   void on_button_click(int button) const;
   int get_button_at(const Vector& pos) const;
 
-private:
+ private:
   Dialog(const Dialog&) = delete;
   Dialog& operator=(const Dialog&) = delete;
 };

@@ -23,14 +23,14 @@
 
 class FallingCoin : public GameObject
 {
-public:
+ public:
   FallingCoin(const Vector& start_position, const int x_vel);
   ~FallingCoin();
 
   void draw(DrawingContext& context);
   void update(float elapsed_time);
 
-private:
+ private:
   Physic physic;
   Vector pos;
   SpritePtr sprite;

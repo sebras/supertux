@@ -24,7 +24,7 @@
  */
 class Trampoline : public Rock
 {
-public:
+ public:
   Trampoline(const ReaderMapping& reader);
   Trampoline(const Vector& pos, bool port);
 
@@ -36,9 +36,8 @@ public:
   void ungrab(MovingObject&, Direction);
   bool is_portable() const;
 
-private:
+ private:
   bool portable;
-
 };
 
 #endif

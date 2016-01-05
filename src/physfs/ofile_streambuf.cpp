@@ -19,18 +19,17 @@
 #include <sstream>
 #include <stdexcept>
 
-OFileStreambuf::OFileStreambuf(const std::string& filename) :
-  file()
+OFileStreambuf::OFileStreambuf(const std::string& filename) : file()
 {
   file = PHYSFS_openWrite(filename.c_str());
-  if(file == 0) {
+  if (file == 0)
+  {
     std::stringstream msg;
-    msg << "Couldn't open file '" << filename << "': "
-        << PHYSFS_getLastError();
+    msg << "Couldn't open file '" << filename << "': " << PHYSFS_getLastError();
     throw std::runtime_error(msg.str());
   }
 
-  setp(buf, buf+sizeof(buf));
+  setp(buf, buf + sizeof(buf));
 }
 
 OFileStreambuf::~OFileStreambuf()
@@ -44,18 +43,16 @@ OFileStreambuf::overflow(int c)
 {
   char c2 = (char)c;
 
-  if(pbase() == pptr())
-    return 0;
+  if (pbase() == pptr()) return 0;
 
   size_t size = pptr() - pbase();
   PHYSFS_sint64 res = PHYSFS_write(file, pbase(), 1, size);
-  if(res <= 0)
-    return traits_type::eof();
+  if (res <= 0) return traits_type::eof();
 
-  if(c != traits_type::eof()) {
+  if (c != traits_type::eof())
+  {
     PHYSFS_sint64 res_ = PHYSFS_write(file, &c2, 1, 1);
-    if(res_ <= 0)
-      return traits_type::eof();
+    if (res_ <= 0) return traits_type::eof();
   }
 
   setp(buf, buf + res);

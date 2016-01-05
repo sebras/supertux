@@ -24,7 +24,7 @@
  */
 class Timer
 {
-public:
+ public:
   Timer();
   ~Timer();
 
@@ -38,20 +38,35 @@ public:
    */
   bool check();
   /** stop the timer */
-  void stop()
-  { start(0); }
+  void
+  stop()
+  {
+    start(0);
+  }
 
   /** returns the period of the timer or 0 if it isn't started */
-  float get_period() const
-  { return period; }
-  float get_timeleft() const
-  { return period - (game_time - cycle_start); }
-  float get_timegone() const
-  { return game_time - cycle_start; }
-  bool started() const
-  { return period != 0 && get_timeleft() > 0; }
+  float
+  get_period() const
+  {
+    return period;
+  }
+  float
+  get_timeleft() const
+  {
+    return period - (game_time - cycle_start);
+  }
+  float
+  get_timegone() const
+  {
+    return game_time - cycle_start;
+  }
+  bool
+  started() const
+  {
+    return period != 0 && get_timeleft() > 0;
+  }
 
-private:
+ private:
   float period;
   float cycle_start;
   bool cyclic;

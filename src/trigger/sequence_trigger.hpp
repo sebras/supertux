@@ -25,7 +25,7 @@ class ReaderMapping;
 
 class SequenceTrigger : public TriggerBase
 {
-public:
+ public:
   SequenceTrigger(const ReaderMapping& reader);
   SequenceTrigger(const Vector& pos, const std::string& sequence_name);
   ~SequenceTrigger();
@@ -34,7 +34,7 @@ public:
 
   std::string get_sequence_name() const;
 
-private:
+ private:
   EventType triggerevent;
   Sequence sequence;
 };

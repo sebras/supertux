@@ -21,9 +21,10 @@
 
 class WorldmapCheatMenu : public Menu
 {
-private:
-private:
-  enum MenuIDs {
+ private:
+ private:
+  enum MenuIDs
+  {
     MNID_GROW,
     MNID_FIRE,
     MNID_ICE,
@@ -36,12 +37,12 @@ private:
     MNID_RESET_WORLDMAP
   };
 
-public:
+ public:
   WorldmapCheatMenu();
 
   void menu_action(MenuItem* item) override;
 
-private:
+ private:
   WorldmapCheatMenu(const WorldmapCheatMenu&) = delete;
   WorldmapCheatMenu& operator=(const WorldmapCheatMenu&) = delete;
 };

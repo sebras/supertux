@@ -34,28 +34,30 @@
 #include "video/gl/gl_texture.hpp"
 #endif
 
-TextureManager::TextureManager() :
-  m_image_textures()
-  ,m_surfaces()
+TextureManager::TextureManager()
+    : m_image_textures(),
+      m_surfaces()
 #ifdef HAVE_OPENGL
-  ,m_textures(),
-  m_saved_textures()
+      ,
+      m_textures(),
+      m_saved_textures()
 #endif
 {
 }
 
 TextureManager::~TextureManager()
 {
-  for(ImageTextures::iterator i = m_image_textures.begin(); i != m_image_textures.end(); ++i)
+  for (ImageTextures::iterator i = m_image_textures.begin();
+       i != m_image_textures.end(); ++i)
   {
-    if(!i->second.expired())
+    if (!i->second.expired())
     {
       log_warning << "Texture '" << i->first << "' not freed" << std::endl;
     }
   }
   m_image_textures.clear();
 
-  for(auto& surface : m_surfaces)
+  for (auto& surface : m_surfaces)
   {
     SDL_FreeSurface(surface.second);
   }
@@ -69,10 +71,10 @@ TextureManager::get(const std::string& _filename)
   ImageTextures::iterator i = m_image_textures.find(filename);
 
   TexturePtr texture;
-  if(i != m_image_textures.end())
-    texture = i->second.lock();
+  if (i != m_image_textures.end()) texture = i->second.lock();
 
-  if(!texture) {
+  if (!texture)
+  {
     texture = create_image_texture(filename);
     texture->cache_filename = filename;
     m_image_textures[filename] = texture;
@@ -113,23 +115,26 @@ TextureManager::remove_texture(GLTexture* texture)
 #endif
 
 TexturePtr
-TextureManager::create_image_texture(const std::string& filename, const Rect& rect)
+TextureManager::create_image_texture(const std::string& filename,
+                                     const Rect& rect)
 {
   try
   {
     return create_image_texture_raw(filename, rect);
   }
-  catch(const std::exception& err)
+  catch (const std::exception& err)
   {
-    log_warning << "Couldn't load texture '" << filename << "' (now using dummy texture): " << err.what() << std::endl;
+    log_warning << "Couldn't load texture '" << filename
+                << "' (now using dummy texture): " << err.what() << std::endl;
     return create_dummy_texture();
   }
 }
 
 TexturePtr
-TextureManager::create_image_texture_raw(const std::string& filename, const Rect& rect)
+TextureManager::create_image_texture_raw(const std::string& filename,
+                                         const Rect& rect)
 {
-  SDL_Surface *image = nullptr;
+  SDL_Surface* image = nullptr;
 
   Surfaces::iterator i = m_surfaces.find(filename);
   if (i != m_surfaces.end())
@@ -150,21 +155,20 @@ TextureManager::create_image_texture_raw(const std::string& filename, const Rect
   }
 
   SDL_PixelFormat* format = image->format;
-  if(format->Rmask == 0 && format->Gmask == 0 && format->Bmask == 0 && format->Amask == 0) {
-    log_debug << "Wrong surface format for image " << filename << ". Compensating." << std::endl;
+  if (format->Rmask == 0 && format->Gmask == 0 && format->Bmask == 0 &&
+      format->Amask == 0)
+  {
+    log_debug << "Wrong surface format for image " << filename
+              << ". Compensating." << std::endl;
     image = SDL_ConvertSurfaceFormat(image, SDL_PIXELFORMAT_RGBA8888, 0);
   }
 
-  SDLSurfacePtr subimage(SDL_CreateRGBSurfaceFrom(static_cast<uint8_t*>(image->pixels) +
-                                                  rect.top * image->pitch +
-                                                  rect.left * image->format->BytesPerPixel,
-                                                  rect.get_width(), rect.get_height(),
-                                                  image->format->BitsPerPixel,
-                                                  image->pitch,
-                                                  image->format->Rmask,
-                                                  image->format->Gmask,
-                                                  image->format->Bmask,
-                                                  image->format->Amask));
+  SDLSurfacePtr subimage(SDL_CreateRGBSurfaceFrom(
+      static_cast<uint8_t*>(image->pixels) + rect.top * image->pitch +
+          rect.left * image->format->BytesPerPixel,
+      rect.get_width(), rect.get_height(), image->format->BitsPerPixel,
+      image->pitch, image->format->Rmask, image->format->Gmask,
+      image->format->Bmask, image->format->Amask));
   if (!subimage)
   {
     throw std::runtime_error("SDL_CreateRGBSurfaceFrom() call failed");
@@ -172,7 +176,7 @@ TextureManager::create_image_texture_raw(const std::string& filename, const Rect
 
 #ifdef OLD_SDL
   if (image->format->palette)
-  { // copy the image palette to subimage if present
+  {  // copy the image palette to subimage if present
     SDL_SetSurfacePalette(subimage.get(), image->format->palette->colors);
   }
 #endif
@@ -189,7 +193,8 @@ TextureManager::create_image_texture(const std::string& filename)
   }
   catch (const std::exception& err)
   {
-    log_warning << "Couldn't load texture '" << filename << "' (now using dummy texture): " << err.what() << std::endl;
+    log_warning << "Couldn't load texture '" << filename
+                << "' (now using dummy texture): " << err.what() << std::endl;
     return create_dummy_texture();
   }
 }
@@ -234,7 +239,8 @@ TextureManager::create_dummy_texture()
     }
     else
     {
-      log_warning << "Couldn't load texture '" << dummy_texture_fname << "' (now using empty one): " << err.what() << std::endl;
+      log_warning << "Couldn't load texture '" << dummy_texture_fname
+                  << "' (now using empty one): " << err.what() << std::endl;
       TexturePtr texture = VideoSystem::current()->new_texture(image.get());
       image.reset(NULL);
       return texture;
@@ -257,17 +263,16 @@ TextureManager::save_textures()
 
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
-  for(Textures::iterator i = m_textures.begin(); i != m_textures.end(); ++i)
+  for (Textures::iterator i = m_textures.begin(); i != m_textures.end(); ++i)
   {
     save_texture(*i);
   }
 
-  for(ImageTextures::iterator i = m_image_textures.begin();
-      i != m_image_textures.end(); ++i)
+  for (ImageTextures::iterator i = m_image_textures.begin();
+       i != m_image_textures.end(); ++i)
   {
     GLTexture* texture = dynamic_cast<GLTexture*>(i->second.lock().get());
-    if(texture == NULL)
-      continue;
+    if (texture == NULL) continue;
 
     save_texture(texture);
   }
@@ -280,7 +285,7 @@ TextureManager::save_texture(GLTexture* texture)
   saved_texture.texture = texture;
   glBindTexture(GL_TEXTURE_2D, texture->get_handle());
 
-  //this doesn't work with OpenGL ES (but we don't need it on the GP2X anyway)
+// this doesn't work with OpenGL ES (but we don't need it on the GP2X anyway)
 #ifndef GL_VERSION_ES_CM_1_0
   glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,
                            &saved_texture.width);
@@ -292,10 +297,8 @@ TextureManager::save_texture(GLTexture* texture)
                       &saved_texture.min_filter);
   glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
                       &saved_texture.mag_filter);
-  glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                      &saved_texture.wrap_s);
-  glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                      &saved_texture.wrap_t);
+  glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, &saved_texture.wrap_s);
+  glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, &saved_texture.wrap_t);
 
   size_t pixelssize = saved_texture.width * saved_texture.height * 4;
   saved_texture.pixels = new char[pixelssize];
@@ -325,8 +328,9 @@ TextureManager::reload_textures()
 #endif
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  for(std::vector<SavedTexture>::iterator i = m_saved_textures.begin();
-      i != m_saved_textures.end(); ++i) {
+  for (std::vector<SavedTexture>::iterator i = m_saved_textures.begin();
+       i != m_saved_textures.end(); ++i)
+  {
     SavedTexture& saved_texture = *i;
 
     GLuint handle;
@@ -336,8 +340,8 @@ TextureManager::reload_textures()
     glBindTexture(GL_TEXTURE_2D, handle);
     glTexImage2D(GL_TEXTURE_2D, 0, static_cast<GLint>(GL_RGBA),
                  saved_texture.width, saved_texture.height,
-                 saved_texture.border, GL_RGBA,
-                 GL_UNSIGNED_BYTE, saved_texture.pixels);
+                 saved_texture.border, GL_RGBA, GL_UNSIGNED_BYTE,
+                 saved_texture.pixels);
     delete[] saved_texture.pixels;
     assert_gl("uploading texture pixel data");
 
@@ -345,10 +349,8 @@ TextureManager::reload_textures()
                     saved_texture.min_filter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
                     saved_texture.mag_filter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                    saved_texture.wrap_s);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-                    saved_texture.wrap_t);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, saved_texture.wrap_s);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, saved_texture.wrap_t);
 
     assert_gl("setting texture_params");
     saved_texture.texture->set_handle(handle);

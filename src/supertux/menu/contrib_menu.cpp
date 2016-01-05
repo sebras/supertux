@@ -30,19 +30,17 @@
 #include "util/file_system.hpp"
 #include "util/gettext.hpp"
 
-ContribMenu::ContribMenu() :
-  m_contrib_worlds()
+ContribMenu::ContribMenu() : m_contrib_worlds()
 {
   // Generating contrib levels list by making use of Level Subset
   std::vector<std::string> level_worlds;
 
-  std::unique_ptr<char*, decltype(&PHYSFS_freeList)>
-    files(PHYSFS_enumerateFiles("levels"),
-          PHYSFS_freeList);
-  for(const char* const* filename = files.get(); *filename != 0; ++filename)
+  std::unique_ptr<char*, decltype(&PHYSFS_freeList)> files(
+      PHYSFS_enumerateFiles("levels"), PHYSFS_freeList);
+  for (const char* const* filename = files.get(); *filename != 0; ++filename)
   {
     std::string filepath = FileSystem::join("levels", *filename);
-    if(PHYSFS_isDirectory(filepath.c_str()))
+    if (PHYSFS_isDirectory(filepath.c_str()))
     {
       level_worlds.push_back(filepath);
     }
@@ -52,7 +50,8 @@ ContribMenu::ContribMenu() :
   add_hl();
 
   int i = 0;
-  for (std::vector<std::string>::const_iterator it = level_worlds.begin(); it != level_worlds.end(); ++it)
+  for (std::vector<std::string>::const_iterator it = level_worlds.begin();
+       it != level_worlds.end(); ++it)
   {
     try
     {
@@ -69,10 +68,9 @@ ContribMenu::ContribMenu() :
           int solved_count = 0;
 
           const auto& state = savegame.get_levelset_state(world->get_basedir());
-          for(const auto& level_state : state.level_states)
+          for (const auto& level_state : state.level_states)
           {
-            if(level_state.filename.empty())
-              continue;
+            if (level_state.filename.empty()) continue;
 
             if (level_state.solved)
             {
@@ -99,11 +97,11 @@ ContribMenu::ContribMenu() :
           int level_count = 0;
           int solved_count = 0;
 
-          const auto& state = savegame.get_worldmap_state(world->get_worldmap_filename());
-          for(const auto& level_state : state.level_states)
+          const auto& state =
+              savegame.get_worldmap_state(world->get_worldmap_filename());
+          for (const auto& level_state : state.level_states)
           {
-            if(level_state.filename.empty())
-              continue;
+            if (level_state.filename.empty()) continue;
 
             if (level_state.solved)
             {
@@ -131,9 +129,10 @@ ContribMenu::ContribMenu() :
         }
       }
     }
-    catch(std::exception& e)
+    catch (std::exception& e)
     {
-      log_info << "Couldn't parse levelset info for '" << *it << "': " << e.what() << std::endl;
+      log_info << "Couldn't parse levelset info for '" << *it
+               << "': " << e.what() << std::endl;
     }
   }
 
@@ -141,9 +140,7 @@ ContribMenu::ContribMenu() :
   add_back(_("Back"));
 }
 
-ContribMenu::~ContribMenu()
-{
-}
+ContribMenu::~ContribMenu() {}
 
 void
 ContribMenu::menu_action(MenuItem* item)
@@ -153,14 +150,16 @@ ContribMenu::menu_action(MenuItem* item)
   {
     // reload the World so that we have something that we can safely
     // std::move() around without wreaking the ContribMenu
-    std::unique_ptr<World> world = World::load(m_contrib_worlds[index]->get_basedir());
+    std::unique_ptr<World> world =
+        World::load(m_contrib_worlds[index]->get_basedir());
     if (!world->is_levelset())
     {
       GameManager::current()->start_worldmap(std::move(world));
     }
     else
     {
-      MenuManager::instance().push_menu(std::unique_ptr<Menu>(new ContribLevelsetMenu(std::move(world))));
+      MenuManager::instance().push_menu(
+          std::unique_ptr<Menu>(new ContribLevelsetMenu(std::move(world))));
     }
   }
 }

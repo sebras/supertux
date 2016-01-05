@@ -15,7 +15,6 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #ifndef HEADER_SUPERTUX_BADGUY_GOLDBOMB_HPP
 #define HEADER_SUPERTUX_BADGUY_GOLDBOMB_HPP
 
@@ -25,7 +24,7 @@
 
 class GoldBomb : public WalkingBadguy, public Portable
 {
-public:
+ public:
   GoldBomb(const ReaderMapping& reader);
 
   void collision_solid(const CollisionHit& hit);
@@ -45,13 +44,14 @@ public:
   void kill_fall();
   void ignite();
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
 
-private:
+ private:
   GoldBomb(const GoldBomb&);
   GoldBomb& operator=(const GoldBomb&);
-  enum Ticking_State {
+  enum Ticking_State
+  {
     STATE_NORMAL,
     STATE_TICKING
   };

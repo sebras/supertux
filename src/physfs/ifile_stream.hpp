@@ -23,14 +23,14 @@
 
 class IFileStream : public std::istream
 {
-protected:
+ protected:
   std::unique_ptr<std::streambuf> sb;
 
-public:
+ public:
   IFileStream(const std::string& filename);
   ~IFileStream();
 
-private:
+ private:
   IFileStream(const IFileStream&) = delete;
   IFileStream& operator=(const IFileStream&) = delete;
 };

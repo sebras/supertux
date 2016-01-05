@@ -21,7 +21,7 @@
 
 class FlyingSnowBall : public BadGuy
 {
-public:
+ public:
   FlyingSnowBall(const ReaderMapping& reader);
   FlyingSnowBall(const Vector& pos);
 
@@ -30,9 +30,10 @@ public:
   void active_update(float elapsed_time);
   void collision_solid(const CollisionHit& hit);
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
-private:
+
+ private:
   float normal_propeller_speed;
   Timer puff_timer; /**< time until the next smoke puff is spawned */
 };

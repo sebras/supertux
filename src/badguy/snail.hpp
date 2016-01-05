@@ -1,5 +1,6 @@
 //  SuperTux - Badguy "Snail"
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,11 +21,12 @@
 #include "badguy/walking_badguy.hpp"
 
 /**
- * Badguy "Snail" - a snail-like creature that can be flipped and tossed around at an angle
+ * Badguy "Snail" - a snail-like creature that can be flipped and tossed around
+ * at an angle
  */
 class Snail : public WalkingBadguy
 {
-public:
+ public:
   Snail(const ReaderMapping& reader);
   Snail(const Vector& pos, Direction d);
 
@@ -38,24 +40,26 @@ public:
 
   bool is_freezable() const;
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
   void be_normal(); /**< switch to state STATE_NORMAL */
-  void be_flat(); /**< switch to state STATE_FLAT */
+  void be_flat();   /**< switch to state STATE_FLAT */
   void be_kicked(); /**< switch to state STATE_KICKED_DELAY */
 
-private:
-  enum State {
-    STATE_NORMAL, /**< walking around */
-    STATE_FLAT, /**< flipped upside-down */
+ private:
+  enum State
+  {
+    STATE_NORMAL,       /**< walking around */
+    STATE_FLAT,         /**< flipped upside-down */
     STATE_KICKED_DELAY, /**< short delay before being launched */
-    STATE_KICKED /**< launched */
+    STATE_KICKED        /**< launched */
   };
 
-private:
+ private:
   State state;
-  Timer kicked_delay_timer; /**< wait time until switching from STATE_KICKED_DELAY to STATE_KICKED */
-  int   squishcount;
+  Timer kicked_delay_timer; /**< wait time until switching from
+                               STATE_KICKED_DELAY to STATE_KICKED */
+  int squishcount;
 };
 
 #endif

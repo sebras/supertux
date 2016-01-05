@@ -1,5 +1,6 @@
 //  Dart - Your average poison dart
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,16 +22,17 @@
 #include "sprite/sprite.hpp"
 #include "supertux/object_factory.hpp"
 
-namespace {
+namespace
+{
 const float DART_SPEED = 200;
 }
 
 static const std::string DART_SOUND = "sounds/flame.wav";
 
-Dart::Dart(const ReaderMapping& reader) :
-  BadGuy(reader, "images/creatures/dart/dart.sprite"),
-  parent(0),
-  sound_source()
+Dart::Dart(const ReaderMapping& reader)
+    : BadGuy(reader, "images/creatures/dart/dart.sprite"),
+      parent(0),
+      sound_source()
 {
   physic.enable_gravity(false);
   countMe = false;
@@ -39,10 +41,10 @@ Dart::Dart(const ReaderMapping& reader) :
   SoundManager::current()->preload("sounds/stomp.wav");
 }
 
-Dart::Dart(const Vector& pos, Direction d, const BadGuy* parent_ = 0) :
-  BadGuy(pos, d, "images/creatures/dart/dart.sprite"),
-  parent(parent_),
-  sound_source()
+Dart::Dart(const Vector& pos, Direction d, const BadGuy* parent_ = 0)
+    : BadGuy(pos, d, "images/creatures/dart/dart.sprite"),
+      parent(parent_),
+      sound_source()
 {
   physic.enable_gravity(false);
   countMe = false;
@@ -51,14 +53,13 @@ Dart::Dart(const Vector& pos, Direction d, const BadGuy* parent_ = 0) :
   SoundManager::current()->preload("sounds/stomp.wav");
 }
 
-Dart::~Dart()
-{
-}
+Dart::~Dart() {}
 
 bool
 Dart::updatePointers(const GameObject* from_object, GameObject* to_object)
 {
-  if (from_object == parent) {
+  if (from_object == parent)
+  {
     parent = dynamic_cast<Dart*>(to_object);
     return true;
   }
@@ -98,17 +99,18 @@ Dart::active_update(float elapsed_time)
 }
 
 void
-Dart::collision_solid(const CollisionHit& )
+Dart::collision_solid(const CollisionHit&)
 {
   SoundManager::current()->play("sounds/darthit.wav", get_pos());
   remove_me();
 }
 
 HitResponse
-Dart::collision_badguy(BadGuy& badguy, const CollisionHit& )
+Dart::collision_badguy(BadGuy& badguy, const CollisionHit&)
 {
   // ignore collisions with parent
-  if (&badguy == parent) {
+  if (&badguy == parent)
+  {
     return FORCE_MOVE;
   }
   SoundManager::current()->play("sounds/stomp.wav", get_pos());

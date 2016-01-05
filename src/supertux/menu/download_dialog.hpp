@@ -26,24 +26,25 @@ using TransferStatusPtr = std::shared_ptr<TransferStatus>;
 
 class DownloadDialog : public Dialog
 {
-private:
+ private:
   TransferStatusPtr m_status;
   std::string m_title;
   bool m_auto_close;
 
-public:
-  DownloadDialog(TransferStatusPtr status, bool auto_close = false, bool passive = false);
+ public:
+  DownloadDialog(TransferStatusPtr status, bool auto_close = false,
+                 bool passive = false);
 
   void set_title(const std::string& title);
   void update() override;
 
-private:
+ private:
   void on_abort();
   void on_download_complete();
 
   void update_text();
 
-private:
+ private:
   DownloadDialog(const DownloadDialog&) = delete;
   DownloadDialog& operator=(const DownloadDialog&) = delete;
 };

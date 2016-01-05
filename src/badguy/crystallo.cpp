@@ -21,21 +21,24 @@
 #include "util/reader_mapping.hpp"
 #include "object/anchor_point.hpp"
 
-Crystallo::Crystallo(const ReaderMapping& reader) :
-  WalkingBadguy(reader, "images/creatures/crystallo/crystallo.sprite", "left", "right"),
-  radius()
+Crystallo::Crystallo(const ReaderMapping& reader)
+    : WalkingBadguy(reader, "images/creatures/crystallo/crystallo.sprite",
+                    "left", "right"),
+      radius()
 {
   walk_speed = 80;
   max_drop_height = 16;
 
-  if ( !reader.get("radius", radius)) {
+  if (!reader.get("radius", radius))
+  {
     radius = 100;
   }
 }
 
-Crystallo::Crystallo(const Vector& pos, Direction d) :
-  WalkingBadguy(pos, d, "images/creatures/crystallo/crystallo.sprite", "left", "right"),
-  radius()
+Crystallo::Crystallo(const Vector& pos, Direction d)
+    : WalkingBadguy(pos, d, "images/creatures/crystallo/crystallo.sprite",
+                    "left", "right"),
+      radius()
 {
   walk_speed = 80;
   max_drop_height = 16;
@@ -45,13 +48,17 @@ Crystallo::Crystallo(const Vector& pos, Direction d) :
 void
 Crystallo::active_update(float elapsed_time)
 {
-  if(get_pos().x > (start_position.x + radius)){
-    if(dir != LEFT){
+  if (get_pos().x > (start_position.x + radius))
+  {
+    if (dir != LEFT)
+    {
       turn_around();
     }
   }
-  if( get_pos().x < (start_position.x - radius)){
-    if(dir != RIGHT){
+  if (get_pos().x < (start_position.x - radius))
+  {
+    if (dir != RIGHT)
+    {
       turn_around();
     }
   }
@@ -61,7 +68,8 @@ Crystallo::active_update(float elapsed_time)
 bool
 Crystallo::collision_squished(GameObject& object)
 {
-  this->set_action(dir == LEFT ? "shattered-left" : "shattered-right", /* loops = */ -1, ANCHOR_BOTTOM);
+  this->set_action(dir == LEFT ? "shattered-left" : "shattered-right",
+                   /* loops = */ -1, ANCHOR_BOTTOM);
   kill_squished(object);
   return true;
 }

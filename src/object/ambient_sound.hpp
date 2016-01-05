@@ -51,16 +51,19 @@ class AmbientSound : public GameObject,
                      public ScriptInterface,
                      public scripting::AmbientSound
 {
-public:
+ public:
   AmbientSound(const ReaderMapping& lisp);
-  AmbientSound(Vector pos, float factor, float bias, float vol, std::string file);
+  AmbientSound(Vector pos, float factor, float bias, float vol,
+               std::string file);
   ~AmbientSound();
 
-  void set_pos(Vector newpos)
+  void
+  set_pos(Vector newpos)
   {
-    position=newpos;
+    position = newpos;
   }
-  const Vector get_pos() const
+  const Vector
+  get_pos() const
   {
     return position;
   }
@@ -76,7 +79,7 @@ public:
    * @}
    */
 
-protected:
+ protected:
   virtual void hit(Player& player);
   virtual void update(float time);
   virtual void draw(DrawingContext&);
@@ -85,7 +88,7 @@ protected:
   virtual void expose(HSQUIRRELVM vm, SQInteger table_idx);
   virtual void unexpose(HSQUIRRELVM vm, SQInteger table_idx);
 
-private:
+ private:
   Vector position;
   Vector dimension;
 
@@ -93,17 +96,17 @@ private:
   std::unique_ptr<SoundSource> sound_source;
   int latency;
 
-  float distance_factor;  /// distance scaling
-  float distance_bias;    /// 100% volume disc radius
-  float silence_distance; /// not implemented yet
+  float distance_factor;   /// distance scaling
+  float distance_bias;     /// 100% volume disc radius
+  float silence_distance;  /// not implemented yet
 
-  float maximumvolume; /// maximum volume
-  float targetvolume;  /// how loud we want to be
-  float currentvolume; /// how loud we are
+  float maximumvolume;  /// maximum volume
+  float targetvolume;   /// how loud we want to be
+  float currentvolume;  /// how loud we are
 
-  float * volume_ptr; /// this will be used by the volume adjustment effect.
+  float* volume_ptr;  /// this will be used by the volume adjustment effect.
 
-private:
+ private:
   AmbientSound(const AmbientSound&);
   AmbientSound& operator=(const AmbientSound&);
 };

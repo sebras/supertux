@@ -26,19 +26,19 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-AmbientSound::AmbientSound(const ReaderMapping& lisp) :
-  position(),
-  dimension(),
-  sample(),
-  sound_source(),
-  latency(),
-  distance_factor(),
-  distance_bias(),
-  silence_distance(),
-  maximumvolume(),
-  targetvolume(),
-  currentvolume(),
-  volume_ptr()
+AmbientSound::AmbientSound(const ReaderMapping& lisp)
+    : position(),
+      dimension(),
+      sample(),
+      sound_source(),
+      latency(),
+      distance_factor(),
+      distance_bias(),
+      silence_distance(),
+      maximumvolume(),
+      targetvolume(),
+      currentvolume(),
+      volume_ptr()
 {
   position.x = 0;
   position.y = 0;
@@ -51,88 +51,88 @@ AmbientSound::AmbientSound(const ReaderMapping& lisp) :
   maximumvolume = 1;
   currentvolume = 0;
 
-  if (!(lisp.get("x", position.x)&&lisp.get("y", position.y))) {
+  if (!(lisp.get("x", position.x) && lisp.get("y", position.y)))
+  {
     log_warning << "No Position in ambient_sound" << std::endl;
   }
 
-  lisp.get("name" , name);
-  lisp.get("width" , dimension.x);
+  lisp.get("name", name);
+  lisp.get("width", dimension.x);
   lisp.get("height", dimension.y);
 
-  lisp.get("distance_factor",distance_factor);
-  lisp.get("distance_bias"  ,distance_bias  );
-  lisp.get("sample"         ,sample         );
-  lisp.get("volume"         ,maximumvolume  );
+  lisp.get("distance_factor", distance_factor);
+  lisp.get("distance_bias", distance_bias);
+  lisp.get("sample", sample);
+  lisp.get("volume", maximumvolume);
 
   // set dimension to zero if smaller than 64, which is default size in flexlay
 
-  if ((dimension.x <= 64) || (dimension.y <= 64)) {
+  if ((dimension.x <= 64) || (dimension.y <= 64))
+  {
     dimension.x = 0;
     dimension.y = 0;
   }
 
   // square all distances (saves us a sqrt later)
 
-  distance_bias*=distance_bias;
-  distance_factor*=distance_factor;
+  distance_bias *= distance_bias;
+  distance_factor *= distance_factor;
 
   // set default silence_distance
 
   if (distance_factor == 0)
     silence_distance = std::numeric_limits<float>::max();
   else
-    silence_distance = 1/distance_factor;
+    silence_distance = 1 / distance_factor;
 
-  lisp.get("silence_distance",silence_distance);
+  lisp.get("silence_distance", silence_distance);
 
-  sound_source.reset(); // not playing at the beginning
+  sound_source.reset();  // not playing at the beginning
   SoundManager::current()->preload(sample);
-  latency=0;
+  latency = 0;
 }
 
-AmbientSound::AmbientSound(Vector pos, float factor, float bias, float vol, std::string file) :
-  position(),
-  dimension(),
-  sample(file),
-  sound_source(),
-  latency(),
-  distance_factor(),
-  distance_bias(),
-  silence_distance(),
-  maximumvolume(),
-  targetvolume(),
-  currentvolume(),
-  volume_ptr()
+AmbientSound::AmbientSound(Vector pos, float factor, float bias, float vol,
+                           std::string file)
+    : position(),
+      dimension(),
+      sample(file),
+      sound_source(),
+      latency(),
+      distance_factor(),
+      distance_bias(),
+      silence_distance(),
+      maximumvolume(),
+      targetvolume(),
+      currentvolume(),
+      volume_ptr()
 {
-  position.x=pos.x;
-  position.y=pos.y;
+  position.x = pos.x;
+  position.y = pos.y;
 
-  dimension.x=0;
-  dimension.y=0;
+  dimension.x = 0;
+  dimension.y = 0;
 
-  distance_factor=factor*factor;
-  distance_bias=bias*bias;
-  maximumvolume=vol;
+  distance_factor = factor * factor;
+  distance_bias = bias * bias;
+  maximumvolume = vol;
 
   // set default silence_distance
 
   if (distance_factor == 0)
     silence_distance = std::numeric_limits<float>::max();
   else
-    silence_distance = 1/distance_factor;
+    silence_distance = 1 / distance_factor;
 
-  sound_source = 0; // not playing at the beginning
+  sound_source = 0;  // not playing at the beginning
   SoundManager::current()->preload(sample);
-  latency=0;
+  latency = 0;
 }
 
-AmbientSound::~AmbientSound()
-{
-  stop_playing();
-}
+AmbientSound::~AmbientSound() { stop_playing(); }
 
 void
-AmbientSound::hit(Player& )
+AmbientSound::hit(Player&)
 {
 }
 
@@ -145,17 +145,20 @@ AmbientSound::stop_playing()
 void
 AmbientSound::start_playing()
 {
-  try {
+  try
+  {
     sound_source = SoundManager::current()->create_sound_source(sample);
-    if(!sound_source)
-      throw std::runtime_error("file not found");
+    if (!sound_source) throw std::runtime_error("file not found");
 
     sound_source->set_gain(0);
     sound_source->set_looping(true);
-    currentvolume=targetvolume=1e-20f;
+    currentvolume = targetvolume = 1e-20f;
     sound_source->play();
-  } catch(std::exception& e) {
-    log_warning << "Couldn't play '" << sample << "': " << e.what() << "" << std::endl;
+  }
+  catch (std::exception& e)
+  {
+    log_warning << "Couldn't play '" << sample << "': " << e.what() << ""
+                << std::endl;
     sound_source.reset();
     remove_me();
   }
@@ -164,52 +167,57 @@ AmbientSound::start_playing()
 void
 AmbientSound::update(float deltat)
 {
-  if (latency-- <= 0) {
-    float px,py;
-    float rx,ry;
+  if (latency-- <= 0)
+  {
+    float px, py;
+    float rx, ry;
 
     if (!Sector::current() || !Sector::current()->camera) return;
     // Camera position
-    px=Sector::current()->camera->get_center().x;
-    py=Sector::current()->camera->get_center().y;
+    px = Sector::current()->camera->get_center().x;
+    py = Sector::current()->camera->get_center().y;
 
     // Relate to which point in the area
-    rx=px<position.x?position.x:
-      (px<position.x+dimension.x?px:position.x+dimension.x);
-    ry=py<position.y?position.y:
-      (py<position.y+dimension.y?py:position.y+dimension.y);
+    rx = px < position.x
+             ? position.x
+             : (px < position.x + dimension.x ? px : position.x + dimension.x);
+    ry = py < position.y
+             ? position.y
+             : (py < position.y + dimension.y ? py : position.y + dimension.y);
 
     // calculate square of distance
-    float sqrdistance=(px-rx)*(px-rx)+(py-ry)*(py-ry);
-    sqrdistance-=distance_bias;
+    float sqrdistance = (px - rx) * (px - rx) + (py - ry) * (py - ry);
+    sqrdistance -= distance_bias;
 
     // inside the bias: full volume (distance 0)
-    if (sqrdistance<0)
-      sqrdistance=0;
+    if (sqrdistance < 0) sqrdistance = 0;
 
     // calculate target volume - will never become 0
-    targetvolume=1/(1+sqrdistance*distance_factor);
-    float rise=targetvolume/currentvolume;
+    targetvolume = 1 / (1 + sqrdistance * distance_factor);
+    float rise = targetvolume / currentvolume;
 
     // rise/fall half life?
-    currentvolume*=pow(rise,deltat*10);
-    currentvolume += 1e-6f; // volume is at least 1e-6 (0 would never rise)
+    currentvolume *= pow(rise, deltat * 10);
+    currentvolume += 1e-6f;  // volume is at least 1e-6 (0 would never rise)
 
-    if (sound_source != 0) {
-
+    if (sound_source != 0)
+    {
       // set the volume
-      sound_source->set_gain(currentvolume*maximumvolume);
+      sound_source->set_gain(currentvolume * maximumvolume);
 
-      if (sqrdistance>=silence_distance && currentvolume<1e-3)
+      if (sqrdistance >= silence_distance && currentvolume < 1e-3)
         stop_playing();
-      latency=0;
-    } else {
-      if (sqrdistance<silence_distance) {
+      latency = 0;
+    }
+    else
+    {
+      if (sqrdistance < silence_distance)
+      {
         start_playing();
-        latency=0;
+        latency = 0;
       }
-      else // set a reasonable latency
-        latency=(int)(0.001/distance_factor);
+      else  // set a reasonable latency
+        latency = (int)(0.001 / distance_factor);
       //(int)(10*((sqrdistance-silence_distance)/silence_distance));
     }
   }
@@ -221,14 +229,14 @@ AmbientSound::update(float deltat)
 }
 
 void
-AmbientSound::draw(DrawingContext &)
+AmbientSound::draw(DrawingContext&)
 {
 }
 
 void
 AmbientSound::expose(HSQUIRRELVM vm, SQInteger table_idx)
 {
-  scripting::AmbientSound* _this = static_cast<scripting::AmbientSound*> (this);
+  scripting::AmbientSound* _this = static_cast<scripting::AmbientSound*>(this);
   expose_object(vm, table_idx, _this, name, false);
 }
 

@@ -26,30 +26,35 @@ class Tile;
 
 class TileSet
 {
-private:
+ private:
   std::vector<std::unique_ptr<Tile> > m_tiles;
 
-public:
+ public:
   TileSet(const std::string& filename);
   TileSet();
   ~TileSet();
 
   void add_tile(int id, std::unique_ptr<Tile> tile);
 
-  const Tile* get(const uint32_t id) const
+  const Tile*
+  get(const uint32_t id) const
   {
     assert(id < m_tiles.size());
     Tile* tile = m_tiles[id].get();
-    if(!tile) {
+    if (!tile)
+    {
       log_warning << "Invalid tile: " << id << std::endl;
       return m_tiles[0].get();
-    } else {
+    }
+    else
+    {
       tile->load_images();
       return tile;
     }
   }
 
-  uint32_t get_max_tileid() const
+  uint32_t
+  get_max_tileid() const
   {
     return m_tiles.size();
   }

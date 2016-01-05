@@ -23,7 +23,7 @@
 
 class Flame : public BadGuy
 {
-public:
+ public:
   Flame(const ReaderMapping& reader);
   Flame(const Flame& flame);
 
@@ -38,7 +38,7 @@ public:
   bool is_freezable() const;
   bool is_flammable() const;
 
-private:
+ private:
   float angle;
   float radius;
   float speed;

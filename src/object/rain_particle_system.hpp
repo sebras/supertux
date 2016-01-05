@@ -24,7 +24,7 @@
 
 class RainParticleSystem : public ParticleSystem_Interactive
 {
-public:
+ public:
   RainParticleSystem();
   virtual ~RainParticleSystem();
 
@@ -32,23 +32,24 @@ public:
 
   virtual void update(float elapsed_time);
 
-  std::string type() const
-  { return "RainParticleSystem"; }
+  std::string
+  type() const
+  {
+    return "RainParticleSystem";
+  }
 
-private:
+ private:
   class RainParticle : public Particle
   {
-  public:
+   public:
     float speed;
 
-    RainParticle() :
-      speed()
-    {}
+    RainParticle() : speed() {}
   };
 
   SurfacePtr rainimages[2];
 
-private:
+ private:
   RainParticleSystem(const RainParticleSystem&);
   RainParticleSystem& operator=(const RainParticleSystem&);
 };

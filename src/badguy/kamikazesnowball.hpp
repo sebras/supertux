@@ -21,14 +21,14 @@
 
 class KamikazeSnowball : public BadGuy
 {
-public:
+ public:
   KamikazeSnowball(const ReaderMapping& reader);
   KamikazeSnowball(const Vector& pos, Direction d);
 
   void initialize();
   void collision_solid(const CollisionHit& hit);
 
-protected:
+ protected:
   bool collision_squished(GameObject& object);
   HitResponse collision_player(Player& player, const CollisionHit& hit);
   void kill_collision();

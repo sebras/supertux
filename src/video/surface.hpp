@@ -32,22 +32,22 @@ class SurfaceData;
     area on this texture */
 class Surface
 {
-public:
+ public:
   static SurfacePtr create(const std::string& file);
   static SurfacePtr create(const std::string& file, const Rect& rect);
 
-private:
+ private:
   TexturePtr texture;
   SurfaceData* surface_data;
   Rect rect;
   bool flipx;
 
-private:
+ private:
   Surface(const std::string& file);
   Surface(const std::string& file, const Rect& rect);
   Surface(const Surface&);
 
-public:
+ public:
   ~Surface();
 
   SurfacePtr clone() const;
@@ -67,7 +67,7 @@ public:
   /** returns a vector containing width and height */
   Vector get_size() const;
 
-private:
+ private:
   Surface& operator=(const Surface&);
 };
 

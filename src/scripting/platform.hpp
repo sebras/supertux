@@ -22,11 +22,11 @@ class Platform;
 typedef Platform _Platform;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Platform
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   Platform(_Platform* platform);
   ~Platform();
@@ -44,12 +44,11 @@ public:
 #ifndef SCRIPTING_API
   _Platform* platform;
 
-private:
+ private:
   Platform(const Platform&);
   Platform& operator=(const Platform&);
 #endif
 };
-
 }
 
 #endif

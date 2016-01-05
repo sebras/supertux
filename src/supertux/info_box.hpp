@@ -30,7 +30,7 @@ class InfoBoxLine;
 /** This class is displaying a box with information text inside the game */
 class InfoBox
 {
-public:
+ public:
   InfoBox(const std::string& text);
   ~InfoBox();
 
@@ -40,14 +40,14 @@ public:
   void pagedown();
   void pageup();
 
-private:
+ private:
   size_t firstline;
   std::vector<std::unique_ptr<InfoBoxLine> > lines;
   std::map<std::string, Surface*> images;
   SurfacePtr arrow_scrollup;
   SurfacePtr arrow_scrolldown;
 
-private:
+ private:
   InfoBox(const InfoBox&);
   InfoBox& operator=(const InfoBox&);
 };

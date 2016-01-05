@@ -28,10 +28,13 @@ class Bullet;
 /** Base class for moving sprites that can hurt the Player. */
 class BadGuy : public MovingSprite
 {
-public:
-  BadGuy(const Vector& pos, const std::string& sprite_name, int layer = LAYER_OBJECTS);
-  BadGuy(const Vector& pos, Direction direction, const std::string& sprite_name, int layer = LAYER_OBJECTS);
-  BadGuy(const ReaderMapping& reader, const std::string& sprite_name, int layer = LAYER_OBJECTS);
+ public:
+  BadGuy(const Vector& pos, const std::string& sprite_name,
+         int layer = LAYER_OBJECTS);
+  BadGuy(const Vector& pos, Direction direction, const std::string& sprite_name,
+         int layer = LAYER_OBJECTS);
+  BadGuy(const ReaderMapping& reader, const std::string& sprite_name,
+         int layer = LAYER_OBJECTS);
 
   /** Called when the badguy is drawn. The default implementation
       simply draws the badguy sprite on screen */
@@ -54,22 +57,26 @@ public:
       the screen (his sprite is turned upside-down) */
   virtual void kill_fall();
 
-  /** Call this, if you use custom kill_fall() or kill_squashed(GameObject& object) */
+  /** Call this, if you use custom kill_fall() or kill_squashed(GameObject&
+   * object) */
   virtual void run_dead_script();
 
   /** True if this badguy can break bricks or open bonusblocks in his
       current form. */
-  virtual bool can_break() const
+  virtual bool
+  can_break() const
   {
     return false;
   }
 
-  Vector get_start_position() const
+  Vector
+  get_start_position() const
   {
     return start_position;
   }
 
-  void set_start_position(const Vector& vec)
+  void
+  set_start_position(const Vector& vec)
   {
     start_position = vec;
   }
@@ -80,7 +87,8 @@ public:
   /** Called to revert a badguy when is_ignited() returns true */
   virtual void extinguish();
 
-  /** Returns whether to call ignite() when a badguy gets hit by a fire bullet */
+  /** Returns whether to call ignite() when a badguy gets hit by a fire bullet
+   */
   virtual bool is_flammable() const;
 
   /** Returns whether this badguys is currently on fire */
@@ -99,12 +107,15 @@ public:
   bool is_in_water() const;
 
   /** Get melting particle sprite filename */
-  virtual std::string get_mpsf() const {
+  virtual std::string
+  get_mpsf() const
+  {
     return "images/objects/water_drop/water_drop.sprite";
   }
 
-protected:
-  enum State {
+ protected:
+  enum State
+  {
     STATE_INIT,
     STATE_INACTIVE,
     STATE_ACTIVE,
@@ -117,7 +128,7 @@ protected:
     STATE_GEAR
   };
 
-protected:
+ protected:
   /** Called when the badguy collided with a player */
   virtual HitResponse collision_player(Player& player, const CollisionHit& hit);
 
@@ -155,10 +166,15 @@ protected:
   void kill_squished(GameObject& object);
 
   void set_state(State state);
-  State get_state() const
-  { return state; }
+  State
+  get_state() const
+  {
+    return state;
+  }
 
-  bool check_state_timer() {
+  bool
+  check_state_timer()
+  {
     return state_timer.check();
   }
 
@@ -174,7 +190,7 @@ protected:
   bool might_fall(int height = 1) const;
 
   /** Get Direction from String. */
-  Direction str2dir( std::string dir_str ) const;
+  Direction str2dir(std::string dir_str) const;
 
   /** Update on_ground_flag judging by solid collision @c hit. This
       gets called from the base implementation of collision_solid, so
@@ -196,21 +212,22 @@ protected:
       last call to update() */
   bool is_active() const;
 
-  /** changes colgroup_active. Also calls set_group when badguy is in STATE_ACTIVE */
+  /** changes colgroup_active. Also calls set_group when badguy is in
+   * STATE_ACTIVE */
   void set_colgroup_active(CollisionGroup group);
 
-private:
+ private:
   void try_activate();
 
-protected:
+ protected:
   Physic physic;
 
-public:
+ public:
   /** Count this badguy to the statistics? This value should not be
       changed during runtime. */
   bool countMe;
 
-protected:
+ protected:
   /** true if initialize() has already been called */
   bool is_initialized;
 
@@ -223,14 +240,14 @@ protected:
   Direction start_dir;
 
   bool frozen;
-  bool ignited; /**< true if this badguy is currently on fire */
+  bool ignited;  /**< true if this badguy is currently on fire */
   bool in_water; /** < true if the badguy is currently in water */
 
   std::string dead_script; /**< script to execute when badguy is killed */
 
   float melting_time;
 
-private:
+ private:
   State state;
 
   /** true if state was STATE_ACTIVE at the beginning of the last call
@@ -250,7 +267,7 @@ private:
   /** CollisionGroup the badguy should be in while active */
   CollisionGroup colgroup_active;
 
-private:
+ private:
   BadGuy(const BadGuy&);
   BadGuy& operator=(const BadGuy&);
 };

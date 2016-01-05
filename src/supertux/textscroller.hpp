@@ -33,7 +33,7 @@ class InfoBoxLine;
  */
 class TextScroller : public Screen
 {
-public:
+ public:
   TextScroller(const std::string& file);
   virtual ~TextScroller();
 
@@ -46,7 +46,7 @@ public:
   static Color reference_color;
   static Color normal_color;
 
-private:
+ private:
   float defaultspeed;
   float speed;
   std::string music;
@@ -55,7 +55,7 @@ private:
   float scroll;
   bool fading;
 
-private:
+ private:
   TextScroller(const TextScroller&);
   TextScroller& operator=(const TextScroller&);
 };

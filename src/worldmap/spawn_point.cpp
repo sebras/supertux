@@ -20,12 +20,10 @@
 #include "util/reader_mapping.hpp"
 #include "worldmap/spawn_point.hpp"
 
-namespace worldmap {
-
-SpawnPoint::SpawnPoint(const ReaderMapping& slisp) :
-  name(),
-  pos(),
-  auto_dir(D_NONE)
+namespace worldmap
+{
+SpawnPoint::SpawnPoint(const ReaderMapping& slisp)
+    : name(), pos(), auto_dir(D_NONE)
 {
   pos.x = -1;
   pos.y = -1;
@@ -35,16 +33,16 @@ SpawnPoint::SpawnPoint(const ReaderMapping& slisp) :
   slisp.get("y", pos.y);
 
   std::string auto_dir_str;
-  if (slisp.get("auto-dir", auto_dir_str)) {
+  if (slisp.get("auto-dir", auto_dir_str))
+  {
     auto_dir = string_to_direction(auto_dir_str);
   }
 
-  if(name.empty())
+  if (name.empty())
     throw std::runtime_error("No name specified for spawnpoint");
-  if(pos.x < 0 || pos.y < 0)
+  if (pos.x < 0 || pos.y < 0)
     throw std::runtime_error("Invalid coordinates for spawnpoint");
 }
-
 }
 
 /* EOF */

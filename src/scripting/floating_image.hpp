@@ -26,11 +26,11 @@ class FloatingImage;
 typedef FloatingImage _FloatingImage;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class FloatingImage
 {
-public:
+ public:
   FloatingImage(const std::string& spritefile);
   ~FloatingImage();
 
@@ -49,11 +49,10 @@ public:
   void fade_out(float fadetime);
 
 #ifndef SCRIPTING_API
-private:
+ private:
   std::shared_ptr<_FloatingImage> floating_image;
 #endif
 };
-
 }
 
 #endif

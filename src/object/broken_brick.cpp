@@ -19,35 +19,29 @@
 #include "math/random_generator.hpp"
 #include "sprite/sprite.hpp"
 
-BrokenBrick::BrokenBrick(SpritePtr sprite_,
-                         const Vector& pos, const Vector& nmovement) :
-  timer(),
-  sprite(sprite_),
-  position(pos),
-  movement(nmovement)
+BrokenBrick::BrokenBrick(SpritePtr sprite_, const Vector& pos,
+                         const Vector& nmovement)
+    : timer(), sprite(sprite_), position(pos), movement(nmovement)
 {
   timer.start(.2f);
 }
 
-BrokenBrick::~BrokenBrick()
-{
-}
+BrokenBrick::~BrokenBrick() {}
 
 void
 BrokenBrick::update(float elapsed_time)
 {
   position += movement * elapsed_time;
 
-  if (timer.check())
-    remove_me();
+  if (timer.check()) remove_me();
 }
 
 void
 BrokenBrick::draw(DrawingContext& context)
 {
   sprite->draw_part(context,
-                    Vector(graphicsRandom.rand(16), graphicsRandom.rand(16)), Vector(16, 16),
-                    position, LAYER_OBJECTS + 1);
+                    Vector(graphicsRandom.rand(16), graphicsRandom.rand(16)),
+                    Vector(16, 16), position, LAYER_OBJECTS + 1);
 }
 
 /* EOF */

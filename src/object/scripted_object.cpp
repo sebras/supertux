@@ -26,30 +26,35 @@
 #include "util/reader.hpp"
 #include "util/reader_mapping.hpp"
 
-ScriptedObject::ScriptedObject(const ReaderMapping& lisp) :
-  MovingSprite(lisp, LAYER_OBJECTS, COLGROUP_MOVING_STATIC),
-  physic(),
-  name(),
-  solid(true),
-  physic_enabled(true),
-  visible(true),
-  new_vel_set(false),
-  new_vel()
+ScriptedObject::ScriptedObject(const ReaderMapping& lisp)
+    : MovingSprite(lisp, LAYER_OBJECTS, COLGROUP_MOVING_STATIC),
+      physic(),
+      name(),
+      solid(true),
+      physic_enabled(true),
+      visible(true),
+      new_vel_set(false),
+      new_vel()
 {
   lisp.get("name", name);
-  if(name.empty()) {
+  if (name.empty())
+  {
     name = "unnamed" + std::to_string(graphicsRandom.rand());
-    log_warning << "Scripted object must have a name specified, setting to: " << name << std::endl;
+    log_warning << "Scripted object must have a name specified, setting to: "
+                << name << std::endl;
   }
 
   lisp.get("solid", solid);
   lisp.get("physic-enabled", physic_enabled);
   lisp.get("visible", visible);
-  layer = reader_get_layer (lisp, /* default = */ LAYER_OBJECTS);
-  if( solid ){
-    set_group( COLGROUP_MOVING_STATIC );
-  } else {
-    set_group( COLGROUP_DISABLED );
+  layer = reader_get_layer(lisp, /* default = */ LAYER_OBJECTS);
+  if (solid)
+  {
+    set_group(COLGROUP_MOVING_STATIC);
+  }
+  else
+  {
+    set_group(COLGROUP_DISABLED);
   }
 }
 
@@ -57,7 +62,8 @@ void
 ScriptedObject::expose(HSQUIRRELVM vm, SQInteger table_idx)
 {
   if (name.empty()) return;
-  expose_object(vm, table_idx, dynamic_cast<scripting::ScriptedObject *>(this), name, false);
+  expose_object(vm, table_idx, dynamic_cast<scripting::ScriptedObject*>(this),
+                name, false);
 }
 
 void
@@ -128,10 +134,13 @@ void
 ScriptedObject::set_solid(bool solid_)
 {
   this->solid = solid_;
-  if( solid ){
-    set_group( COLGROUP_MOVING_STATIC );
-  } else {
-    set_group( COLGROUP_DISABLED );
+  if (solid)
+  {
+    set_group(COLGROUP_MOVING_STATIC);
+  }
+  else
+  {
+    set_group(COLGROUP_DISABLED);
   }
 }
 
@@ -144,13 +153,13 @@ ScriptedObject::is_solid()
 bool
 ScriptedObject::gravity_enabled() const
 {
-	return physic.gravity_enabled();
+  return physic.gravity_enabled();
 }
 
 void
 ScriptedObject::enable_gravity(bool f)
 {
-	physic.enable_gravity(f);
+  physic.enable_gravity(f);
 }
 
 void
@@ -174,10 +183,10 @@ ScriptedObject::get_name()
 void
 ScriptedObject::update(float elapsed_time)
 {
-  if(!physic_enabled)
-    return;
+  if (!physic_enabled) return;
 
-  if(new_vel_set) {
+  if (new_vel_set)
+  {
     physic.set_velocity(new_vel.x, new_vel.y);
     new_vel_set = false;
   }
@@ -187,8 +196,7 @@ ScriptedObject::update(float elapsed_time)
 void
 ScriptedObject::draw(DrawingContext& context)
 {
-  if(!visible)
-    return;
+  if (!visible) return;
 
   sprite->draw(context, get_pos(), layer);
 }
@@ -196,23 +204,25 @@ ScriptedObject::draw(DrawingContext& context)
 void
 ScriptedObject::collision_solid(const CollisionHit& hit)
 {
-  if(!physic_enabled)
-    return;
+  if (!physic_enabled) return;
 
-  if(hit.bottom) {
-    if(physic.get_velocity_y() > 0)
-      physic.set_velocity_y(0);
-  } else if(hit.top) {
+  if (hit.bottom)
+  {
+    if (physic.get_velocity_y() > 0) physic.set_velocity_y(0);
+  }
+  else if (hit.top)
+  {
     physic.set_velocity_y(.1f);
   }
 
-  if(hit.left || hit.right) {
+  if (hit.left || hit.right)
+  {
     physic.set_velocity_x(0);
   }
 }
 
 HitResponse
-ScriptedObject::collision(GameObject& , const CollisionHit& )
+ScriptedObject::collision(GameObject&, const CollisionHit&)
 {
   return FORCE_MOVE;
 }

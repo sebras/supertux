@@ -35,26 +35,20 @@
 #include "util/reader_mapping.hpp"
 #include "worldmap/worldmap.hpp"
 
-GameManager::GameManager() :
-  m_world(),
-  m_savegame()
-{
-}
+GameManager::GameManager() : m_world(), m_savegame() {}
 
-GameManager::~GameManager()
-{
-}
+GameManager::~GameManager() {}
 
 void
-GameManager::start_level(std::unique_ptr<World> world, const std::string& level_filename)
+GameManager::start_level(std::unique_ptr<World> world,
+                         const std::string& level_filename)
 {
   m_world = std::move(world);
   m_savegame.reset(new Savegame(m_world->get_savegame_filename()));
   m_savegame->load();
 
-  std::unique_ptr<Screen> screen(new LevelsetScreen(m_world->get_basedir(),
-                                                    level_filename,
-                                                    *m_savegame));
+  std::unique_ptr<Screen> screen(
+      new LevelsetScreen(m_world->get_basedir(), level_filename, *m_savegame));
   ScreenManager::current()->push_screen(std::move(screen));
 }
 
@@ -68,10 +62,9 @@ GameManager::start_worldmap(std::unique_ptr<World> world)
     m_savegame->load();
 
     ScreenManager::current()->push_screen(std::unique_ptr<Screen>(
-                                    new worldmap::WorldMap(m_world->get_worldmap_filename(),
-                                                           *m_savegame)));
+        new worldmap::WorldMap(m_world->get_worldmap_filename(), *m_savegame)));
   }
-  catch(std::exception& e)
+  catch (std::exception& e)
   {
     log_fatal << "Couldn't start world: " << e.what() << std::endl;
   }
@@ -86,19 +79,22 @@ GameManager::get_level_name(const std::string& filename) const
     auto doc = ReaderDocument::parse(filename);
     auto root = doc.get_root();
 
-    if(root.get_name() != "supertux-level") {
+    if (root.get_name() != "supertux-level")
+    {
       return "";
-    } else {
+    }
+    else
+    {
       auto mapping = root.get_mapping();
       std::string name;
       mapping.get("name", name);
       return name;
     }
   }
-  catch(const std::exception& e)
+  catch (const std::exception& e)
   {
-    log_warning << "Problem getting name of '" << filename << "': "
-                << e.what() << std::endl;
+    log_warning << "Problem getting name of '" << filename << "': " << e.what()
+                << std::endl;
     return "";
   }
 }

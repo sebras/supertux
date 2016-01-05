@@ -21,7 +21,7 @@
 
 class Jumpy : public BadGuy
 {
-public:
+ public:
   Jumpy(const ReaderMapping& reader);
 
   void collision_solid(const CollisionHit& hit);
@@ -33,10 +33,10 @@ public:
   bool is_freezable() const;
   bool is_flammable() const;
 
-private:
+ private:
   HitResponse hit(const CollisionHit& hit);
 
-private:
+ private:
   Vector pos_groundhit;
   bool groundhit_pos_set;
 };

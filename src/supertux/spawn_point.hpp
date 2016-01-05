@@ -24,7 +24,7 @@
 
 class SpawnPoint
 {
-public:
+ public:
   SpawnPoint();
   SpawnPoint(const SpawnPoint& other);
   SpawnPoint(const ReaderMapping& lisp);

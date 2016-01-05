@@ -1,5 +1,6 @@
 //  SuperTux - End Sequence: Tux walks right
-//  Copyright (C) 2007 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2007 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -20,16 +21,12 @@
 #include "supertux/screen_manager.hpp"
 #include "supertux/sector.hpp"
 
-EndSequenceWalkLeft::EndSequenceWalkLeft() :
-  EndSequence(),
-  last_x_pos(),
-  endsequence_timer()
+EndSequenceWalkLeft::EndSequenceWalkLeft()
+    : EndSequence(), last_x_pos(), endsequence_timer()
 {
 }
 
-EndSequenceWalkLeft::~EndSequenceWalkLeft()
-{
-}
+EndSequenceWalkLeft::~EndSequenceWalkLeft() {}
 
 void
 EndSequenceWalkLeft::draw(DrawingContext& /*context*/)
@@ -50,9 +47,11 @@ EndSequenceWalkLeft::running(float elapsed_time)
   EndSequence::running(elapsed_time);
   Player& tux = *Sector::current()->player;
 
-  if (tux_may_walk) {
+  if (tux_may_walk)
+  {
     end_sequence_controller->press(Controller::LEFT);
-    if (int(last_x_pos) == int(tux.get_pos().x)) {
+    if (int(last_x_pos) == int(tux.get_pos().x))
+    {
       end_sequence_controller->press(Controller::JUMP);
     }
   }

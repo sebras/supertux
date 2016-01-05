@@ -22,16 +22,10 @@
 
 class SoundFile
 {
-public:
-  SoundFile() :
-    channels(),
-    rate(),
-    bits_per_sample(),
-    size()
-  {}
+ public:
+  SoundFile() : channels(), rate(), bits_per_sample(), size() {}
 
-  virtual ~SoundFile()
-  { }
+  virtual ~SoundFile() {}
 
   virtual size_t read(void* buffer, size_t buffer_size) = 0;
   virtual void reset() = 0;
@@ -42,7 +36,7 @@ public:
   /// size in bytes
   size_t size;
 
-private:
+ private:
   SoundFile(const SoundFile&) = delete;
   SoundFile& operator=(const SoundFile&) = delete;
 };

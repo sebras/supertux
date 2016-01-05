@@ -24,15 +24,16 @@ class AddonManager;
 
 class AddonMenu : public Menu
 {
-private:
-  enum {
+ private:
+  enum
+  {
     MNID_CHECK_ONLINE,
     MNID_NOTHING_NEW,
     MNID_LANGPACK_MODE,
     MNID_ADDON_LIST_START = 10
   };
 
-private:
+ private:
   AddonManager& m_addon_manager;
   std::vector<std::string> m_installed_addons;
   std::vector<std::string> m_repository_addons;
@@ -40,8 +41,9 @@ private:
   bool m_language_pack_mode;
   bool m_auto_install_langpack;
 
-public:
-  AddonMenu(bool language_pack_mode = false, bool auto_install_langpack = false);
+ public:
+  AddonMenu(bool language_pack_mode = false,
+            bool auto_install_langpack = false);
   ~AddonMenu();
 
   void refresh() override;
@@ -50,11 +52,11 @@ public:
   void install_addon(const Addon& addon);
   void toggle_addon(const Addon& addon);
 
-private:
+ private:
   void rebuild_menu();
   bool addon_visible(const Addon& addon) const;
 
-private:
+ private:
   AddonMenu(const AddonMenu&);
   AddonMenu& operator=(const AddonMenu&);
 };

@@ -32,107 +32,129 @@ class Sizef;
  */
 class Rectf
 {
-public:
-  Rectf() :
-    p1(),
-    p2()
-  { }
+ public:
+  Rectf() : p1(), p2() {}
 
-  Rectf(const Vector& np1, const Vector& np2) :
-    p1(np1), p2(np2)
-  {
-  }
+  Rectf(const Vector& np1, const Vector& np2) : p1(np1), p2(np2) {}
 
-  Rectf(float x1, float y1, float x2, float y2) :
-    p1(x1, y1), p2(x2, y2)
+  Rectf(float x1, float y1, float x2, float y2) : p1(x1, y1), p2(x2, y2)
   {
     assert(p1.x <= p2.x && p1.y <= p2.y);
   }
 
   Rectf(const Vector& p1_, const Sizef& size);
 
-  float get_left() const
-  { return p1.x; }
-
-  float get_right() const
-  { return p2.x; }
-
-  float get_top() const
-  { return p1.y; }
-
-  float get_bottom() const
-  { return p2.y; }
-
-  float get_width() const
-  { return p2.x - p1.x; }
-
-  float get_height() const
-  { return p2.y - p1.y; }
-
-  Vector get_middle() const
-  { return Vector((p1.x+p2.x)/2, (p1.y+p2.y)/2); }
-
-  void set_pos(const Vector& v)
+  float
+  get_left() const
   {
-    move(v-p1);
+    return p1.x;
   }
 
-  void set_height(float height)
+  float
+  get_right() const
+  {
+    return p2.x;
+  }
+
+  float
+  get_top() const
+  {
+    return p1.y;
+  }
+
+  float
+  get_bottom() const
+  {
+    return p2.y;
+  }
+
+  float
+  get_width() const
+  {
+    return p2.x - p1.x;
+  }
+
+  float
+  get_height() const
+  {
+    return p2.y - p1.y;
+  }
+
+  Vector
+  get_middle() const
+  {
+    return Vector((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+  }
+
+  void
+  set_pos(const Vector& v)
+  {
+    move(v - p1);
+  }
+
+  void
+  set_height(float height)
   {
     p2.y = p1.y + height;
   }
-  void set_width(float width)
+  void
+  set_width(float width)
   {
     p2.x = p1.x + width;
   }
-  void set_size(float width, float height)
+  void
+  set_size(float width, float height)
   {
     set_width(width);
     set_height(height);
   }
-  Sizef get_size() const
+  Sizef
+  get_size() const
   {
     return Sizef(get_width(), get_height());
   }
 
-  void move(const Vector& v)
+  void
+  move(const Vector& v)
   {
     p1 += v;
     p2 += v;
   }
 
-  bool contains(const Vector& v) const
+  bool
+  contains(const Vector& v) const
   {
     return v.x >= p1.x && v.y >= p1.y && v.x < p2.x && v.y < p2.y;
   }
-  bool contains(const Rectf& other) const
+  bool
+  contains(const Rectf& other) const
   {
-    if(p1.x >= other.p2.x || other.p1.x >= p2.x)
-      return false;
-    if(p1.y >= other.p2.y || other.p1.y >= p2.y)
-      return false;
+    if (p1.x >= other.p2.x || other.p1.x >= p2.x) return false;
+    if (p1.y >= other.p2.y || other.p1.y >= p2.y) return false;
 
     return true;
   }
 
-  float distance (const Vector& other, AnchorPoint ap = ANCHOR_MIDDLE) const
+  float
+  distance(const Vector& other, AnchorPoint ap = ANCHOR_MIDDLE) const
   {
-    Vector v = get_anchor_pos (*this, ap);
-    return ((v - other).norm ());
+    Vector v = get_anchor_pos(*this, ap);
+    return ((v - other).norm());
   }
 
-  float distance (const Rectf& other, AnchorPoint ap = ANCHOR_MIDDLE) const
+  float
+  distance(const Rectf& other, AnchorPoint ap = ANCHOR_MIDDLE) const
   {
-    Vector v1 = get_anchor_pos (*this, ap);
-    Vector v2 = get_anchor_pos (other, ap);
+    Vector v1 = get_anchor_pos(*this, ap);
+    Vector v2 = get_anchor_pos(other, ap);
 
-    return ((v1 - v2).norm ());
+    return ((v1 - v2).norm());
   }
 
-  Rectf grown(float border) const
+  Rectf
+  grown(float border) const
   {
-    return Rectf(p1.x - border, p1.y - border,
-                 p2.x + border, p2.y + border);
+    return Rectf(p1.x - border, p1.y - border, p2.x + border, p2.y + border);
   }
 
   // leave these two public to save the headaches of set/get functions for such

@@ -25,7 +25,7 @@
  */
 class ShrinkFade : public ScreenFade
 {
-public:
+ public:
   ShrinkFade(const Vector& point, float fade_time);
   ~ShrinkFade();
 
@@ -34,7 +34,7 @@ public:
 
   bool done() const;
 
-private:
+ private:
   Vector dest;
   float fade_time;
   float accum_time;

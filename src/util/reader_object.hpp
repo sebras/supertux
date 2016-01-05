@@ -19,9 +19,10 @@
 
 #include <string>
 
-namespace sexp {
+namespace sexp
+{
 class Value;
-} // namespace sexp
+}  // namespace sexp
 
 class ReaderDocument;
 class ReaderMapping;
@@ -29,7 +30,7 @@ class ReaderCollection;
 
 class ReaderObject final
 {
-public:
+ public:
   ReaderObject();
   ReaderObject(const ReaderDocument* doc, const sexp::Value* sx);
 
@@ -37,7 +38,7 @@ public:
   ReaderMapping get_mapping() const;
   ReaderCollection get_collection() const;
 
-private:
+ private:
   const ReaderDocument* m_doc;
   const sexp::Value* m_sx;
 };

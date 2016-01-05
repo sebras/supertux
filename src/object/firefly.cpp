@@ -27,75 +27,91 @@
 #include "supertux/sector.hpp"
 #include "util/reader_mapping.hpp"
 
-Firefly::Firefly(const ReaderMapping& lisp) :
-   MovingSprite(lisp, "images/objects/resetpoints/default-resetpoint.sprite", LAYER_TILES, COLGROUP_TOUCHABLE),
-   activated(false),
-   initial_position()
+Firefly::Firefly(const ReaderMapping& lisp)
+    : MovingSprite(lisp, "images/objects/resetpoints/default-resetpoint.sprite",
+                   LAYER_TILES, COLGROUP_TOUCHABLE),
+      activated(false),
+      initial_position()
 {
   initial_position = get_pos();
-  if( !lisp.get( "sprite", sprite_name ) ){
+  if (!lisp.get("sprite", sprite_name))
+  {
     reactivate();
     return;
   }
-  if (sprite_name.empty()) {
+  if (sprite_name.empty())
+  {
     sprite_name = "images/objects/resetpoints/default-resetpoint.sprite";
     reactivate();
     return;
   }
-  //Replace sprite
-  sprite = SpriteManager::current()->create( sprite_name );
-  bbox.set_size(sprite->get_current_hitbox_width(), sprite->get_current_hitbox_height());
+  // Replace sprite
+  sprite = SpriteManager::current()->create(sprite_name);
+  bbox.set_size(sprite->get_current_hitbox_width(),
+                sprite->get_current_hitbox_height());
   reactivate();
 
-  //Load sound
-    if( sprite_name.find("vbell", 0) == std::string::npos ) {
-      SoundManager::current()->preload("sounds/savebell_low.wav");
-    }
-    else {
-      SoundManager::current()->preload("sounds/savebell2.wav");
-    }
+  // Load sound
+  if (sprite_name.find("vbell", 0) == std::string::npos)
+  {
+    SoundManager::current()->preload("sounds/savebell_low.wav");
+  }
+  else
+  {
+    SoundManager::current()->preload("sounds/savebell2.wav");
+  }
 }
 
 void
 Firefly::reactivate()
 {
-  if(GameSession::current()->get_reset_point_pos() == initial_position){
-    // TODO: && GameSession::current()->get_reset_point_sectorname() ==  <sector this firefly is in>
-    // GameSession::current()->get_current_sector()->get_name() is not yet initialized.
-    // Worst case a resetpoint in a different sector at the same position as the real
-    // resetpoint the player is spawning is set to ringing, too. Until we can check the sector, too, dont set
+  if (GameSession::current()->get_reset_point_pos() == initial_position)
+  {
+    // TODO: && GameSession::current()->get_reset_point_sectorname() ==  <sector
+    // this firefly is in>
+    // GameSession::current()->get_current_sector()->get_name() is not yet
+    // initialized.
+    // Worst case a resetpoint in a different sector at the same position as the
+    // real
+    // resetpoint the player is spawning is set to ringing, too. Until we can
+    // check the sector, too, dont set
     // activated = true; here.
     sprite->set_action("ringing");
   }
 }
 
 HitResponse
-Firefly::collision(GameObject& other, const CollisionHit& )
+Firefly::collision(GameObject& other, const CollisionHit&)
 {
   // If the bell is already activated, don't ring it again!
-  if(activated || sprite->get_action() == "ringing")
-    return ABORT_MOVE;
+  if (activated || sprite->get_action() == "ringing") return ABORT_MOVE;
 
-  Player* player = dynamic_cast<Player*> (&other);
-  if(player) {
+  Player* player = dynamic_cast<Player*>(&other);
+  if (player)
+  {
     activated = true;
     // spawn some particles
     // TODO: provide convenience function in MovingSprite or MovingObject?
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
       Vector ppos = bbox.get_middle();
       float angle = graphicsRandom.randf(-M_PI_2, M_PI_2);
       float velocity = graphicsRandom.randf(450, 900);
-      float vx = sin(angle)*velocity;
-      float vy = -cos(angle)*velocity;
+      float vx = sin(angle) * velocity;
+      float vy = -cos(angle) * velocity;
       Vector pspeed = Vector(vx, vy);
       Vector paccel = Vector(0, 1000);
-      Sector::current()->add_object(std::make_shared<SpriteParticle>("images/objects/particles/reset.sprite", "default", ppos, ANCHOR_MIDDLE, pspeed, paccel, LAYER_OBJECTS-1));
+      Sector::current()->add_object(std::make_shared<SpriteParticle>(
+          "images/objects/particles/reset.sprite", "default", ppos,
+          ANCHOR_MIDDLE, pspeed, paccel, LAYER_OBJECTS - 1));
     }
 
-    if( sprite_name.find("vbell", 0) == std::string::npos ) {
+    if (sprite_name.find("vbell", 0) == std::string::npos)
+    {
       SoundManager::current()->play("sounds/savebell2.wav");
     }
-    else {
+    else
+    {
       SoundManager::current()->play("sounds/savebell_low.wav");
     }
 

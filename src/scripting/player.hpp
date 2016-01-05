@@ -21,14 +21,13 @@
 #include <string>
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Player
 {
-public:
+ public:
 #ifndef SCRIPTING_API
-  virtual ~Player()
-  {}
+  virtual ~Player() {}
 #endif
 
   /**
@@ -36,11 +35,11 @@ public:
    * This can be "grow", "fireflower" or "iceflower" at the moment
    */
   virtual bool add_bonus(const std::string& bonus) = 0;
-   /**
-    * Replaces the Tux's bonus with another bonus.
-    * This can be "grow", "fireflower" or "iceflower" at the moment
-    */
-   virtual bool set_bonus(const std::string& bonus) = 0;
+  /**
+   * Replaces the Tux's bonus with another bonus.
+   * This can be "grow", "fireflower" or "iceflower" at the moment
+   */
+  virtual bool set_bonus(const std::string& bonus) = 0;
   /**
    * Give tux more coins
    */
@@ -99,7 +98,8 @@ public:
 
   /**
    * play cheer animation.
-   * This might need some space and behave in an unpredictable way. Best to use this at level end.
+   * This might need some space and behave in an unpredictable way. Best to use
+   * this at level end.
    */
   virtual void do_cheer() = 0;
 
@@ -121,7 +121,8 @@ public:
 
   /**
    * jump in the air if possible
-   * sensible values for yspeed are negative - unless we want to jump into the ground of course
+   * sensible values for yspeed are negative - unless we want to jump into the
+   * ground of course
    */
   virtual void do_jump(float yspeed) = 0;
 
@@ -139,9 +140,7 @@ public:
    * Instructs the scriptable controller to press or release a button
    */
   virtual void do_scripting_controller(std::string control, bool pressed) = 0;
-
 };
-
 }
 
 #endif

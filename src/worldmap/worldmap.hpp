@@ -1,6 +1,7 @@
 //  SuperTux
 //  Copyright (C) 2004 Ingo Ruhnke <grumbel@gmail.com>
-//  Copyright (C) 2006 Christoph Sommer <christoph.sommer@2006.expires.deltadevelopment.de>
+//  Copyright (C) 2006 Christoph Sommer
+//  <christoph.sommer@2006.expires.deltadevelopment.de>
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -44,15 +45,16 @@ class Sprite;
 class TileMap;
 class Savegame;
 
-namespace worldmap {
-
+namespace worldmap
+{
 class Tux;
 class LevelTile;
 class SpecialTile;
 class SpriteChange;
 
 // For one way tiles
-enum {
+enum
+{
   BOTH_WAYS,
   NORTH_SOUTH_WAY,
   SOUTH_NORTH_WAY,
@@ -69,7 +71,7 @@ class WorldMap : public Screen
   static Color message_color;
   static Color teleporter_message_color;
 
-private:
+ private:
   typedef std::vector<SpecialTile*> SpecialTiles;
   typedef std::vector<SpriteChange*> SpriteChanges;
   typedef std::vector<LevelTile*> LevelTiles;
@@ -93,12 +95,12 @@ private:
   GameObjects game_objects;
   std::list<TileMap*> solid_tilemaps;
 
-public:
+ public:
   /** Variables to deal with the passive map messages */
   Timer passive_message_timer;
   std::string passive_message;
 
-private:
+ private:
   std::string map_filename;
   std::string levels_path;
 
@@ -114,7 +116,8 @@ private:
   ScriptList scripts;
 
   Color ambient_light;
-  std::string force_spawnpoint; /**< if set, spawnpoint will be forced to this value */
+  std::string
+      force_spawnpoint; /**< if set, spawnpoint will be forced to this value */
 
   bool in_level;
 
@@ -122,8 +125,9 @@ private:
   Vector pan_pos;
   bool panning;
 
-public:
-  WorldMap(const std::string& filename, Savegame& savegame, const std::string& force_spawnpoint = "");
+ public:
+  WorldMap(const std::string& filename, Savegame& savegame,
+           const std::string& force_spawnpoint = "");
   ~WorldMap();
 
   void add_object(GameObjectPtr object);
@@ -131,8 +135,11 @@ public:
   void try_expose(const GameObjectPtr& object);
   void try_unexpose(const GameObjectPtr& object);
 
-  static WorldMap* current()
-  { return current_; }
+  static WorldMap*
+  current()
+  {
+    return current_;
+  }
 
   virtual void setup();
   virtual void leave();
@@ -166,9 +173,17 @@ public:
   void finished_level(Level* level);
 
   /** returns current Tux incarnation */
-  Tux* get_tux() const { return tux.get(); }
+  Tux*
+  get_tux() const
+  {
+    return tux.get();
+  }
 
-  Savegame& get_savegame() const { return m_savegame; }
+  Savegame&
+  get_savegame() const
+  {
+    return m_savegame;
+  }
 
   LevelTile* at_level() const;
   SpecialTile* at_special_tile() const;
@@ -177,7 +192,8 @@ public:
 
   /** Check if it is possible to walk from \a pos into \a direction,
       if possible, write the new position to \a new_pos */
-  bool path_ok(const Direction& direction, const Vector& pos, Vector* new_pos) const;
+  bool path_ok(const Direction& direction, const Vector& pos,
+               Vector* new_pos) const;
 
   /**
    * Save worldmap state to squirrel state table
@@ -189,8 +205,11 @@ public:
    */
   void load_state();
 
-  const std::string& get_title() const
-  { return name; }
+  const std::string&
+  get_title() const
+  {
+    return name;
+  }
 
   /**
    * runs a script in the context of the worldmap (and keeps a reference to
@@ -202,12 +221,13 @@ public:
    * switch to another worldmap.
    * filename is relative to data root path
    */
-  void change(const std::string& filename, const std::string& force_spawnpoint="");
+  void change(const std::string& filename,
+              const std::string& force_spawnpoint = "");
 
   /**
    * moves Tux to the given spawnpoint
    */
-  void move_to_spawnpoint(const std::string& spawnpoint, bool pan =false);
+  void move_to_spawnpoint(const std::string& spawnpoint, bool pan = false);
 
   /**
    * returns the width (in tiles) of a worldmap
@@ -224,7 +244,7 @@ public:
    */
   void set_levels_solved(bool solved, bool perfect);
 
-private:
+ private:
   void load_level_information(LevelTile& level);
   void draw_status(DrawingContext& context);
   void calculate_total_stats();
@@ -235,12 +255,12 @@ private:
   Vector get_camera_pos_for_tux() const;
   void clamp_camera_position(Vector& c);
 
-private:
+ private:
   WorldMap(const WorldMap&);
   WorldMap& operator=(const WorldMap&);
 };
 
-} // namespace worldmap
+}  // namespace worldmap
 
 #endif
 

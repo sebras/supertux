@@ -25,21 +25,21 @@
  */
 class IFileStreambuf : public std::streambuf
 {
-public:
+ public:
   IFileStreambuf(const std::string& filename);
   ~IFileStreambuf();
 
-protected:
+ protected:
   virtual int underflow();
   virtual pos_type seekoff(off_type pos, std::ios_base::seekdir,
                            std::ios_base::openmode);
   virtual pos_type seekpos(const pos_type& pos, std::ios_base::openmode);
 
-private:
+ private:
   PHYSFS_file* file;
   char buf[1024];
 
-private:
+ private:
   IFileStreambuf(const IFileStreambuf&);
   IFileStreambuf& operator=(const IFileStreambuf&);
 };

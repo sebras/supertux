@@ -22,15 +22,9 @@
 
 namespace scripting
 {
+ThreadQueue::ThreadQueue() : threads() {}
 
-ThreadQueue::ThreadQueue() :
-  threads()
-{
-}
-
-ThreadQueue::~ThreadQueue()
-{
-}
+ThreadQueue::~ThreadQueue() {}
 
 void
 ThreadQueue::add(HSQUIRRELVM vm)
@@ -41,7 +35,8 @@ ThreadQueue::add(HSQUIRRELVM vm)
   sq_weakref(global_vm, -1);
 
   HSQOBJECT object;
-  if(SQ_FAILED(sq_getstackobj(global_vm, -1, &object))) {
+  if (SQ_FAILED(sq_getstackobj(global_vm, -1, &object)))
+  {
     sq_pop(global_vm, 2);
     throw SquirrelError(global_vm, "Couldn't get thread weakref from vm");
   }
@@ -58,18 +53,22 @@ ThreadQueue::wakeup()
   // robust for scripts that add new entries to the list while we're traversing
   // it
   size_t i = threads.size() - 1;
-  size_t end = (size_t) 0 - 1;
+  size_t end = (size_t)0 - 1;
   size_t size_begin = threads.size();
-  while(i != end) {
+  while (i != end)
+  {
     HSQOBJECT object = threads[i];
 
     sq_pushobject(global_vm, object);
     sq_getweakrefval(global_vm, -1);
 
     HSQUIRRELVM scheduled_vm;
-    if(sq_gettype(global_vm, -1) == OT_THREAD &&
-       SQ_SUCCEEDED(sq_getthread(global_vm, -1, &scheduled_vm))) {
-      if(SQ_FAILED(sq_wakeupvm(scheduled_vm, SQFalse, SQFalse, SQTrue, SQFalse))) {
+    if (sq_gettype(global_vm, -1) == OT_THREAD &&
+        SQ_SUCCEEDED(sq_getthread(global_vm, -1, &scheduled_vm)))
+    {
+      if (SQ_FAILED(
+              sq_wakeupvm(scheduled_vm, SQFalse, SQFalse, SQTrue, SQFalse)))
+      {
         log_warning << "Couldn't wakeup scheduled squirrel VM" << std::endl;
       }
     }
@@ -81,7 +80,6 @@ ThreadQueue::wakeup()
 
   threads.erase(threads.begin(), threads.begin() + size_begin);
 }
-
 }
 
 /* EOF */

@@ -28,14 +28,14 @@ class InputManager;
 
 class GameControllerManager
 {
-private:
+ private:
   InputManager* m_parent;
   int m_deadzone;
   std::vector<SDL_GameController*> m_game_controllers;
   std::array<bool, Controller::CONTROLCOUNT> m_stick_state;
   std::array<bool, Controller::CONTROLCOUNT> m_button_state;
 
-public:
+ public:
   GameControllerManager(InputManager* parent);
   ~GameControllerManager();
 
@@ -45,7 +45,7 @@ public:
   void on_controller_added(int joystick_index);
   void on_controller_removed(int instance_id);
 
-private:
+ private:
   GameControllerManager(const GameControllerManager&) = delete;
   GameControllerManager& operator=(const GameControllerManager&) = delete;
 };

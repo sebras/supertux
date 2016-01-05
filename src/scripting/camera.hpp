@@ -22,11 +22,11 @@ class Camera;
 typedef Camera _Camera;
 #endif
 
-namespace scripting {
-
+namespace scripting
+{
 class Camera
 {
-public:
+ public:
 #ifndef SCRIPTING_API
   Camera(_Camera* camera);
   ~Camera();
@@ -46,12 +46,11 @@ public:
 #ifndef SCRIPTING_API
   _Camera* camera;
 
-private:
+ private:
   Camera(const Camera&);
   Camera& operator=(const Camera&);
 #endif
 };
-
 }
 
 #endif

@@ -20,13 +20,15 @@
 #include "supertux/object_factory.hpp"
 #include "supertux/sector.hpp"
 
-namespace{
-  static const float CAPTAIN_WALK_SPEED = 100;
-  static const float BOARDING_SPEED = 200;
+namespace
+{
+static const float CAPTAIN_WALK_SPEED = 100;
+static const float BOARDING_SPEED = 200;
 }
 
 CaptainSnowball::CaptainSnowball(const ReaderMapping& reader)
-  : WalkingBadguy(reader, "images/creatures/snowball/cpt-snowball.sprite", "left", "right")
+    : WalkingBadguy(reader, "images/creatures/snowball/cpt-snowball.sprite",
+                    "left", "right")
 {
   walk_speed = BOARDING_SPEED;
   max_drop_height = -1;
@@ -34,7 +36,8 @@ CaptainSnowball::CaptainSnowball(const ReaderMapping& reader)
 }
 
 CaptainSnowball::CaptainSnowball(const Vector& pos, Direction d)
-  : WalkingBadguy(pos, d, "images/creatures/snowball/cpt-snowball.sprite", "left", "right")
+    : WalkingBadguy(pos, d, "images/creatures/snowball/cpt-snowball.sprite",
+                    "left", "right")
 {
   // Created during game eg. by dispencer. Board the enemy!
   walk_speed = BOARDING_SPEED;
@@ -54,10 +57,13 @@ CaptainSnowball::might_climb(int width, int height) const
   float y2a = bbox.p2.y - 1;
   float y1b = bbox.p1.y + 1 - height;
   float y2b = bbox.p2.y - 1 - height;
-  if (dir == LEFT) {
+  if (dir == LEFT)
+  {
     x1 = bbox.p1.x - width;
     x2 = bbox.p1.x - 1;
-  } else {
+  }
+  else
+  {
     x1 = bbox.p2.x + 1;
     x2 = bbox.p2.x + width;
   }
@@ -68,9 +74,12 @@ CaptainSnowball::might_climb(int width, int height) const
 void
 CaptainSnowball::active_update(float elapsed_time)
 {
-  if (on_ground() && might_climb(8, 64)) {
+  if (on_ground() && might_climb(8, 64))
+  {
     physic.set_velocity_y(-400);
-  } else if (on_ground() && might_fall(16)) {
+  }
+  else if (on_ground() && might_fall(16))
+  {
     physic.set_velocity_y(-400);
     walk_speed = BOARDING_SPEED;
     physic.set_velocity_x(dir == LEFT ? -walk_speed : walk_speed);
@@ -81,7 +90,8 @@ CaptainSnowball::active_update(float elapsed_time)
 void
 CaptainSnowball::collision_solid(const CollisionHit& hit)
 {
-  if (is_active() && (walk_speed == BOARDING_SPEED)) {
+  if (is_active() && (walk_speed == BOARDING_SPEED))
+  {
     walk_speed = CAPTAIN_WALK_SPEED;
     physic.set_velocity_x(dir == LEFT ? -walk_speed : walk_speed);
   }

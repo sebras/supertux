@@ -29,31 +29,33 @@
 
 #define EXPLOSION_FORCE 1000.0f
 
-ShortFuse::ShortFuse(const ReaderMapping& reader) :
-  WalkingBadguy(reader, "images/creatures/short_fuse/short_fuse.sprite", "left", "right")
+ShortFuse::ShortFuse(const ReaderMapping& reader)
+    : WalkingBadguy(reader, "images/creatures/short_fuse/short_fuse.sprite",
+                    "left", "right")
 {
   walk_speed = 100;
   max_drop_height = -1;
 
-  //Check if we need another sprite
-  if( !reader.get( "sprite", sprite_name ) ){
+  // Check if we need another sprite
+  if (!reader.get("sprite", sprite_name))
+  {
     return;
   }
-  if (sprite_name.empty()) {
+  if (sprite_name.empty())
+  {
     sprite_name = "images/creatures/short_fuse/short_fuse.sprite";
     return;
   }
-  //Replace sprite
-  sprite = SpriteManager::current()->create( sprite_name );
+  // Replace sprite
+  sprite = SpriteManager::current()->create(sprite_name);
 }
 
 void
 ShortFuse::explode()
 {
-  if (!is_valid())
-    return;
+  if (!is_valid()) return;
 
-  auto explosion = std::make_shared<Explosion>(get_bbox ().get_middle());
+  auto explosion = std::make_shared<Explosion>(get_bbox().get_middle());
 
   explosion->hurts(false);
   explosion->pushes(true);
@@ -66,28 +68,26 @@ ShortFuse::explode()
 bool
 ShortFuse::collision_squished(GameObject& obj)
 {
-  if (!is_valid ())
-    return true;
+  if (!is_valid()) return true;
 
   Player* player = dynamic_cast<Player*>(&obj);
-  if(player)
-    player->bounce(*this);
+  if (player) player->bounce(*this);
 
-  explode ();
+  explode();
 
   return true;
 }
 
 HitResponse
-ShortFuse::collision_player (Player& player, const CollisionHit&)
+ShortFuse::collision_player(Player& player, const CollisionHit&)
 {
-  player.bounce (*this);
-  explode ();
+  player.bounce(*this);
+  explode();
   return ABORT_MOVE;
 }
 
 HitResponse
-ShortFuse::collision_bullet (Bullet& bullet, const CollisionHit& )
+ShortFuse::collision_bullet(Bullet& bullet, const CollisionHit&)
 {
   // All bullets cause the unstable short fuse to explode
   bullet.remove_me();
@@ -98,7 +98,7 @@ ShortFuse::collision_bullet (Bullet& bullet, const CollisionHit& )
 void
 ShortFuse::kill_fall()
 {
-  explode ();
+  explode();
 }
 
 void

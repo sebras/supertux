@@ -26,7 +26,7 @@ class Sector;
  */
 class LevelTransformer
 {
-public:
+ public:
   virtual ~LevelTransformer();
 
   /** transform a complete Level, the standard implementation just calls

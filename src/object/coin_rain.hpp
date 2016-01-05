@@ -29,12 +29,12 @@ class Sprite;
 
 class CoinRain : public GameObject
 {
-public:
-  CoinRain(const Vector& pos, bool emerge=false);
+ public:
+  CoinRain(const Vector& pos, bool emerge = false);
   virtual void update(float elapsed_time);
   virtual void draw(DrawingContext& context);
 
-private:
+ private:
   SpritePtr sprite;
   Vector position;
   float emerge_distance;

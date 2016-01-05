@@ -23,20 +23,15 @@
 #include "util/reader_collection.hpp"
 #include "util/reader_mapping.hpp"
 
-TileManager::TileManager() :
-  tilesets()
-{
-}
+TileManager::TileManager() : tilesets() {}
 
-TileManager::~TileManager()
-{
-}
+TileManager::~TileManager() {}
 
 TileSet*
-TileManager::get_tileset(const std::string &filename)
+TileManager::get_tileset(const std::string& filename)
 {
   TileSets::const_iterator i = tilesets.find(filename);
-  if(i != tilesets.end())
+  if (i != tilesets.end())
   {
     return i->second.get();
   }

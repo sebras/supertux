@@ -25,7 +25,7 @@
 
 class InfoBlock : public Block
 {
-public:
+ public:
   InfoBlock(const ReaderMapping& lisp);
   virtual ~InfoBlock();
   void update(float elapsed_time);
@@ -34,18 +34,22 @@ public:
   void show_message();
   void hide_message();
 
-protected:
+ protected:
   virtual void hit(Player& player);
   virtual HitResponse collision(GameObject& other, const CollisionHit& hit);
   Player* get_nearest_player() const;
 
-protected:
+ protected:
   std::string message;
-  //AmbientSound* ringing;
-  //bool stopped;
-  float shown_pct; /**< Value in the range of 0..1, depending on how much of the infobox is currently shown */
-  float dest_pct; /**< With each call to update(), shown_pct will slowly transition to this value */
-  std::vector<std::unique_ptr<InfoBoxLine> > lines; /**< lines of text (or images) to display */
+  // AmbientSound* ringing;
+  // bool stopped;
+  float
+      shown_pct;  /**< Value in the range of 0..1, depending on how much of the
+                     infobox is currently shown */
+  float dest_pct; /**< With each call to update(), shown_pct will slowly
+                     transition to this value */
+  std::vector<std::unique_ptr<InfoBoxLine> >
+      lines; /**< lines of text (or images) to display */
   float lines_height;
 };
 

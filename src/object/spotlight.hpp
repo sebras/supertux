@@ -27,23 +27,23 @@
 
 class Spotlight : public GameObject
 {
-public:
+ public:
   Spotlight(const ReaderMapping& reader);
   virtual ~Spotlight();
 
   void update(float elapsed_time);
   void draw(DrawingContext& context);
 
-private:
-  Vector  position;
-  float   angle;
+ private:
+  Vector position;
+  float angle;
   SpritePtr center;
   SpritePtr base;
   SpritePtr lights;
   SpritePtr light;
   SpritePtr lightcone;
 
-  Color   color;
+  Color color;
 };
 
 #endif

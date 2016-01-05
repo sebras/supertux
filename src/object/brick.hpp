@@ -22,17 +22,17 @@
 
 class Brick : public Block
 {
-public:
+ public:
   Brick(const Vector& pos, int data, const std::string& spriteName);
   Brick(const ReaderMapping& lisp);
 
   void try_break(Player* player);
   HitResponse collision(GameObject& other, const CollisionHit& hit);
 
-protected:
+ protected:
   virtual void hit(Player& player);
 
-private:
+ private:
   bool breakable;
   int coin_counter;
 };
